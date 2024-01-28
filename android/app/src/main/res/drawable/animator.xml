@@ -1,0 +1,25 @@
+
+<!-- <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+     android:drawable="@drawable/psych_vector" >
+     <target
+         android:name="rotationGroup"
+         android:animation="@animator/fade_in" />
+  
+ </animated-vector> -->
+ <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false"
+    >
+    <!-- <item android:drawable="@drawable/psychsail_100" android:duration="100000" android:width="50dp" android:height="50dp"/> -->
+    <!-- <item android:drawable="@drawable/psychsail_300" android:duration="100000" android:width="25dp" android:height="25dp"/> -->
+    <item android:drawable="@drawable/psychsail_100" android:duration="250"  android:variablePadding="true" />
+    <!-- <item android:drawable="@drawable/psychsail_150" android:duration="250"  android:variablePadding="true" /> -->
+    <item android:drawable="@drawable/psychsail_200" android:duration="250"  android:variablePadding="true" />
+    <!-- <item android:drawable="@drawable/psychsail_250" android:duration="250"  android:variablePadding="true" /> -->
+    <item android:drawable="@drawable/psychsail_300" android:duration="250"  android:variablePadding="true" />
+    <!-- <item android:drawable="@drawable/psychsail_350" android:duration="250"  android:variablePadding="true" /> -->
+    <item android:drawable="@drawable/psychsail_400" android:duration="250"  android:variablePadding="true" />
+    <item android:drawable="@drawable/psychsail_600" android:duration="250"  android:variablePadding="true" />
+    
+    
+    
+</animation-list>
