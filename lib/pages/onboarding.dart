@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import '../components/firebase_func.dart';
 
 class onboarding extends StatefulWidget {
   const onboarding({super.key});
@@ -9,14 +12,17 @@ class onboarding extends StatefulWidget {
   State<onboarding> createState() => _onboardingState();
 }
 
-class _onboardingState extends State<onboarding> {
+class _onboardingState extends State<onboarding>  with SingleTickerProviderStateMixin{
+
+
+  
   @override
   Widget build(BuildContext context) {
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     return  LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              bool constr = false;
+              bool constr = false; 
               if(constraints.maxWidth > 600) constr = true;
         return Scaffold(
           extendBodyBehindAppBar: true,
@@ -52,7 +58,7 @@ class _onboardingState extends State<onboarding> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:  32.0),
+                    padding: EdgeInsets.only(left:  32.0, right: 32.0, top: sizeHeight/50),
                     child: Container(
                       
                       
@@ -74,7 +80,7 @@ class _onboardingState extends State<onboarding> {
                     padding:  EdgeInsets.symmetric(horizontal: 32.0),
                     child: Container(
                       constraints: BoxConstraints(
-                        minHeight: sizeHeight/15
+                        minHeight: sizeHeight/15,
                       ),
                       alignment: Alignment.center,
                       child: Center(
@@ -85,6 +91,7 @@ class _onboardingState extends State<onboarding> {
                           fontFamily: 'ABeeZee',
                           color: Colors.white.withOpacity(0.6),
                           fontStyle: FontStyle.italic
+                        
                         ),
                         overflow: TextOverflow.fade,),
                       ),
@@ -101,30 +108,36 @@ class _onboardingState extends State<onboarding> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Container(child: Padding(
-                              padding:  EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
-                              child: Image.asset("assets/facebook.png",fit: BoxFit.cover,),
-                            ),decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                          color: Colors.transparent,
-                        
-                           border: Border.all(
-                            color: Colors.white,
-                            width: 0.25,
-                          ),
-                            ),),
-                            Container(child: Padding(
-                              padding: EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
-                              child: Image.asset("assets/google.png",fit: BoxFit.cover,),
-                            ),decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                          color: Colors.transparent,
-                        
-                           border: Border.all(
-                            color: Colors.white,
-                            width: 0.25,
-                          ),
-                            ),),Container(child: Padding(
+                              InkWell(
+                                onTap: () async =>  {print(await signInWithFacebook())},
+                              child: Container(child: Padding(
+                                padding:  EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
+                                child: Image.asset("assets/facebook.png",fit: BoxFit.cover,),
+                              ),decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                                        color: Colors.transparent,
+                                                      
+                                                         border: Border.all(
+                              color: Colors.white,
+                              width: 0.25,
+                                                        ),
+                              ),),
+                            ),
+                            InkWell(
+                              onTap: () async =>  {print(await signInWithGoogle())},
+                              child: Container(child: Padding(
+                                padding: EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
+                                child: Image.asset("assets/google.png",fit: BoxFit.cover,),
+                              ),decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                                        color: Colors.transparent,
+                                                      
+                                                         border: Border.all(
+                              color: Colors.white,
+                              width: 0.25,
+                                                        ),
+                              ),),
+                            ),Container(child: Padding(
                               padding: EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
                               child: Image.asset("assets/apple.png",fit: BoxFit.cover,),
                             ),decoration: BoxDecoration(
@@ -196,24 +209,29 @@ class _onboardingState extends State<onboarding> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric( horizontal: constr ? sizeWidth/5:sizeWidth/10),
-                    child: Container(
-                          decoration: BoxDecoration(
-                    color: Colors.transparent
+                    child: InkWell(
+                      onTap: () => {
+                        Navigator.pushNamed(context, '/login')
+                      },
+                      child: Container(
+                            decoration: BoxDecoration(
+                      color: Colors.transparent
+                            ),
+                            
+                            alignment: Alignment.center,
+                            child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Existing account? Log in",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: constr ? sizeWidth/50 : sizeHeight/50,
+                         fontStyle: FontStyle.italic,
+                         fontFamily: 'ABeeZee', 
+                      ),
+                      overflow: TextOverflow.fade,),
+                            ),
                           ),
-                          
-                          alignment: Alignment.center,
-                          child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Existing account? Log in",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: constr ? sizeWidth/50 : sizeHeight/50,
-                       fontStyle: FontStyle.italic,
-                       fontFamily: 'ABeeZee', 
                     ),
-                    overflow: TextOverflow.fade,),
-                          ),
-                        ),
                   ),
                 ],
                 
