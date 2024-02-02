@@ -1,5 +1,6 @@
 import 'dart:ffi';
-
+import '../components/text.dart';
+import '../components/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -78,24 +79,8 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                   if(constraints.maxWidth < 600 )
                   Padding(
                     padding:  EdgeInsets.symmetric(horizontal: 32.0),
-                    child: Container(
-                      constraints: BoxConstraints(
-                        minHeight: sizeHeight/15,
-                      ),
-                      alignment: Alignment.center,
-                      child: Center(
-                        child: Text("Chill Maps, Therapy Chats - Because\nSuccess Shouldn't Stress You Out!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: sizeHeight/50,
-                          fontFamily: 'ABeeZee',
-                          color: Colors.white.withOpacity(0.6),
-                          fontStyle: FontStyle.italic
-                        
-                        ),
-                        overflow: TextOverflow.fade,),
-                      ),
-                    ),
+                    child: HigthlightText(sizeHeight/50,sizeHeight/15,"Chill Maps, Therapy Chats - Because\nSuccess Shouldn't Stress You Out!")
+                   
                   ),
                   Padding(
                     padding:  EdgeInsets.symmetric(horizontal: sizeWidth/10),
@@ -108,104 +93,30 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                              InkWell(
-                                onTap: () async =>  {print(await signInWithFacebook())},
-                              child: Container(child: Padding(
-                                padding:  EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
-                                child: Image.asset("assets/facebook.png",fit: BoxFit.cover,),
-                              ),decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                                        color: Colors.transparent,
-                                                      
-                                                         border: Border.all(
-                              color: Colors.white,
-                              width: 0.25,
-                                                        ),
-                              ),),
+                            InkWell(
+                              onTap: () async =>  {print(await signInWithFacebook())},
+                              child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/facebook.png"),
                             ),
                             InkWell(
                               onTap: () async =>  {print(await signInWithGoogle())},
-                              child: Container(child: Padding(
-                                padding: EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
-                                child: Image.asset("assets/google.png",fit: BoxFit.cover,),
-                              ),decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                                        color: Colors.transparent,
-                                                      
-                                                         border: Border.all(
-                              color: Colors.white,
-                              width: 0.25,
-                                                        ),
-                              ),),
-                            ),Container(child: Padding(
-                              padding: EdgeInsets.all(constr ? sizeWidth/200 : sizeWidth/100),
-                              child: Image.asset("assets/apple.png",fit: BoxFit.cover,),
-                            ),decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                          color: Colors.transparent,
-                        
-                           border: Border.all(
-                            color: Colors.white,
-                            width: 0.25,
-                          ),
-                            ),)
+                              child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),
+                            ),
+                            InkWell(
+                              onTap: () async => {},
+                              child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/apple.png"),
+                            ),
+                            
                           ],),
                           
                       )
                     ),
                     
                   ),
-                  Row(children: [
-                      Expanded(
-                        child: new Container(
-                            margin:  EdgeInsets.symmetric( horizontal: constr ? sizeWidth/30:sizeWidth/20),
-                            child: Divider(
-                              color: Colors.white,
-                              height: 36,
-                              thickness: 0.25,
-                            )),
-                      ),
-                      Text("OR", textAlign: TextAlign.center,
-            style: TextStyle(
-            color: Color(0xFFD6E4DF),
-            fontSize: 14,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'ABeeZee',
-            fontWeight: FontWeight.w400,
-            
-            )),
-                      Expanded(
-                        child: new Container(
-                            margin: EdgeInsets.symmetric( horizontal: constr ? sizeWidth/30:sizeWidth/20),
-                            child: Divider(
-                              color: Colors.white,
-                              height: 36,
-                              thickness: 0.25,
-                            )),
-                      ),
-                    ]),
+                  divider(constr,sizeWidth/30,sizeWidth/20,Colors.white),
+                  
                     Padding(
                     padding: EdgeInsets.symmetric( horizontal: constr ? sizeWidth/5:sizeWidth/10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
-                      
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Sign up with mail",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: constr ? sizeWidth/50 : sizeHeight/50,
-                           fontStyle: FontStyle.italic,
-                           fontFamily: 'ABeeZee', 
-                          color: Colors.black
-                        ),
-                        overflow: TextOverflow.fade,),
-                      ),
-                    ),
+                    child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Sign up with mail",Colors.white,Colors.black),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric( horizontal: constr ? sizeWidth/5:sizeWidth/10),
@@ -213,24 +124,7 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                       onTap: () => {
                         Navigator.pushNamed(context, '/login')
                       },
-                      child: Container(
-                            decoration: BoxDecoration(
-                      color: Colors.transparent
-                            ),
-                            
-                            alignment: Alignment.center,
-                            child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Existing account? Log in",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: constr ? sizeWidth/50 : sizeHeight/50,
-                         fontStyle: FontStyle.italic,
-                         fontFamily: 'ABeeZee', 
-                      ),
-                      overflow: TextOverflow.fade,),
-                            ),
-                          ),
+                      child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Existing account? Log in",Colors.transparent,Colors.white),
                     ),
                   ),
                 ],
