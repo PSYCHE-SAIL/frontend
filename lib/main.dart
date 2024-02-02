@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'PsycheSail',
-      initialRoute: '/login',
+      initialRoute: '/',
       routes: {
         '/': (context) => const onboarding(),
         '/login': (context) => const Login(),
