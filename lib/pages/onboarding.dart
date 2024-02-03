@@ -116,7 +116,9 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                   
                     Padding(
                     padding: EdgeInsets.symmetric( horizontal: constr ? sizeWidth/5:sizeWidth/10),
-                    child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Sign up with mail",Colors.white,Colors.black),
+                    child: InkWell(onTap: () => {
+                        Navigator.pushNamed(context, '/Signup')
+                      },child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Sign up with mail",Colors.white,Colors.black)),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric( horizontal: constr ? sizeWidth/5:sizeWidth/10),

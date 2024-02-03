@@ -23,27 +23,18 @@ Widget HigthlightText(fontsize,minheight,txt) {
 }
 
 Widget greyText(fontsize,minheight,txt) {
-  return Container(
-    decoration: BoxDecoration(
-                border: Border.all(color: Colors.black)
-              ),
-                      constraints: BoxConstraints(
-                        minHeight: minheight,
-                      ),
-                      alignment: Alignment.center,
-                      child: Center(
-                        child: Text(txt,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: fontsize,
-                          fontFamily: 'ABeeZee',
-                          color: Colors.grey,
-                          fontStyle: FontStyle.italic
-                        
-                        ),
-                        overflow: TextOverflow.fade,),
-                      ),
-                    );
+  return Center(
+    child: Text(txt,
+    textAlign: TextAlign.center,
+    style: TextStyle(
+      fontSize: fontsize,
+      fontFamily: 'ABeeZee',
+      color: Colors.grey,
+      fontStyle: FontStyle.italic
+    
+    ),
+    overflow: TextOverflow.fade,),
+  );
 }
 
 Widget divider(constr,greaterwidth,lesswidth,col) {
@@ -76,4 +67,40 @@ Widget divider(constr,greaterwidth,lesswidth,col) {
                             )),
                       ),
                     ]);
+}
+Widget dividervertical(constr,greaterwidth,lesswidth,col) {
+  return Column(
+    children: [
+       Container(
+          margin:  EdgeInsets.symmetric( vertical: 8.0),
+          child:  Container(color: Colors.grey, height: greaterwidth, width: 1,),),
+      Text("OR", textAlign: TextAlign.center,
+                      style: TextStyle(
+                      color: col,
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                      fontFamily: 'ABeeZee',
+                      fontWeight: FontWeight.w400,
+                      
+                      )),
+       Container(
+          margin:  EdgeInsets.symmetric( vertical: 8.0),
+          child:  Container(color: Colors.grey, height: greaterwidth, width: 1,),),
+    ],
+  );
+}
+
+InputDecoration logininput(txt,example) {
+  return InputDecoration(
+    
+                                border: UnderlineInputBorder(),
+                                labelText: txt,
+                                labelStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontFamily: 'ABeeZee',
+                      fontWeight: FontWeight.w400,
+                                  color: Color.fromRGBO(35, 154, 139, 75)
+                                ),
+                                helperText: example
+                              );
 }
