@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import './pages/onboarding.dart';
 import './pages/login.dart';
+import './pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart'; 
 import './pages/signup.dart';
+
 
 void main() async {
   if(Platform.isWindows || Platform.isLinux) {
@@ -35,7 +37,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const onboarding(),
         '/login': (context) => const Login(),
-        '/Signup': (context) => const Signup()
+        '/Signup': (context) => const Signup(),
+        '/home':(context) => const home()
       },
     debugShowCheckedModeBanner: false,
     theme: ThemeData.dark(useMaterial3: true),

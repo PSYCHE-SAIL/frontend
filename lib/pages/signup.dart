@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/text.dart';
 import '../components/button.dart';
 import '../components/firebase_func.dart';
+import '../components/crud.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -11,6 +12,11 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+   var check = null;
+   late final nameController = TextEditingController();
+  late final emailController = TextEditingController();
+  late final passwordController = TextEditingController();
+  final error = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +66,19 @@ class _SignupState extends State<Signup> {
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: nameController,
+                                    onChanged: (newValue) => nameController.text = newValue,
                                 obscureText: true,
                             decoration: logininput('Enter Name', "Ex- john"),
                           ),
                         TextFormField(
+                          controller: emailController,
+                                    onChanged: (newValue) => emailController.text = newValue,
                                 decoration: logininput('Enter your email', "Ex- john@gmail.com"),
                               ),
                                TextFormField(
+                                controller: passwordController,
+                                    onChanged: (newValue) => passwordController.text = newValue,
                                 obscureText: true,
                             decoration: logininput('Password', "Ex- John123g#"),
                           ),
@@ -74,6 +86,7 @@ class _SignupState extends State<Signup> {
                                 obscureText: true,
                             decoration: logininput('Confirm Password',""),
                           ),
+                           if(error.value) Text("Missing values. Please try again",style: TextStyle(color: Colors.red)),
                       ],
                     ),
                   )
@@ -89,6 +102,8 @@ class _SignupState extends State<Signup> {
                               maxWidth: sizeWidth/3,
                             ),
                             child: TextFormField(
+                              controller: nameController,
+                                    onChanged: (newValue) => nameController.text = newValue,
                                    style: TextStyle(
                                     color:Colors.black
                                    ),
@@ -100,6 +115,8 @@ class _SignupState extends State<Signup> {
                               maxWidth: sizeWidth/3,
                             ),
                                    child: TextFormField(
+                                    controller: emailController,
+                                    onChanged: (newValue) => emailController.text = newValue,
                                     obscureText: true,
                                                                decoration: logininput('Enter your email', "Ex- john@gmail.com"),
                                                              ),
@@ -114,6 +131,8 @@ class _SignupState extends State<Signup> {
                               maxWidth: sizeWidth/3,
                             ),
                             child: TextFormField(
+                              controller: passwordController,
+                                    onChanged: (newValue) => passwordController.text = newValue,
                                    style: TextStyle(
                                     color:Colors.black
                                    ),
@@ -140,11 +159,28 @@ class _SignupState extends State<Signup> {
                                                constraints: BoxConstraints(
                                                  maxWidth: sizeWidth/2,
                                                ),
-                                               child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Create an account",Color.fromRGBO(35, 154, 139, 75),Colors.white)),
+                                               child: InkWell(
+                                                onTap: () async {
+                                                  if(nameController.text == ""  || passwordController.text == "" || emailController.text == "") {error.value = true;}
+                                                  else {
+                                                 check = createRecord(nameController.text,emailController.text,nameController.text,passwordController);
+                                                 if(check != {}) Navigator.pushNamed(context, '/home');
+                                                  }
+                                                },
+                                                child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Create an account",Color.fromRGBO(35, 154, 139, 75),Colors.white))),
                                            )
                    : Padding(
                       padding: EdgeInsets.only(left: sizeWidth/20, right:sizeWidth/20),
-                      child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Create an account",Color.fromRGBO(35, 154, 139, 75),Colors.white),
+                      
+                      child: InkWell(
+                        onTap: () async {
+                                                  if(nameController.text == ""  || passwordController.text == "" || emailController.text == "") {error.value = true;}
+                                                  else {
+                                                 check = createRecord(nameController.text,emailController.text,nameController.text,passwordController.text);
+                                                 if(check != {}) Navigator.pushNamed(context, '/home');
+                                                  }
+                                                },
+                        child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Create an account",Color.fromRGBO(35, 154, 139, 75),Colors.white)),
                     ),
                     
                 ],

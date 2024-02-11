@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/text.dart';
 import '../components/button.dart';
 import '../components/firebase_func.dart';
+import '../components/crud.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -11,7 +12,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
+  var check = null;
+  late final nameController = TextEditingController();
+  late final emailController = TextEditingController();
+  late final passwordController = TextEditingController();
+  final error = ValueNotifier(false);
   @override
   Widget build(BuildContext context) {
       double sizeHeight = MediaQuery.of(context).size.height;
@@ -67,7 +72,11 @@ class _LoginState extends State<Login> {
                           child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/facebook.png"),
                         ),
                         InkWell(
-                          onTap: () async =>  {print(await signInWithGoogle())},
+                          onTap: () async =>  {
+                                check = await signInWithGoogle(),
+                                check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],""),
+                                if(check != {}) Navigator.pushNamed(context, '/home')
+                                },
                           child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),
                         ),
                         InkWell(
@@ -86,12 +95,23 @@ class _LoginState extends State<Login> {
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: emailController,
+                                    onChanged: (newValue) => emailController.text = newValue,
                                 decoration: logininput('Enter your email', "Ex- john@gmail.com"),
                               ),
+                              TextFormField(
+                                controller: nameController,
+                                    onChanged: (newValue) => nameController.text = newValue,
+                                decoration: logininput('Enter your name', "Ex- john"),
+                              ),
                                TextFormField(
+                                controller: passwordController,
+                                    onChanged: (newValue) => passwordController.text = newValue,
                                 obscureText: true,
                             decoration: logininput('Password', "Ex- John123g#"),
                           ),
+                          if(error.value)Text("Missing values. Please try again",style: TextStyle(color: Colors.red),),
+                                if(check == 'IncorrectDetails') Text("User details do not match",style: TextStyle(color: Colors.red))
                       ],
                     ),
                   ),
@@ -114,7 +134,11 @@ class _LoginState extends State<Login> {
                                                       Padding(
                                                         padding: const EdgeInsets.all(8.0),
                                                         child: InkWell(
-                                                          onTap: () async =>  {print(await signInWithGoogle())},
+                                                          onTap: () async =>  {
+                                check = await signInWithGoogle(),
+                                check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],""),
+                                if(check != {}) Navigator.pushNamed(context, '/home')
+                                },
                                                           child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),
                                                         ),
                                                       ),
@@ -125,6 +149,7 @@ class _LoginState extends State<Login> {
                                                           child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/black_apple.png"),
                                                         ),
                                                       ),
+
                         ],
                       ),
                       dividervertical(constr,sizeHeight/7,sizeHeight/20,Colors.black),
@@ -132,24 +157,56 @@ class _LoginState extends State<Login> {
                         children: [
                           Container(
                             constraints: BoxConstraints(
-                              maxWidth: sizeWidth/2,
-                            ),
-                            child: TextFormField(
-                                   style: TextStyle(
-                                    color:Colors.black
-                                   ),
-                                    decoration: logininput('Enter your email', "Ex- john@gmail.com"),
+                                    maxWidth: sizeWidth/2,
                                   ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth: sizeWidth/4.3,
+                                  ),
+                                  child: TextFormField(
+                                    controller: emailController,
+                                    onChanged: (newValue) => emailController.text = newValue,
+                                         style: TextStyle(
+                                          color:Colors.black
+                                         ),
+                                          decoration: logininput('Enter your email', "Ex- john@gmail.com"),
+                                        ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Container(
+                                                                constraints: BoxConstraints(
+                                  maxWidth: sizeWidth/4.3,
+                                                                ),
+                                                                child: TextFormField(
+                                                                  controller: nameController,
+                                    onChanged: (newValue) => nameController.text = newValue,
+                                       style: TextStyle(
+                                        color:Colors.black
+                                       ),
+                                        decoration: logininput('Enter your name', "Ex- john"),
+                                      ),
+                                                              ),
+                                ),
+                              ],
+                            ),
                           ),
+                          
                                  Container(
                                   constraints: BoxConstraints(
                               maxWidth: sizeWidth/2,
                             ),
                                    child: TextFormField(
+                                    controller: passwordController,
+                                    onChanged: (newValue) => passwordController.text = newValue,
                                     obscureText: true,
                                                                decoration: logininput('Password', "Ex- John123g#"),
                                                              ),
                                  ),
+                                if(error.value) Text("Missing values. Please try again",style: TextStyle(color: Colors.red)),
+                                if(check == 'IncorrectDetails') Text("User details do not match",style: TextStyle(color: Colors.red))
                         ],
                       ),
                     ]),
@@ -160,11 +217,22 @@ class _LoginState extends State<Login> {
                     children :[
 Padding(
                           padding: EdgeInsets.only(left: sizeWidth/20, right:sizeWidth/20),
-                          child: Container(
-                            constraints: BoxConstraints(
-                              maxWidth: sizeWidth/2,
-                            ),
-                            child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Log in",Color.fromRGBO(35, 154, 139, 75),Colors.white)),
+                          child: InkWell(
+                            onTap: () async {
+                             if(nameController.text == ""  || passwordController.text == "" || emailController.text == "") {error.value = true;}
+                             else {
+                              print(nameController.text);
+                              // check = await checkUser(nameController.text, emailController.text, passwordController.text);
+                              if(check == 'userExists') Navigator.pushNamed(context, '/home');
+
+                             }
+                            },
+                            child: Container(
+                              constraints: BoxConstraints(
+                                maxWidth: sizeWidth/2,
+                              ),
+                              child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Log in",Color.fromRGBO(35, 154, 139, 75),Colors.white)),
+                          ),
                         ),
                         Padding(
                       padding: EdgeInsets.only(left: sizeWidth/20, right:sizeWidth/20),
@@ -176,7 +244,19 @@ Padding(
                      children: [
                        Padding(
                           padding: EdgeInsets.only(left: sizeWidth/20, right:sizeWidth/20),
-                          child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Log in",Color.fromRGBO(35, 154, 139, 75),Colors.white),
+                          child: InkWell(
+                            onTap: () async {
+                             if(nameController.text == "" || passwordController.text == "" || emailController.text == "") {setState(() {
+                               error.value = true;
+                             });}
+                             else {
+                              check = await checkUser(nameController.text, emailController.text, passwordController.text);
+                              if(check == 'userExists') Navigator.pushNamed(context, '/home');
+     
+                             }
+                             print(error);
+                            },
+                            child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Log in",Color.fromRGBO(35, 154, 139, 75),Colors.white)),
                         ),
                         Padding(
                       padding: EdgeInsets.only(left: sizeWidth/20, right:sizeWidth/20),

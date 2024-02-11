@@ -4,6 +4,7 @@ import '../components/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import '../components/crud.dart';
 import '../components/firebase_func.dart';
 
 class onboarding extends StatefulWidget {
@@ -14,9 +15,7 @@ class onboarding extends StatefulWidget {
 }
 
 class _onboardingState extends State<onboarding>  with SingleTickerProviderStateMixin{
-
-
-  
+ late var check;
   @override
   Widget build(BuildContext context) {
     double sizeHeight = MediaQuery.of(context).size.height;
@@ -61,9 +60,7 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                   Padding(
                     padding: EdgeInsets.only(left:  32.0, right: 32.0, top: sizeHeight/50),
                     child: Container(
-                      
-                      
-                      // alignment: Alignment.center,
+                     // alignment: Alignment.center,
                       child: Center(
                         child: Text(constr ? 'Success Beyond Stress, Wellness Within':'Success Beyond Stress,\nWellness Within',
                         textAlign: TextAlign.center,
@@ -98,7 +95,11 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                               child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/facebook.png"),
                             ),
                             InkWell(
-                              onTap: () async =>  {print(await signInWithGoogle())},
+                              onTap: () async =>  {
+                                check = await signInWithGoogle(),
+                                check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],"1"),
+                                if(check != {}) Navigator.pushNamed(context, '/home')
+                                },
                               child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),
                             ),
                             InkWell(
