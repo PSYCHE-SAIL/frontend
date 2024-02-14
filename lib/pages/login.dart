@@ -74,7 +74,7 @@ class _LoginState extends State<Login> {
                         InkWell(
                           onTap: () async =>  {
                                 check = await signInWithGoogle(),
-                                check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],""),
+                                check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],"1"),
                                 if(check != {}) Navigator.pushNamed(context, '/home')
                                 },
                           child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),

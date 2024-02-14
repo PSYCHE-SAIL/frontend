@@ -52,7 +52,6 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
           body: Padding(
             padding:  EdgeInsets.only(top : sizeHeight/20),
             child: Container(
-            
             decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/background_onboarding.png"),fit: BoxFit.cover)), 
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -77,13 +76,10 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                   Padding(
                     padding:  EdgeInsets.symmetric(horizontal: 32.0),
                     child: HigthlightText(sizeHeight/50,sizeHeight/15,"Chill Maps, Therapy Chats - Because\nSuccess Shouldn't Stress You Out!")
-                   
                   ),
                   Padding(
                     padding:  EdgeInsets.symmetric(horizontal: sizeWidth/10),
                     child: Container(
-                      
-                      
                       alignment: Alignment.center,
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal : sizeWidth/10),
@@ -114,7 +110,6 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                     
                   ),
                   divider(constr,sizeWidth/30,sizeWidth/20,Colors.white),
-                  
                     Padding(
                     padding: EdgeInsets.symmetric( horizontal: constr ? sizeWidth/5:sizeWidth/10),
                     child: InkWell(onTap: () => {
