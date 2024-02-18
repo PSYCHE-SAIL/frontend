@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:psychesail/components/crud.dart';
+import 'package:random_avatar/random_avatar.dart';
 import '../components/button.dart';
 import 'package:intl/intl.dart';
 
@@ -91,98 +92,93 @@ class _homeState extends State<home> {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                          final DateTime now = DateTime.now();
- final formattedDate = dateFormatter.format(now);
+                             final formattedDate = dateFormatter.format(now);
                                            final formattedTime = timeFormatter.format(now);
                                           
                                            DateTime checkTime = DateFormat("hh:mm:ss").parse(formattedTime);
                                           final diffTime = checkTime.difference(DateFormat("hh:mm:ss").parse(snapshot.data.values.elementAt(index)['time']));
-                                      return Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Container(
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                           
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Container(
+                                                  width: sizeWidth/5,
                                                   decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               5)),
-                                                  child: circleButton(
-                                                      constr,
-                                                      sizeWidth / 200,
-                                                      sizeWidth / 300,
-                                                      "assets/idea.png"),
+                                                  child: RandomAvatar(snapshot.data.keys.elementAt(index), trBackground: false, height: 50,width: 50),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      snapshot.data.keys.elementAt(index),
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: constr
-                                                            ? sizeWidth / 40
-                                                            : sizeWidth / 20,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        fontFamily: 'ABeeZee',
+                                                Container(
+                                                  width: sizeWidth/2.5,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        snapshot.data.keys.elementAt(index),
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: constr
+                                                              ? sizeWidth / 40
+                                                              : sizeWidth / 20,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontFamily: 'ABeeZee',
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      snapshot.data.values.elementAt(index)['message'],
-                                                      style: TextStyle(
-                                                        color: Colors.grey,
+                                                      Text(
+                                                        snapshot.data.values.elementAt(index)['message'],
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    Text(
-                                                      formattedDate == snapshot.data.values.elementAt(index)['date'] ? diffTime.inHours == 00 ? diffTime.inMinutes == 00 ? "${diffTime.inSeconds.toString()} sec" : "${diffTime.inMinutes.toString()} mins":"${diffTime.inHours.toString()} hours": snapshot.data.values.elementAt(index)['date'],
-                                                      style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        fontFamily: 'ABeeZee',
+                                                Container(
+                                                  width: sizeWidth/4,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      Text(
+                                                        formattedDate == snapshot.data.values.elementAt(index)['date'] ? diffTime.inHours == 00 ? diffTime.inMinutes == 00 ? "${diffTime.inSeconds.toString()} sec" : "${diffTime.inMinutes.toString()} mins":"${diffTime.inHours.toString()} hours": snapshot.data.values.elementAt(index)['date'],
+                                                        style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                          fontFamily: 'ABeeZee',
+                                                        ),
                                                       ),
-                                                    ),
-                                                    CircleAvatar(
-                                                        maxRadius: constr
-                                                            ? sizeWidth / 65
-                                                            : sizeWidth / 40,
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        child: Text(
-                                                          "",
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                                  sizeWidth /
-                                                                      50),
-                                                        )),
-                                                  ],
+                                                      CircleAvatar(
+                                                          maxRadius: constr
+                                                              ? sizeWidth / 65
+                                                              : sizeWidth / 40,
+                                                          backgroundColor:
+                                                              Colors.transparent,
+                                                          child: Text(
+                                                            "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    sizeWidth /
+                                                                        50),
+                                                          )),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );

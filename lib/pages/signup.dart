@@ -176,8 +176,8 @@ class _SignupState extends State<Signup> {
                         onTap: () async {
                                                   if(nameController.text == ""  || passwordController.text == "" || emailController.text == "") {error.value = true;}
                                                   else {
-                                                 check = createRecord(nameController.text,emailController.text,nameController.text,passwordController.text);
-                                                 if(check == 'userExists') Navigator.pushNamed(context, '/home', arguments: {'currentuser' : nameController.text} );
+                                                 check = await createRecord(nameController.text,emailController.text,nameController.text,passwordController.text);
+                                                 if(check != 'userExists') Navigator.pushNamed(context, '/home', arguments: {'currentuser' : nameController.text} );
                                                   }
                                                 },
                         child: bottomButton(constr,sizeWidth/50,sizeHeight/50,"Create an account",Color.fromRGBO(35, 154, 139, 75),Colors.white)),

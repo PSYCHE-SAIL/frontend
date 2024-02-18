@@ -94,7 +94,7 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                             InkWell(
                               onTap: () async =>  {
                                 check = await signInWithGoogle(),
-                                                            currentuser=await (check).additionalUserInfo.profile['given_name'],
+                                 currentuser=await (check).additionalUserInfo.profile['given_name'],
                                 check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],""),
                                 if(check != {}) {
                                   Navigator.pushNamed(context, '/home', arguments: {'currentuser' : currentuser} )

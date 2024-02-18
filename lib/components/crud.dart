@@ -46,7 +46,7 @@ dynamic getData(id) async {
 dynamic checkUser(name,email,password) async {
   var check = await getData(name);
   if(check == 'No data available.') return 'IncorrectDetails';
-  if(check['name'] == name && check['email'] == email && check['password'] == password) {
+  if(check['id'] == name && check['email'] == email && check['password'] == password) {
     return 'userExists';
   } else return 'IncorrectDetails';
 }
