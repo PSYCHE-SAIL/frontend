@@ -1,5 +1,9 @@
 # PsycheSail
 
+<div style="display: flex">
+ <img src="https://avatars.githubusercontent.com/u/156929781?s=400&u=e78410db0bb16fec2208ed7d1f1b3d944d76fc72&v=4" alt="psychesail-application" width="400" height="400">
+</div>
+
 <div style="display: flex;">
   
   <img src="https://i.imgur.com/nlWp1bm.png" alt="Femuunity Logo" width="310" height="244">
