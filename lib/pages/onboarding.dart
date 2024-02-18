@@ -16,6 +16,7 @@ class onboarding extends StatefulWidget {
 
 class _onboardingState extends State<onboarding>  with SingleTickerProviderStateMixin{
  late var check;
+ var currentuser = null;
   @override
   Widget build(BuildContext context) {
     double sizeHeight = MediaQuery.of(context).size.height;
@@ -93,8 +94,11 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                             InkWell(
                               onTap: () async =>  {
                                 check = await signInWithGoogle(),
-                                check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],"1"),
-                                if(check != {}) Navigator.pushNamed(context, '/home')
+                                                            currentuser=await (check).additionalUserInfo.profile['given_name'],
+                                check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],""),
+                                if(check != {}) {
+                                  Navigator.pushNamed(context, '/home', arguments: {'currentuser' : currentuser} )
+                                  }
                                 },
                               child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),
                             ),

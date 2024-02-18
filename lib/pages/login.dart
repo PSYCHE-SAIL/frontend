@@ -3,6 +3,7 @@ import '../components/text.dart';
 import '../components/button.dart';
 import '../components/firebase_func.dart';
 import '../components/crud.dart';
+import './home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,10 +14,12 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   var check = null;
+  var currentuser = null;
   late final nameController = TextEditingController();
   late final emailController = TextEditingController();
   late final passwordController = TextEditingController();
   final error = ValueNotifier(false);
+  // FirebaseFirestore _firestore = FirebaseFirestore.instance ;
   @override
   Widget build(BuildContext context) {
       double sizeHeight = MediaQuery.of(context).size.height;
@@ -74,8 +77,9 @@ class _LoginState extends State<Login> {
                         InkWell(
                           onTap: () async =>  {
                                 check = await signInWithGoogle(),
+                                currentuser=await (check).additionalUserInfo.profile['given_name'],
                                 check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],"1"),
-                                if(check != {}) Navigator.pushNamed(context, '/home')
+                                if(check != {}) Navigator.pushNamed(context, '/home', arguments: {'currentuser' : currentuser} )
                                 },
                           child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),
                         ),
@@ -136,8 +140,11 @@ class _LoginState extends State<Login> {
                                                         child: InkWell(
                                                           onTap: () async =>  {
                                 check = await signInWithGoogle(),
+                                                            currentuser=await (check).additionalUserInfo.profile['given_name'],
                                 check =  await createRecord((check).additionalUserInfo.profile['given_name'], (check).additionalUserInfo.profile['email'],(check).additionalUserInfo.profile['given_name'],""),
-                                if(check != {}) Navigator.pushNamed(context, '/home')
+                                if(check != {}) {
+                                  Navigator.pushNamed(context, '/home', arguments: {'currentuser' : currentuser} )
+                                  }
                                 },
                                                           child: circleButton(constr,sizeWidth/200,sizeWidth/100,"assets/google.png"),
                                                         ),
@@ -222,8 +229,8 @@ Padding(
                              if(nameController.text == ""  || passwordController.text == "" || emailController.text == "") {error.value = true;}
                              else {
                               print(nameController.text);
-                              // check = await checkUser(nameController.text, emailController.text, passwordController.text);
-                              if(check == 'userExists') Navigator.pushNamed(context, '/home');
+                              check = await checkUser(nameController.text, emailController.text, passwordController.text);
+                              if(check == 'userExists') Navigator.pushNamed(context, '/home', arguments: {'currentuser' : nameController.text} );
 
                              }
                             },
@@ -251,7 +258,7 @@ Padding(
                              });}
                              else {
                               check = await checkUser(nameController.text, emailController.text, passwordController.text);
-                              if(check == 'userExists') Navigator.pushNamed(context, '/home');
+                              if(check == 'userExists') Navigator.pushNamed(context, '/home', arguments: {'currentuser' : nameController.text} );
      
                              }
                              print(error);
