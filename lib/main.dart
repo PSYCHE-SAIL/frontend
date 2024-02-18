@@ -6,6 +6,7 @@ import './pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart'; 
 import './pages/signup.dart';
+import './pages/chatroom.dart';
 
 void main() async {
 
@@ -36,7 +37,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const onboarding(),
         '/login': (context) => const Login(),
         '/Signup': (context) => const Signup(),
-        '/home':(context) => const home()
+        '/home':(context) => const home(),
+        '/chatroom':(context) => const ChatRoom()
       },
     debugShowCheckedModeBanner: false,
     theme: ThemeData.dark(useMaterial3: true),
