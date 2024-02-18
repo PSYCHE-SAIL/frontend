@@ -9,9 +9,7 @@ part 'bloc_state.dart';
 
 class BlocBloc extends Bloc<BlocEvent, BlocState> {
   BlocBloc() : super(ChatSuccessState(messages: [])) {
-    on<ChatGenerateNewTextMessageEvent>(chatGenerateNewTextMessageEvent) {
-      
-    }
+    on<ChatGenerateNewTextMessageEvent>(chatGenerateNewTextMessageEvent) {}
 List<BotChatMessageModel> messages = [] ;
 FutureOr<void> chatGenerateNewTextMessageEvent(ChatGenerateNewTextMessageEvent event, Emitter<BlocState> emit)async{
       messages.add(BotChatMessageModel(role: "user", parts: [ChatPartModel(text: event.inputMessage)]));
