@@ -10,13 +10,20 @@ part 'bloc_state.dart';
 class BlocBloc extends Bloc<BlocEvent, BlocState> {
   BlocBloc() : super(ChatSuccessState(messages: [])) {
     on<ChatGenerateNewTextMessageEvent>(chatGenerateNewTextMessageEvent) {}
-List<BotChatMessageModel> messages = [] ;
-FutureOr<void> chatGenerateNewTextMessageEvent(ChatGenerateNewTextMessageEvent event, Emitter<BlocState> emit)async{
-      messages.add(BotChatMessageModel(role: "user", parts: [ChatPartModel(text: event.inputMessage)]));
-      emit(ChatSuccessState(messages: messages));
-      await ChatRepo.chatTextGenerationRepo(messages);
-};
-// ignore: invalid_use_of_visible_for_testing_member
+  }
+
+  List<BotChatMessageModel> messages = [];
+
+  FutureOr<dynamic> chatGenerateNewTextMessageEvent(
+      ChatGenerateNewTextMessageEvent event) async {
+    messages.add(BotChatMessageModel(
+        role: "user", parts: [ChatPartModel(text: event.inputMessage)]));
+    String generatedText  = await ChatRepo.chatTextGenerationRepo(messages);
+    if(generatedText.length>0) {
+      messages.add(BotChatMessageModel(role: 'model', parts: [ChatPartModel(text: generatedText)]));
+    }
+    return (messages);
 
   }
 }
+// ignore: invalid_use_of_visible_for_testing_member

@@ -178,7 +178,7 @@ Widget homechatbubble(
               print(user['id']);
               print(user['email']);
               print(currentUserId);
-              if(user['id'].toString() == "monkeybot") {
+              if(user['id'].toString() == 'monkeybot') {
                 Navigator.pushNamed(context, '/monkeybot', arguments: {
                   'receiveremail': user['email'],
                   'receiverid': user['id'],
@@ -195,7 +195,7 @@ Widget homechatbubble(
               }
   ,
             child: Text(
-              user['id'],
+              user['id'].toString(),
               style: TextStyle(
                 color: Colors.black,
                 fontSize: constr ? sizeWidth / 40 : sizeWidth / 20,

@@ -83,7 +83,8 @@ class _HomePageState extends State<HomePage> {
           height: 36,
           thickness: 3,
           ),),
-            _buildUserList(constr, sizeWidth, sizeHeight, currentUserId),
+            _buildUserList(constr, sizeWidth, sizeHeight, 'monkeybot')
+            // _buildUserList(constr, sizeWidth, sizeHeight, currentUserId),
           ],),),
 
           bottomNavigationBar: BottomNavigationBar(
@@ -153,11 +154,12 @@ class _HomePageState extends State<HomePage> {
       //   );
       // }
       // else {
-      return Padding(
-        padding: EdgeInsets.all(12),
-        child: homechatbubble(
-            constr, sizeWidth, sizeHeight, data, context, currentUserId),
-      );
+        return Padding(
+          padding: EdgeInsets.all(12),
+          child: homechatbubble(
+              constr, sizeWidth, sizeHeight, data, context, currentUserId),
+        );
+      // }
       // return ListTile(
       //   title: Text(data['id']),
       //   onTap: () {

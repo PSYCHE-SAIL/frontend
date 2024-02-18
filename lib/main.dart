@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
 
       title: 'PsycheSail',
-      initialRoute: '/monkeybot',
+      initialRoute: '/',
       routes: {
         '/': (context) => const onboarding(),
         '/login': (context) => const Login(),

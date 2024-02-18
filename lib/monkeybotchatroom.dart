@@ -25,26 +25,12 @@ class MonkeyBotChatRoom extends StatefulWidget {
 
 class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
   final TextEditingController _messageController = TextEditingController();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final BlocBloc chatbloc = BlocBloc();
+
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var receiveremail;
   var receiverid;
   var currentid;
-  final BlocBloc chatbloc = BlocBloc();
-  @override
-  void initState() {
-    super.initState();
-    chatbloc.on<ChatGenerateNewTextMessageEvent>((event, emit) {
-      // Handle the event here
-      // You can dispatch new states based on this event
-    });
-  }
-  void _sendMessage() {
-    if (_messageController.text.isNotEmpty) {
-      // await sendmessage(receiverid, _messageController.text);
-      chatbloc.add(ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text));
-      _messageController.clear();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +40,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
 
     // Access individual parameters
     receiveremail = args?['receiveremail'] ?? '';
-    receiverid = args?['receiverid'] ?? '';
+    receiverid = "monkeybot";
     currentid = args?['currentid'] ?? '';
     print(receiverid);
     print(receiveremail);
@@ -79,10 +65,10 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
             bloc: chatbloc,
             listener: (context, state) {},
             builder: (context, state) {
-              switch (state.runtimeType) {
-                case ChatSuccessState:
-                  List<BotChatMessageModel> messages =
-                      (state as ChatSuccessState).messages;
+              List<BotChatMessageModel> messages =
+                  chatbloc.messages;
+              switch (messages.isNotEmpty) {
+                case true:
                   return Container(
                     width: double.maxFinite,
                     height: double.maxFinite,
@@ -93,23 +79,123 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                       children: [
                         Expanded(
                           child: ListView.builder(
-                            itemCount: messages.length,
-                              itemBuilder: (context,index) {
-                            return Container(
-                              padding: const EdgeInsets.all(12.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Color.fromRGBO(32, 160, 144, 100),
-                                ),
-                                child  : Text(messages[index].parts.first.text));
-                          }),
+                              itemCount: messages.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                                    padding: const EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color:(currentid=='monkeybot')? Colors.grey:Color.fromRGBO(32, 160, 144, 100),
+                                    ),
+                                    child:
+                                        Text(style: TextStyle(color:(currentid=='monkeybot')? Colors.black:Colors.white, fontSize: 17),
+                                            messages[index].parts.first.text),
+
+                                );
+                              }),
                         ),
-                        _buildMessageInput(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 10),
+                          height: 120,
+                          color: Colors.white,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: TextField(
+                                    controller: _messageController,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        borderSide:
+                                            BorderSide(color: Colors.black))),
+                              )),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              InkWell(
+                                onTap: () async{
+                                  if(_messageController.text.isNotEmpty) {
+                                    print(_messageController.text);
+                                    print( ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text));
+                                    print(await chatbloc.chatGenerateNewTextMessageEvent(ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text)));
+
+                                  }
+                                },
+                                child : CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.black,
+                                child: Icon(
+                                  Icons.send,
+                                  color: Colors.white,
+                                ),
+                              ),)
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   );
                 default:
-                  return SizedBox();
+                  return Column(
+              children: [
+                Expanded(child: Container(
+                  color: Colors.white,
+                ), ),
+                Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 10),
+                    height: 120,
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: TextField(
+                              controller: _messageController,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(100),
+                                      borderSide:
+                                      BorderSide(color: Colors.black))),
+                            )),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        InkWell(
+                          onTap: () async{
+                            if(_messageController.text.isNotEmpty) {
+                              print(_messageController.text);
+                              print( ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text));
+                              print(await chatbloc.chatGenerateNewTextMessageEvent(ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text)));
+// print(chatbloc.messages.length);
+                              _messageController.clear();
+                            }
+                          },
+                          child : CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.black,
+                            child: Icon(
+                              Icons.send,
+                              color: Colors.white,
+                            ),
+                          ),)
+                      ],
+                    ),
+                  )
+                  ]);
               }
             }));
 
@@ -176,7 +262,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
 //     );
 //   }
 //   // build message input
-  Widget _buildMessageInput() {
+  Widget _buildMessageInput(messages) {
     return Row(
       children: [
         //textfield
@@ -190,55 +276,64 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
 
         // send button
         InkWell(
-          onTap: () {
-            _sendMessage();
-          },
-            child : CircleAvatar(
-          radius: 32,
-          backgroundColor: Colors.transparent,
-          child: Icon(Icons.send,color: Colors.black,),
-        ))
+            onTap: () async {
+              print(ChatSuccessState(messages: messages).toString());
+              if (_messageController.text.isNotEmpty) {
+                chatbloc.add(ChatGenerateNewTextMessageEvent(
+                    inputMessage: _messageController.text));
+
+                _messageController.clear();
+              }
+            },
+            child: CircleAvatar(
+              radius: 32,
+              backgroundColor: Colors.transparent,
+              child: Icon(
+                Icons.send,
+                color: Colors.black,
+              ),
+            ))
       ],
     );
   }
-
-  Future<void> sendmessage(String receiverId, String message) async {
-    // get user info
-    var snap = await getData(currentid);
-    print(snap['email']);
-    print(receiverid);
-    print(receiveremail);
-    print(currentid);
-    final String currentUserId = currentid;
-    final String currentEmailId = snap['email'];
-    final timestamp = Timestamp.now();
-
-    // create a new message
-    Message newMessage = Message(
-      senderEmail: currentEmailId,
-      senderid: currentUserId,
-      receiverid: receiverid,
-      message: message,
-      timestamp: timestamp,
-    );
-    //construct chatroom id for current user id and sender id (sorted to ensure uniqueness)
-    List<String> ids = [currentUserId, receiverId];
-    ids.sort();
-    String chatroomId = ids.join("_");
-
-    //add new message to database
-    await _firestore
-        .collection('chat_rooms')
-        .doc(chatroomId)
-        .collection('messages')
-        .add(newMessage.toMap());
-  }
-//
-//   // GET MESSAGES
-//   Stream<QuerySnapshot> getmessages(String userId, String otheruserId) {
-//     List<String> ids= [userId, otheruserId];
-//     ids.sort();
-//     String chatroomid =  ids.join("_");
-//     return _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).snapshots();
-//   }
 }
+//   Future<void> sendmessage(String receiverId, String message) async {
+//     // get user info
+//     var snap = await getData(currentid);
+//     print(snap['email']);
+//     print(receiverid);
+//     print(receiveremail);
+//     print(currentid);
+//     final String currentUserId = currentid;
+//     final String currentEmailId = snap['email'];
+//     final timestamp = Timestamp.now();
+//
+//     // create a new message
+//     Message newMessage = Message(
+//       senderEmail: currentEmailId,
+//       senderid: currentUserId,
+//       receiverid: receiverid,
+//       message: message,
+//       timestamp: timestamp,
+//     );
+//     //construct chatroom id for current user id and sender id (sorted to ensure uniqueness)
+//     List<String> ids = [currentUserId, receiverId];
+//     ids.sort();
+//     String chatroomId = ids.join("_");
+//
+//     //add new message to database
+//     await _firestore
+//         .collection('chat_rooms')
+//         .doc(chatroomId)
+//         .collection('messages')
+//         .add(newMessage.toMap());
+//   }
+// //
+// //   // GET MESSAGES
+// //   Stream<QuerySnapshot> getmessages(String userId, String otheruserId) {
+// //     List<String> ids= [userId, otheruserId];
+// //     ids.sort();
+// //     String chatroomid =  ids.join("_");
+// //     return _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).snapshots();
+// //   }
+// }

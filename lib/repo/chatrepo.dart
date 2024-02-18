@@ -7,11 +7,11 @@ import 'package:gdscsol/utils/constants.dart';
 import '../model/botchatmessagemodel.dart';
 
 class ChatRepo {
-  static chatTextGenerationRepo(List<BotChatMessageModel> previousmessages) async {
+  static Future<String> chatTextGenerationRepo(List<BotChatMessageModel> previousmessages) async {
     try {
       Dio dio = Dio();
 
-      final response = dio.post(
+      final response = await dio.post(
           "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${API_KEY}" ,
           data : {
             "contents": previousmessages.map((e)=> e.toMap()).toList(),
@@ -42,9 +42,15 @@ class ChatRepo {
             ]
           }
       );
-      log(response.toString());
+      if(response.statusCode! >= 200 && response.statusCode! < 300) {
+return response.data["candidates"].first["content"]["parts"].first["text"] ;
+      }
+      else {
+        return(response.toString());
+      }
+      // print(response.toString());
     }catch(e) {
-      log(e.toString());
+      return(e.toString());
     }
   }
 }
