@@ -38,6 +38,7 @@ dependencies:
   firebase_database: ^10.4.5
   cloud_firestore: ^4.15.4
   provider: ^6.1.1
+  random_avatar: ^0.0.8
   bloc:
   flutter_bloc:
   dio:

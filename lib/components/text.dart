@@ -207,64 +207,48 @@ Widget homechatbubble(
         ],
       ),
     ),
-    // Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //     children: [
-    //       Padding(
-    //         padding: const EdgeInsets.all(4.0),
-    //         child: Column(
-    //           children: [
-    //             Column(
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //               children: [
-    //                 Text(
-    //                   "2 min",
-    //                   style: TextStyle(
-    //                     color: Colors.grey,
-    //                     fontStyle: FontStyle.italic,
-    //                     fontFamily: 'ABeeZee',
-    //                   ),
-    //                 ),
-    //                 CircleAvatar(
-    //                     maxRadius: constr ? sizeWidth / 65 : sizeWidth / 40,
-    //                     backgroundColor: Colors.red,
-    //                     child: Text(
-    //                       "3",
-    //                       style: TextStyle(
-    //                         fontSize: sizeWidth / 50,
-    //                       ),
-    //                     )),
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //       Padding(
-    //         padding: const EdgeInsets.all(4.0),
-    //         child: Column(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //           children: [
-    //             Text(
-    //               "2 min",
-    //               style: TextStyle(
-    //                 color: Colors.grey,
-    //                 fontStyle: FontStyle.italic,
-    //                 fontFamily: 'ABeeZee',
-    //               ),
-    //             ),
-    //             CircleAvatar(
-    //                 maxRadius: constr ? sizeWidth / 65 : sizeWidth / 40,
-    //                 backgroundColor: Colors.red,
-    //                 child: Text(
-    //                   "3",
-    //                   style: TextStyle(fontSize: sizeWidth / 50),
-    //                 )),
-    //           ],
-    //         ),
-    //       ),
-    //     ])
   ]);
+}
+Widget settingsContainer(constr,rad,sizeWidth,iconUsed,heading,hint) {
+  return Padding(
+    padding: EdgeInsets.all(16.0),
+    child: Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+
+        Container(
+          width: sizeWidth/4,
+          child: CircleAvatar(
+              radius: rad,
+              backgroundColor:Colors.grey,
+              child: Icon(iconUsed,size: 25,color: Colors.black,)
+          ),
+        ),
+        SizedBox(
+
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(heading,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: constr ? sizeWidth / 40 : sizeWidth / 20,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'ABeeZee',
+
+                ),),
+              Text(hint,
+                style: TextStyle(
+                    color: Colors.grey,
+                  fontSize: constr ? sizeWidth / 40 : sizeWidth / 20,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'ABeeZee',
+                ),
+              )
+            ],
+          ),
+        )
+      ],),
+  );
 }
