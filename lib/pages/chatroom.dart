@@ -30,9 +30,13 @@ class _ChatRoomState extends State<ChatRoom> {
 
   void _sendMessage() async{
     if(_messageController.text.isNotEmpty){
-      await sendmessage(receiverid, _messageController.text);
+      await sendmessage(receiverid, _messageController.text,currentid);
+       updateChat(receiverid, currentid, _messageController.text);
+    
       _messageController.clear();
     }
+     
+
   }
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,7 @@ final size = MediaQuery.of(context).size;
         children: [
           // messages
           Expanded(
-            child: _buildMessageList(),
+            child: _buildMessageList(receiverid,currentid),
           ),
           _buildMessageInput(),
         ],
@@ -74,7 +78,7 @@ final size = MediaQuery.of(context).size;
     );
   }
 // build message list
-  Widget _buildMessageList(){
+  Widget _buildMessageList(receiverid,currentid){
     return StreamBuilder(stream: getmessages(receiverid,currentid), builder: (context,snapshot){
       if(snapshot.hasError){
         return Text('Error${snapshot.error}');
@@ -83,12 +87,12 @@ final size = MediaQuery.of(context).size;
         return const Text('Loading...');
       }
       return ListView(
-        children: snapshot.data!.docs.map((document) => _buildMessageItem(document)).toList(),
+        children: snapshot.data!.docs.map((document) => _buildMessageItem(document,currentid)).toList(),
       );
     });
   }
   // build message item
-  Widget  _buildMessageItem(DocumentSnapshot document) {
+  Widget  _buildMessageItem(DocumentSnapshot document,currentid) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
     // align sender messages => left ; receiver messages => right
 
@@ -148,44 +152,8 @@ final size = MediaQuery.of(context).size;
       ],
     );
   }
-  Future<void> sendmessage(String receiverId, String message) async{
-    // get user info
-    var snap = await getData(currentid);
-print(snap['email']);
-    print(receiverid);
-    print(receiveremail);
-    print(currentid);
-    final String currentUserId = currentid;
-    final String currentEmailId = snap['email'];
-    final timestamp = Timestamp.now();
 
-
-    // create a new message
-    Message newMessage = Message(
-    senderEmail: currentEmailId,
-    senderid: currentUserId,
-    receiverid: receiverid,
-    message: message,
-    timestamp: timestamp,
-    );
-    //construct chatroom id for current user id and sender id (sorted to ensure uniqueness)
-    List<String> ids = [currentUserId, receiverId];
-    ids.sort();
-    String chatroomId = ids.join("_");
-
-
-
-
-    //add new message to database
-    await _firestore.collection('chat_rooms').doc(chatroomId).collection('messages').add(newMessage.toMap());
-  }
 
   // GET MESSAGES
-  Stream<QuerySnapshot> getmessages(String userId, String otheruserId) {
-    List<String> ids= [userId, otheruserId];
-    ids.sort();
-    String chatroomid =  ids.join("_");
-    return _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).snapshots();
-  }
-
+  
 }

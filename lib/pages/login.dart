@@ -99,16 +99,19 @@ class _LoginState extends State<Login> {
                     child: Column(
                       children: [
                         TextFormField(
+                          style: TextStyle(color: Colors.black),
                           controller: emailController,
                                     onChanged: (newValue) => emailController.text = newValue,
                                 decoration: logininput('Enter your email', "Ex- john@gmail.com"),
                               ),
                               TextFormField(
+                                style: TextStyle(color: Colors.black),
                                 controller: nameController,
                                     onChanged: (newValue) => nameController.text = newValue,
                                 decoration: logininput('Enter your name', "Ex- john"),
                               ),
                                TextFormField(
+                                style: TextStyle(color: Colors.black),
                                 controller: passwordController,
                                     onChanged: (newValue) => passwordController.text = newValue,
                                 obscureText: true,
@@ -173,11 +176,10 @@ class _LoginState extends State<Login> {
                                     maxWidth: sizeWidth/4.3,
                                   ),
                                   child: TextFormField(
+                                    style: TextStyle(color: Colors.black),
                                     controller: emailController,
                                     onChanged: (newValue) => emailController.text = newValue,
-                                         style: TextStyle(
-                                          color:Colors.black
-                                         ),
+                                         
                                           decoration: logininput('Enter your email', "Ex- john@gmail.com"),
                                         ),
                                 ),
@@ -206,6 +208,7 @@ class _LoginState extends State<Login> {
                               maxWidth: sizeWidth/2,
                             ),
                                    child: TextFormField(
+                                    style: TextStyle(color: Colors.black),
                                     controller: passwordController,
                                     onChanged: (newValue) => passwordController.text = newValue,
                                     obscureText: true,

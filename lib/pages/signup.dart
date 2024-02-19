@@ -66,23 +66,35 @@ class _SignupState extends State<Signup> {
                     child: Column(
                       children: [
                         TextFormField(
+                          style: TextStyle(
+                                          color:Colors.black
+                                         ),
                           controller: nameController,
                                     onChanged: (newValue) => nameController.text = newValue,
                                 obscureText: true,
                             decoration: logininput('Enter Name', "Ex- john"),
                           ),
                         TextFormField(
+                          style: TextStyle(
+                                          color:Colors.black
+                                         ),
                           controller: emailController,
                                     onChanged: (newValue) => emailController.text = newValue,
                                 decoration: logininput('Enter your email', "Ex- john@gmail.com"),
                               ),
                                TextFormField(
+                                style: TextStyle(
+                                          color:Colors.black
+                                         ),
                                 controller: passwordController,
                                     onChanged: (newValue) => passwordController.text = newValue,
                                 obscureText: true,
                             decoration: logininput('Password', "Ex- John123g#"),
                           ),
                           TextFormField(
+                            style: TextStyle(
+                                          color:Colors.black
+                                         ),
                                 obscureText: true,
                             decoration: logininput('Confirm Password',""),
                           ),
@@ -102,11 +114,12 @@ class _SignupState extends State<Signup> {
                               maxWidth: sizeWidth/3,
                             ),
                             child: TextFormField(
+                              style: TextStyle(
+                                          color:Colors.black
+                                         ),
                               controller: nameController,
                                     onChanged: (newValue) => nameController.text = newValue,
-                                   style: TextStyle(
-                                    color:Colors.black
-                                   ),
+                                  
                                     decoration: logininput('Enter Name', "Ex- john"),
                                   ),
                           ),
@@ -115,6 +128,9 @@ class _SignupState extends State<Signup> {
                               maxWidth: sizeWidth/3,
                             ),
                                    child: TextFormField(
+                                    style: TextStyle(
+                                          color:Colors.black
+                                         ),
                                     controller: emailController,
                                     onChanged: (newValue) => emailController.text = newValue,
                                     obscureText: true,

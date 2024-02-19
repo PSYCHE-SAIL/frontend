@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:random_avatar/random_avatar.dart';
 import './button.dart';
 
 Widget HigthlightText(fontsize, minheight, txt) {
@@ -105,6 +106,7 @@ Widget dividervertical(constr, greaterwidth, lesswidth, col) {
 
 InputDecoration logininput(txt, example) {
   return InputDecoration(
+    
       border: UnderlineInputBorder(),
       labelText: txt,
       labelStyle: TextStyle(
@@ -132,8 +134,7 @@ Widget textbubble(
                 padding: EdgeInsets.all(9.0),
                 child: (constr)
                     ? Container()
-                    : circleButton(condition, size.width / 150,
-                        size.height / 90, "assets/idea.png"))),
+                    : RandomAvatar(receiverid, trBackground: false, height: 50,width: 50),)),
         Flexible(
           child: Container(
             padding: EdgeInsets.all(11),
@@ -209,4 +210,48 @@ Widget homechatbubble(
     ),
    
   ]);
+}
+
+Widget settingsContainer(constr,rad,sizeWidth,iconUsed,heading,hint) {
+  return Padding(
+    padding: EdgeInsets.all(16.0),
+    child: Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+
+        Container(
+          width: sizeWidth/4,
+          child: CircleAvatar(
+              radius: rad,
+              backgroundColor:Colors.grey,
+              child: Icon(iconUsed,size: 25,color: Colors.black,)
+          ),
+        ),
+        SizedBox(
+
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(heading,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: constr ? sizeWidth / 40 : sizeWidth / 20,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'ABeeZee',
+
+                ),),
+              Text(hint,
+                style: TextStyle(
+                    color: Colors.grey,
+                  fontSize: constr ? sizeWidth / 40 : sizeWidth / 20,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'ABeeZee',
+                ),
+              )
+            ],
+          ),
+        )
+      ],),
+  );
 }

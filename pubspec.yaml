@@ -43,6 +43,9 @@ dependencies:
   cloud_firestore: ^4.15.4
   intl: ^0.19.0
   random_avatar: ^0.0.8
+  bloc:
+  flutter_bloc:
+  dio:
   # js: ^0.7.0
 
 dev_dependencies:

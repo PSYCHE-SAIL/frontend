@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:psychesail/components/text.dart';
+import 'package:psychesail/model/message.dart';
 import 'package:psychesail/model/userList.dart';
 
 
@@ -77,17 +79,9 @@ dynamic updateChat(currentUser,receiveUser,message) {
   final DateTime now = DateTime.now();
 final formattedDate = dateFormatter.format(now);
 final formattedTime = timeFormatter.format(now);
-String small = "";
-  String large = "";
-  if(currentUser < receiveUser) {small = currentUser; large = receiveUser;}
-  else {large = currentUser; small = receiveUser;}
-_firestore.collection('chatrooms/$small&&$large').doc('$formattedDate').set({
-    "$currentUser" : {
-      "$formattedTime" : message
-    }
-  },SetOptions(merge: true)).then((res) {
-     print("created");
-  });
+_firestore.collection('chatAvailable').doc('$currentUser').set({
+  "$receiveUser" : {'message' : message, 'time' : formattedTime, 'date': formattedDate}
+},SetOptions(merge: true));
 }
 
 dynamic getUsers(currentuser) async {
@@ -96,4 +90,47 @@ dynamic getUsers(currentuser) async {
   print(data.data().values);
   return data.data();
 }
+
+Future<void> sendmessage(String receiverId, String message, currentid) async{
+    // get user info
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    var snap = await getData(currentid);
+print(snap['email']);
+    print(receiverId);
+    // print(receiveremail);
+    print(currentid);
+    final String currentUserId = currentid;
+    final String currentEmailId = snap['email'];
+    final timestamp = Timestamp.now();
+
+
+    // create a new message
+    Message newMessage = Message(
+    senderEmail: currentEmailId,
+    senderid: currentUserId,
+    receiverid: receiverId,
+    message: message,
+    timestamp: timestamp,
+    );
+    //construct chatroom id for current user id and sender id (sorted to ensure uniqueness)
+    List<String> ids = [currentUserId, receiverId];
+    ids.sort();
+    String chatroomId = ids.join("_");
+
+
+
+
+    //add new message to database
+    await _firestore.collection('chat_rooms').doc(chatroomId).collection('messages').add(newMessage.toMap());
+  }
+
+  // GET MESSAGES
+  Stream<QuerySnapshot> getmessages(String userId, String otheruserId) {
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    List<String> ids= [userId, otheruserId];
+    ids.sort();
+    String chatroomid =  ids.join("_");
+    return _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).snapshots();
+  }
 
