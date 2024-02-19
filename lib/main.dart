@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:psychesail/pages/monkeybotchatroom.dart';
 import './pages/onboarding.dart';
 import './pages/login.dart';
 import './pages/home.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart'; 
 import './pages/signup.dart';
 import './pages/chatroom.dart';
+import './pages/settings.dart';
 
 void main() async {
 
@@ -38,7 +41,9 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const Login(),
         '/Signup': (context) => const Signup(),
         '/home':(context) => const home(),
-        '/chatroom':(context) => const ChatRoom()
+        '/chatroom':(context) => const ChatRoom(),
+        '/monkeybot':(context) => const MonkeyBotChatRoom(),
+        '/settings':(context)=> const Setting(),
       },
     debugShowCheckedModeBanner: false,
     theme: ThemeData.dark(useMaterial3: true),
