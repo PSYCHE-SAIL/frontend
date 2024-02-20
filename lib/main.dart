@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PsycheSail',
       initialRoute: '/',
+      
       routes: {
         '/': (context) => const onboarding(),
         '/login': (context) => const Login(),
