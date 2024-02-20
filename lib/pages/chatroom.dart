@@ -58,7 +58,7 @@ final size = MediaQuery.of(context).size;
         actions: [
           Padding(padding: EdgeInsets.only(right: size.width/50),
           child :
-          IconButton(onPressed: () {print("Pressed call button");}, icon: Icon(Icons.call), color: Colors.black))
+          IconButton(onPressed: () {Navigator.pushNamed(context,'/call_page');}, icon: Icon(Icons.call), color: Colors.black))
         ],
       ),
       body: Container (

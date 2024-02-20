@@ -106,7 +106,6 @@ Widget dividervertical(constr, greaterwidth, lesswidth, col) {
 
 InputDecoration logininput(txt, example) {
   return InputDecoration(
-    
       border: UnderlineInputBorder(),
       labelText: txt,
       labelStyle: TextStyle(
@@ -131,10 +130,12 @@ Widget textbubble(
       children: [
         Container(
             child: Padding(
-                padding: EdgeInsets.all(9.0),
-                child: (constr)
-                    ? Container()
-                    : RandomAvatar(receiverid, trBackground: false, height: 50,width: 50),)),
+          padding: EdgeInsets.all(9.0),
+          child: (constr)
+              ? Container()
+              : RandomAvatar(receiverid,
+                  trBackground: false, height: 50, width: 50),
+        )),
         Flexible(
           child: Container(
             padding: EdgeInsets.all(11),
@@ -179,22 +180,20 @@ Widget homechatbubble(
               print(user['id']);
               print(user['email']);
               print(currentUserId);
-              if(user['id'].toString() == "monkeybot") {
+              if (user['id'].toString() == "monkeybot") {
                 Navigator.pushNamed(context, '/monkeybot', arguments: {
                   'receiveremail': user['email'],
                   'receiverid': user['id'],
                   'currentid': currentUserId,
                 });
+              } else {
+                Navigator.pushNamed(context, '/chatroom', arguments: {
+                  'receiveremail': user['email'],
+                  'receiverid': user['id'],
+                  'currentid': currentUserId,
+                });
               }
-              else{
-  Navigator.pushNamed(context, '/chatroom', arguments: {
-  'receiveremail': user['email'],
-  'receiverid': user['id'],
-  'currentid': currentUserId,
-  });
-  }
-              }
-  ,
+            },
             child: Text(
               user['id'],
               style: TextStyle(
@@ -208,42 +207,43 @@ Widget homechatbubble(
         ],
       ),
     ),
-   
   ]);
 }
 
-Widget settingsContainer(constr,rad,sizeWidth,iconUsed,heading,hint) {
+Widget settingsContainer(constr, rad, sizeWidth, iconUsed, heading, hint) {
   return Padding(
     padding: EdgeInsets.all(16.0),
     child: Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-
         Container(
-          width: sizeWidth/4,
+          width: sizeWidth / 4,
           child: CircleAvatar(
               radius: rad,
-              backgroundColor:Colors.grey,
-              child: Icon(iconUsed,size: 25,color: Colors.black,)
-          ),
+              backgroundColor: Colors.grey,
+              child: Icon(
+                iconUsed,
+                size: 25,
+                color: Colors.black,
+              )),
         ),
         SizedBox(
-
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(heading,
+              Text(
+                heading,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: constr ? sizeWidth / 40 : sizeWidth / 20,
                   fontStyle: FontStyle.italic,
                   fontFamily: 'ABeeZee',
-
-                ),),
-              Text(hint,
+                ),
+              ),
+              Text(
+                hint,
                 style: TextStyle(
-                    color: Colors.grey,
+                  color: Colors.grey,
                   fontSize: constr ? sizeWidth / 40 : sizeWidth / 20,
                   fontStyle: FontStyle.italic,
                   fontFamily: 'ABeeZee',
@@ -252,6 +252,57 @@ Widget settingsContainer(constr,rad,sizeWidth,iconUsed,heading,hint) {
             ],
           ),
         )
-      ],),
+      ],
+    ),
+  );
+}
+
+Widget _maptextbubble() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            child: Padding(
+          padding: EdgeInsets.all(9.0),
+          child: RandomAvatar("Serenity",
+              trBackground: false, height: 50, width: 50),
+        )),
+        Flexible(
+          child: Container(
+            padding: EdgeInsets.all(11),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: AssetImage("assets/maps_image.png"),
+                    fit: BoxFit.cover,
+                  )),
+                ),
+                // Text(
+                //   message,
+                //   style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 17),
+                // ),
+                SizedBox(height: 4),
+                Text(
+                  "https://maps.app.goo.gl/smBnLVPhTkBku2uk8",
+                  style: TextStyle(color: Colors.black, fontSize: 17),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }

@@ -13,6 +13,7 @@ import 'package:psychesail/model/textField.dart';
 import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/model/message.dart';
+import 'package:random_avatar/random_avatar.dart';
 
 class MonkeyBotChatRoom extends StatefulWidget {
   const MonkeyBotChatRoom({
@@ -31,6 +32,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
   var lastmessage;
   var receiverid;
     bool endchat = false;
+    bool suggestplaces = false;
   var currentid;
   @override
   void initState() {
@@ -143,6 +145,13 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                           child: Center(child: Text("End chat")),
                                         ),
                                       ),
+                                      InkWell(
+                                          onTap: ()=>{
+                                            setState(() {
+                                              suggestplaces = true;
+                                            }),
+                                          },
+                                          child:
                                       Container(
                                         width: sizeWidth/3,
                                         height: sizeHeight/25,
@@ -152,12 +161,14 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                         ),
                                         child: Center(child: Text("Suggest Places")),
                                       )
+                                      )
                                     ],)
                                   ],
                                 );
                                 
                               }),
                         ),
+                        if(suggestplaces) _maptextbubble(),
                         if(endchat)Container(
                            margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
                                     padding: const EdgeInsets.all(12.0),
@@ -197,7 +208,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                               const SizedBox(
                                 width: 12,
                               ),
-                              !endchat ? InkWell(
+                             ( !endchat || !suggestplaces)  ? InkWell(
                                 onTap: () async{
                                   if(_messageController.text.isNotEmpty) {
                                     print(_messageController.text);
@@ -288,6 +299,55 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     // }
     //     )
     // );
+  }
+  Widget _maptextbubble() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              child: Padding(
+                padding: EdgeInsets.all(9.0),
+                child: RandomAvatar("Serenity",
+                    trBackground: false, height: 50, width: 50),
+              )),
+          Flexible(
+            child: Container(
+              padding: EdgeInsets.all(11),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/maps_image.png"),
+                          fit: BoxFit.cover,
+                        )),
+                  ),
+                  // Text(
+                  //   message,
+                  //   style: TextStyle(
+                  //       color: Colors.black,
+                  //       fontSize: 17),
+                  // ),
+                  SizedBox(height: 4),
+                  Text(
+                    "https://maps.app.goo.gl/smBnLVPhTkBku2uk8",
+                    style: TextStyle(color: Colors.black, fontSize: 17),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
 // build message list
@@ -481,3 +541,4 @@ Widget _buildMessageList(receiverid,currentid){
 // //     return _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).snapshots();
 // //   }
 // }
+
