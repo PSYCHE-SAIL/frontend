@@ -257,19 +257,19 @@ Widget settingsContainer(constr, rad, sizeWidth, iconUsed, heading, hint) {
   );
 }
 
-Widget _maptextbubble() {
+Widget _maptextbubble(size) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-            child: Padding(
-          padding: EdgeInsets.all(9.0),
-          child: RandomAvatar("Serenity",
-              trBackground: false, height: 50, width: 50),
-        )),
+        // Container(
+        //     child: Padding(
+        //   padding: EdgeInsets.all(9.0),
+        //   child: RandomAvatar("Serenity",
+        //       trBackground: false, height: 50, width: 50),
+        // )),
         Flexible(
           child: Container(
             padding: EdgeInsets.all(11),
@@ -281,6 +281,7 @@ Widget _maptextbubble() {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  constraints: BoxConstraints(minHeight: size.height/3 , minWidth: size.width/4),
                   decoration: BoxDecoration(
                       image: DecorationImage(
                     image: AssetImage("assets/maps_image.png"),
@@ -293,7 +294,7 @@ Widget _maptextbubble() {
                 //       color: Colors.black,
                 //       fontSize: 17),
                 // ),
-                SizedBox(height: 4),
+                // SizedBox(height: 4),
                 Text(
                   "https://maps.app.goo.gl/smBnLVPhTkBku2uk8",
                   style: TextStyle(color: Colors.black, fontSize: 17),
