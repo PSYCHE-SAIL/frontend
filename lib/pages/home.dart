@@ -101,7 +101,7 @@ class _homeState extends State<home> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: () => {
-                                            if(snapshot.data.keys.elementAt(index) == 'monkeyBot') {Navigator.pushNamed(context, '/monkeybot', arguments: {'receiverid' : snapshot.data.keys.elementAt(index),'currentid': currentUserId,'lastmessage': snapshot.data.values.elementAt(index)['message']} ) }
+                                            if(snapshot.data.keys.elementAt(index) == 'Serenity') {Navigator.pushNamed(context, '/monkeybot', arguments: {'receiverid' : snapshot.data.keys.elementAt(index),'currentid': currentUserId,'lastmessage': snapshot.data.values.elementAt(index)['message']} ) }
                                             else {Navigator.pushNamed(context, '/chatroom', arguments: {'receiverid' : snapshot.data.keys.elementAt(index),'currentid': currentUserId,'receiveremail': 'gaand_maarao'} ) }
                                           },
                                           child: Container(

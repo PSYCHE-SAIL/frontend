@@ -28,7 +28,7 @@ dynamic createRecord(name,email,id,password) async {
       'email' : email,
       'password': password
     });
-    createChatrooms(name, "monkeyBot", "");
+    createChatrooms(name, "Serenity", "");
     return 'created';
   }  else if(check['email'] == email) return 'userExists';
   return {};

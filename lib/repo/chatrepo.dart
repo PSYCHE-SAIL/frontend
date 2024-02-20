@@ -54,7 +54,7 @@ class ChatRepo {
           }
       );
       if(response.statusCode! >= 200 && response.statusCode! < 300) {
-        return response.data["candidates"].first["content"]["parts"][0]["text"] ;
+        return response.data["candidates"][0]["content"]["parts"][0]["text"] ;
       }
       else {
         return(response.toString());

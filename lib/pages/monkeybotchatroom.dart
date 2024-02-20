@@ -30,14 +30,22 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var lastmessage;
   var receiverid;
+    bool endchat = false;
   var currentid;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    endchat = false;
 
+  }
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     final size = MediaQuery.of(context).size;
-
+ double sizeHeight = MediaQuery.of(context).size.height;
+    double sizeWidth = MediaQuery.of(context).size.width;
     // Access individual parameters
     lastmessage = args?['lastmessage'] ?? '';
     receiverid = 'monkeyBot';
@@ -45,7 +53,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     print(receiverid);
     print(lastmessage);
     print(currentid);
-
+  
     dynamic sendMessage(messages) async{
     if(_messageController.text.isNotEmpty){
       await sendmessage(receiverid, _messageController.text,currentid);
@@ -93,7 +101,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                           child: ListView.builder(
                               itemCount: messages.length,
                               itemBuilder: (context, index) {
-                                return Container(
+                                return !(index%8 == 7) ? Container(
                                   margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
                                     padding: const EdgeInsets.all(12.0),
                                     decoration: BoxDecoration(
@@ -103,10 +111,66 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                     child:
                                         Text(style: TextStyle(color:(messages[index].role == "user")? Colors.white:Colors.black, fontSize: 17),
                                             messages[index].parts.first.text),
-        
+                                ) : Column(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                                        padding: const EdgeInsets.all(12.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color:(messages[index].role == "user")? Color.fromRGBO(32, 160, 144, 100) :Colors.grey,
+                                        ),
+                                        child:
+                                            Text(style: TextStyle(color:(messages[index].role == "user")? Colors.white:Colors.black, fontSize: 17),
+                                                messages[index].parts.first.text),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                      InkWell(
+                                        onTap: ()=>{
+                                          setState(() {
+                                            endchat = true;
+                                          }),
+                                        },
+                                        child: Container(
+                                          width: sizeWidth/3,
+                                          height: sizeHeight/25,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            color: Colors.grey,
+                                          ),
+                                          child: Center(child: Text("End chat")),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: sizeWidth/3,
+                                        height: sizeHeight/25,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.grey,
+                                        ),
+                                        child: Center(child: Text("Suggest Places")),
+                                      )
+                                    ],)
+                                  ],
                                 );
+                                
                               }),
                         ),
+                        if(endchat)Container(
+                           margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                                    padding: const EdgeInsets.all(12.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      
+                                    ),
+                          child: Center(child: Text("I hope i was hopefull in making this situation better for you.\nCome back whenever you need help.\nHave a great day.",
+                          style: TextStyle(
+                            color: Colors.black
+                          ),
+                          textAlign: TextAlign.center,
+                          ))),
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 10),
@@ -133,14 +197,14 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                               const SizedBox(
                                 width: 12,
                               ),
-                              InkWell(
+                              !endchat ? InkWell(
                                 onTap: () async{
                                   if(_messageController.text.isNotEmpty) {
                                     print(_messageController.text);
                                     print( ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text));
                                     print(await chatbloc.chatGenerateNewTextMessageEvent(ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text)));
                                     await sendMessage(messages);
-        _messageController.clear();
+                                    _messageController.clear();
                                   }
                                 },
                                 child : CircleAvatar(
@@ -150,7 +214,14 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                   Icons.send,
                                   color: Colors.white,
                                 ),
-                              ),)
+                              ),) : CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.black,
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.white,
+                              ),
+                                                            )
                             ],
                           ),
                         )
