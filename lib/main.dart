@@ -10,6 +10,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import './pages/signup.dart';
 import './pages/chatroom.dart';
 import './pages/settings.dart';
+import 'firebase_options.dart';
 
 void main() async {
 
@@ -22,8 +23,8 @@ void main() async {
     );
   }
 
-  WidgetsFlutterBinding.ensureInitialized(); 
-  await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
   }
 
