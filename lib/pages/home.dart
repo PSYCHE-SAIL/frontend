@@ -50,9 +50,7 @@ class _homeState extends State<home> {
             actions: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
-                child: circleButton(
-                    constr, sizeWidth / 100, sizeWidth / 50, "assets/idea.png"),
-              )
+                child: RandomAvatar(currentUserId, trBackground: false, height: 50,width: 50))
             ],
           ),
           body: Padding(
@@ -119,7 +117,8 @@ class _homeState extends State<home> {
                                                         borderRadius:
                                                             BorderRadius.circular(
                                                                 5)),
-                                                    child: RandomAvatar(snapshot.data.keys.elementAt(index), trBackground: false, height: 50,width: 50),
+                                                    child:!(snapshot.data.keys.elementAt(index) == "Groupchat" )?  RandomAvatar(snapshot.data.keys.elementAt(index), trBackground: false, height: 50,width: 50) : circleButton(
+                    constr, sizeWidth / 100, sizeWidth / 50, "assets/group_dp.png"),
                                                   ),
                                                   Container(
                                                     width: sizeWidth/2.5,

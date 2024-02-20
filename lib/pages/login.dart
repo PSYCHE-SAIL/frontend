@@ -179,7 +179,6 @@ class _LoginState extends State<Login> {
                                     style: TextStyle(color: Colors.black),
                                     controller: emailController,
                                     onChanged: (newValue) => emailController.text = newValue,
-                                         
                                           decoration: logininput('Enter your email', "Ex- john@gmail.com"),
                                         ),
                                 ),

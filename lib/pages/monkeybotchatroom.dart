@@ -48,7 +48,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     double sizeWidth = MediaQuery.of(context).size.width;
     // Access individual parameters
     lastmessage = args?['lastmessage'] ?? '';
-    receiverid = 'monkeyBot';
+    receiverid = 'Serenity';
     currentid = args?['currentid'] ?? '';
     print(receiverid);
     print(lastmessage);

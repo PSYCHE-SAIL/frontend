@@ -29,6 +29,7 @@ dynamic createRecord(name,email,id,password) async {
       'password': password
     });
     createChatrooms(name, "Serenity", "");
+    createChatrooms(name, "Groupchat", "");
     return 'created';
   }  else if(check['email'] == email) return 'userExists';
   return {};
