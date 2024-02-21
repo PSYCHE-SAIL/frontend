@@ -13,18 +13,12 @@ Watch the product demo on:
   </a> 	
   
  <hr>
-<!--  
- ## 💯 Project Achievements
- - [Global Top 100 | Google Solution Challenge](https://www.linkedin.com/posts/drowsy-coder_gdsc-solutionchallenge-vit-activity-7060683890058809344-eIzN?utm_source=share&utm_medium=member_desktop)
-- [Best Overall Project (1st in 400+ Teams) | IEEE YESIST12 Bangalore Section](https://www.linkedin.com/posts/drowsy-coder_appdevelopment-femaleempowerment-ieee-activity-7060303118273548289-qSXa?utm_source=share&utm_medium=member_desktop)
-- [Global Finalist | Google Solution Challenge](https://www.linkedin.com/posts/drowsy-coder_gdsc-solutionchallenge-project-activity-7077547999547060224-lW77?utm_source=share&utm_medium=member_desktop) -->
 
 ## ⚠️ Initial Survey and Problem Statement Research
 
 <table style="width: 100%;">
   <tr>
     <td>
-      <!-- <img src="https://i.imgur.com/4sVzbxo.png" alt="Image 1" style="width: 50%;"> -->
       <img src="https://i.imgur.com/iHjDNpt.png" alt="Image 1" style="width: 50%;"> 
       <p>😓 
 We discovered that many of our peers feel depressed and like their minds stop working when they're struggling. They're hesitant to talk about their feelings because they think they're the only ones going through tough times. This sense of loneliness and despair sometimes leads to students hurting themselves or even thinking about ending their lives.
@@ -100,12 +94,11 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 
 - **Cognitive Behavioral Therapy (CBT) Techniques:** Incorporate evidence-based cognitive behavioral therapy techniques to address negative thought patterns and promote positive behavior change.
 
-
 - **Notifications for Check-Ins**: Stay connected and supported with regular check-in notifications. Receive reminders to check in with your progress and well-being, ensuring you stay on track with your goals and providing an opportunity to reflect on your journey.
 
 - **Mindfulness Exercises:** Access guided mindfulness exercises and relaxation techniques to reduce stress and improve emotional well-being.
 
-- **Privacy and Security:** Ensure user privacy and data security with robust encryption and adherence to privacy regulations. user anonymously chat with others going through the same and hence 
+- **Privacy and Security:** Ensure user privacy and data security with robust encryption and adherence to privacy regulations. user anonymously chat with others going through the same and hence
 
 - **Personalized Therapy Sessions:** Access personalized therapy sessions tailored to individual needs and preferences.
 
@@ -116,7 +109,6 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 - **User-Friendly Interface:** Enjoy a user-friendly interface designed for easy navigation and intuitive use, enhancing the overall user experience.
 
 - **Continuous Improvement with Gemini by Google**: PsycheSail leverages Gemini, Google's AI platform, for ongoing enhancements based on user feedback and the latest advancements in AI technology, ensuring personalized and effective therapy sessions.
-
 
 <!-- ### 🪲✅ Bug Fixes
 
@@ -138,20 +130,28 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 <table style="width: 100%;">
   <tr>
     <td style="text-align: center;">
-      <img src="https://imgur.com/uyirs8p.gif" alt="Image 1" style="width: 100%;">
+      <video width="500" height="500" controls>
+  <source src="./assets/ps1gif.mp4" type="video/mp4">
+  </video>
       <p>Login Screen</p>
     </td>
     <td style="text-align: center;">
-      <img src="https://imgur.com/UJenl3L.gif" alt="Image 8" style="width: 100%;">
+      <video width="500" height="500" controls>
+  <source src="./assets/ps2gif.mp4" type="video/mp4">
+  </video>
       <p>Home Screen</p>
     </td>
     <td style="text-align: center;">
-      <img src="https://imgur.com/7UCqRiI.gif" alt="Image 2" style="width: 100%;">
-      <p>Add Posts</p>
+      <video width="500" height="500" controls>
+  <source src="./assets/ps3gif.mp4" type="video/mp4">
+  </video>
+      <p>Serenity Bot</p>
     </td>
     <td style="text-align: center;">
-      <img src="https://imgur.com/sUQaklh.gif" alt="Image 3" style="width: 100%;">
-      <p>Communities Drawer</p>
+      <video width="500" height="500" controls>
+  <source src="./assets/ps4gif.mp4" type="video/mp4">
+  </video>
+      <p>Group Chat</p>
     </td>
   </tr>
 </table>
@@ -188,21 +188,13 @@ Before you start, make sure you have installed the following on your system:
 <table style="width: 100%;">
 
   <tr>
-    <td style="text-align: center;">
-      <img src="https://imgur.com/K6pF4UY.gif" alt="Image 6" style="width: 100%;">
-      <p>Opportunities</p>
+     <td style="text-align: center;">
+      <img src="./assets/ps3ss.jpg" alt="Image 4" height="50%" width="50%" >
+      <p>Start Screen</p>
     </td>
-    <td style="text-align: center;">
-      <img src="https://imgur.com/EsKLjCG.gif" alt="Image 7" style="width: 100%;">
-      <p>Sakhi: AI Chatbot</p>
-    </td>
-  <td style="text-align: center;">
-      <img src="https://imgur.com/Am1AzQN.gif" alt="Image 4" style="width: 100%;">
-      <p>Menstrual Tracking</p>
-    </td>
-    <td style="text-align: center;">
-      <img src="https://imgur.com/eVNaaF3.gif" alt="Image 9" style="width: 100%;">
-      <p>Safety Section</p>
+    <td style="text-align: center;" >
+      <img src="./assets/ps1ss.jpg" alt="Image 6" height="50%" width="50%">
+      <p>Settings Screen</p>
     </td>
   </tr>
 </table>
