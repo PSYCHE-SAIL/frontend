@@ -8,7 +8,7 @@ PsycheSail is an app for students who need help with their feelings. It has a ch
 
 Watch the product demo on:
 
-<a href="https://www.youtube.com/watch?v=1H82iFD0pHM">
+<a href="https://youtu.be/C7G-DoE2umk">
     <img src="https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white" alt="LinkedIn Badge"/>
   </a> 	
   
@@ -72,15 +72,15 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 
 <hr> -->
 
-## Latest Version - v1.0.0
+<!-- ## Latest Version - v1.0.0 -->
 
 <table>
   <tr>
-    <td>
+    <!-- <td>
       <a href="https://github.com/drowsy-coder/PsycheSail/releases/download/v2.00.00/PsycheSail.v2.apk">
         <img src="https://user-images.githubusercontent.com/663460/26973090-f8fdc986-4d14-11e7-995a-e7c5e79ed925.png" alt="Github" width="200">
       </a>
-    </td>
+    </td> -->
     <td>
       <a href="https://media.giphy.com/media/iHD88spVFkL7mZakwa/giphy.gif">
         <img src="https://imgur.com/F5JxdNT.png" alt="Github" width="200">
@@ -100,7 +100,6 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 
 - **Cognitive Behavioral Therapy (CBT) Techniques:** Incorporate evidence-based cognitive behavioral therapy techniques to address negative thought patterns and promote positive behavior change.
 
-- **Recreational Activity Suggestions**: Explore nearby recreational activities and venues using the Google Maps API. Receive personalized recommendations tailored to your location and preferences, helping you discover new experiences to enhance your well-being and enjoyment.
 
 - **Notifications for Check-Ins**: Stay connected and supported with regular check-in notifications. Receive reminders to check in with your progress and well-being, ensuring you stay on track with your goals and providing an opportunity to reflect on your journey.
 
@@ -125,6 +124,8 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 - Fixed render-flex errors in multiple parts of the app. -->
 
 ### 👀 Upcoming Features
+
+- **Recreational Activity Suggestions**: Explore nearby recreational activities and venues using the Google Maps API. Receive personalized recommendations tailored to your location and preferences, helping you discover new experiences to enhance your well-being and enjoyment.
 
 - **Professional Support Integration:** Seamlessly integrate with professional mental health services for additional support and intervention when needed.
 
