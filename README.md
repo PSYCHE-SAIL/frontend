@@ -130,27 +130,19 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 <table style="width: 100%;">
   <tr>
     <td style="text-align: center;">
-      <video width="500" height="500" controls>
-  <source src="./assets/ps1gif.mp4" type="video/mp4">
-  </video>
+      <img src="./assets/ps1gif1.gif" width="500" height="500">
       <p>Login Screen</p>
     </td>
     <td style="text-align: center;">
-      <video width="500" height="500" controls>
-  <source src="./assets/ps2gif.mp4" type="video/mp4">
-  </video>
+      <img src="./assets/ps2gif2.gif" width="500" height="500">
       <p>Home Screen</p>
     </td>
     <td style="text-align: center;">
-      <video width="500" height="500" controls>
-  <source src="./assets/ps3gif.mp4" type="video/mp4">
-  </video>
+      <img src="./assets/ps3gif3.gif" width="500" height="500">
       <p>Serenity Bot</p>
     </td>
     <td style="text-align: center;">
-      <video width="500" height="500" controls>
-  <source src="./assets/ps4gif.mp4" type="video/mp4">
-  </video>
+      <img src="./assets/ps4gif4.gif" width="500" height="500">
       <p>Group Chat</p>
     </td>
   </tr>
