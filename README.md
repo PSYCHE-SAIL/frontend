@@ -4,12 +4,6 @@
  <img src="https://avatars.githubusercontent.com/u/156929781?s=400&u=e78410db0bb16fec2208ed7d1f1b3d944d76fc72&v=4" alt="psychesail-application" width="400" height="400">
 </div>
 
-<div style="display: flex;">
-  
-  <img src="https://i.imgur.com/nlWp1bm.png" alt="Femuunity Logo" width="310" height="244">
-
-</div>
-
 PsycheSail is an app for students who need help with their feelings. It has a chatbot that talks to you and gives you ways to feel better. It also shows you fun things to do nearby on a map. You can join a group chat with other people who feel the same way as you. If things are really bad, you can talk to a counselor right away. It's all about helping you feel better and stay strong together. And the chatbot can even suggest music to help you relax.
 
 Watch the product demo on:
@@ -83,7 +77,7 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 <table>
   <tr>
     <td>
-      <a href="https://github.com/drowsy-coder/femunity/releases/download/v2.00.00/Femunity.v2.apk">
+      <a href="https://github.com/drowsy-coder/PsycheSail/releases/download/v2.00.00/PsycheSail.v2.apk">
         <img src="https://user-images.githubusercontent.com/663460/26973090-f8fdc986-4d14-11e7-995a-e7c5e79ed925.png" alt="Github" width="200">
       </a>
     </td>
@@ -244,12 +238,8 @@ PsycheSail includes an emergency assistance feature that provides immediate supp
 
 ## 🤝 Contributing
 
-If you would like to contribute to Femunity, please fork the project on GitHub and submit a pull request.
+If you would like to contribute to PsycheSail, please fork the project on GitHub and submit a pull request.
 
 ## 🙏 Acknowledgments
 
 - All the juniors who helped us in our initial survey and those who gave us suggestions.
-
-## 🪪 License
-
-Femunity is licensed under the MIT license. See [LICENSE.txt](LICENSE.txt) for more information.
