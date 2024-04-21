@@ -307,3 +307,37 @@ Widget _maptextbubble(size) {
     ),
   );
 }
+
+Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description) {
+  return Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: sizeWidth * 0.5
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Column(
+                                                  children: [
+                                                    circleButton(
+                                                              constr, sizeWidth / 100, sizeWidth / 50, "assets/group_dp.png"),
+                                                              Text(heading,style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                    fontWeight: FontWeight.bold
+                                                  ),),
+                                                  Text(description,style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                    
+                                                  ),
+                                                  textAlign: TextAlign.center,)
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+}

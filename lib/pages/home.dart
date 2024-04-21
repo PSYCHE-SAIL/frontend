@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:psychesail/components/crud.dart';
+import 'package:psychesail/components/text.dart';
+import 'package:psychesail/components/vertical_scroll.dart';
 import 'package:random_avatar/random_avatar.dart';
 import '../components/button.dart';
 import 'package:intl/intl.dart';
@@ -31,6 +33,7 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
+    const contents = [{"Exams", "Discussion forums having students prepping for some exams"},{"Exams", "Discussion forums having students prepping for some exams"}];
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     var currentUserId = '';
@@ -83,111 +86,121 @@ class _homeState extends State<home> {
                               if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else {
-                                return ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                         final DateTime now = DateTime.now();
-                             final formattedDate = dateFormatter.format(now);
-                                           final formattedTime = timeFormatter.format(now);
-                                          
-                                           DateTime checkTime = DateFormat("hh:mm:ss").parse(formattedTime);
-                                          final diffTime = checkTime.difference(DateFormat("hh:mm:ss").parse(snapshot.data.values.elementAt(index)['time']));
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: InkWell(
-                                          onTap: () => {
-                                            if(snapshot.data.keys.elementAt(index) == 'Serenity') {Navigator.pushNamed(context, '/monkeybot', arguments: {'receiverid' : snapshot.data.keys.elementAt(index),'currentid': currentUserId,'lastmessage': snapshot.data.values.elementAt(index)['message']} ) }
-                                            else {Navigator.pushNamed(context, '/chatroom', arguments: {'receiverid' : snapshot.data.keys.elementAt(index),'currentid': currentUserId,'receiveremail': 'gaand_maarao'} ) }
-                                          },
-                                          child: Container(
-                                             
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  Container(
-                                                    width: sizeWidth/5,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                5)),
-                                                    child:!(snapshot.data.keys.elementAt(index) == "Groupchat" )?  RandomAvatar(snapshot.data.keys.elementAt(index), trBackground: false, height: 50,width: 50) : circleButton(
-                    constr, sizeWidth / 100, sizeWidth / 50, "assets/group_dp.png"),
-                                                  ),
-                                                  Container(
-                                                    width: sizeWidth/2.5,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment.center,
-                                                      children: [
-                                                        Text(
-                                                          snapshot.data.keys.elementAt(index),
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: constr
-                                                                ? sizeWidth / 40
-                                                                : sizeWidth / 20,
-                                                            fontStyle:
-                                                                FontStyle.italic,
-                                                            fontFamily: 'ABeeZee',
+                                return SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      children: [
+                                        ListView.builder(
+                                            scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                            itemCount: snapshot.data[0].length,
+                                            itemBuilder:
+                                                (BuildContext context, int index) {
+                                                 final DateTime now = DateTime.now();
+                                                                     final formattedDate = dateFormatter.format(now);
+                                                   final formattedTime = timeFormatter.format(now);
+                                                  
+                                                   DateTime checkTime = DateFormat("hh:mm:ss").parse(formattedTime);
+                                                  final diffTime = checkTime.difference(DateFormat("hh:mm:ss").parse(snapshot.data[0].values.elementAt(index)['time']));
+                                              return Padding(
+                                                padding: const EdgeInsets.symmetric(vertical : 8.0),
+                                                child: InkWell(
+                                                  onTap: () => {
+                                                    if(snapshot.data[0].keys.elementAt(index) == 'Serenity') {Navigator.pushNamed(context, '/monkeybot', arguments: {'receiverid' : snapshot.data[0].keys.elementAt(index),'currentid': currentUserId,'lastmessage': snapshot.data[0].values.elementAt(index)['message']} ) }
+                                                    else {Navigator.pushNamed(context, '/chatroom', arguments: {'receiverid' : snapshot.data[0].keys.elementAt(index),'currentid': currentUserId,'receiveremail': 'gaand_maarao'} ) }
+                                                  },
+                                                  child: Container(
+                                                     
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          horizontal: 8.0),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment.spaceEvenly,
+                                                        children: [
+                                                          Container(
+                                                            width: sizeWidth/5,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        5)),
+                                                            child:!(snapshot.data[0].keys.elementAt(index) == "Groupchat" )?  RandomAvatar(snapshot.data[0].keys.elementAt(index), trBackground: false, height: 50,width: 50) : circleButton(
+                                                            constr, sizeWidth / 100, sizeWidth / 50, "assets/group_dp.png"),
                                                           ),
-                                                        ),
-                                                        Text(
-                                                          snapshot.data.values.elementAt(index)['message'].length < 20 ? snapshot.data.values.elementAt(index)['message']:snapshot.data.values.elementAt(index)['message'].substring(0,20),
-                                                          style: TextStyle(
-                                                            color: Colors.grey,
+                                                          Container(
+                                                            width: sizeWidth/2.5,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment.center,
+                                                              children: [
+                                                                Text(
+                                                                  snapshot.data[0].keys.elementAt(index),
+                                                                  style: TextStyle(
+                                                                    color: Colors.black,
+                                                                    fontSize: constr
+                                                                        ? sizeWidth / 40
+                                                                        : sizeWidth / 20,
+                                                                    fontStyle:
+                                                                        FontStyle.italic,
+                                                                    fontFamily: 'ABeeZee',
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  snapshot.data[0].values.elementAt(index)['message'].length < 20 ? snapshot.data[0].values.elementAt(index)['message']:snapshot.data[0].values.elementAt(index)['message'].substring(0,20),
+                                                                  style: TextStyle(
+                                                                    color: Colors.grey,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                          Container(
+                                                            width: sizeWidth/4,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment.center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceAround,
+                                                              children: [
+                                                                Text(
+                                                                  formattedDate == snapshot.data[0].values.elementAt(index)['date'] ? diffTime.inHours == 00 ? diffTime.inMinutes == 00 ? "${diffTime.inSeconds.toString()} sec" : "${diffTime.inMinutes.toString()} mins":"${diffTime.inHours.toString()} hours": snapshot.data[0].values.elementAt(index)['date'],
+                                                                  style: TextStyle(
+                                                                    color: Colors.grey,
+                                                                    fontStyle:
+                                                                        FontStyle.italic,
+                                                                    fontFamily: 'ABeeZee',
+                                                                  ),
+                                                                ),
+                                                                CircleAvatar(
+                                                                    maxRadius: constr
+                                                                        ? sizeWidth / 65
+                                                                        : sizeWidth / 40,
+                                                                    backgroundColor:
+                                                                        Colors.transparent,
+                                                                    child: Text(
+                                                                      "",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              sizeWidth /
+                                                                                  50),
+                                                                    )),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                  Container(
-                                                    width: sizeWidth/4,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment.center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      children: [
-                                                        Text(
-                                                          formattedDate == snapshot.data.values.elementAt(index)['date'] ? diffTime.inHours == 00 ? diffTime.inMinutes == 00 ? "${diffTime.inSeconds.toString()} sec" : "${diffTime.inMinutes.toString()} mins":"${diffTime.inHours.toString()} hours": snapshot.data.values.elementAt(index)['date'],
-                                                          style: TextStyle(
-                                                            color: Colors.grey,
-                                                            fontStyle:
-                                                                FontStyle.italic,
-                                                            fontFamily: 'ABeeZee',
-                                                          ),
-                                                        ),
-                                                        CircleAvatar(
-                                                            maxRadius: constr
-                                                                ? sizeWidth / 65
-                                                                : sizeWidth / 40,
-                                                            backgroundColor:
-                                                                Colors.transparent,
-                                                            child: Text(
-                                                              "",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      sizeWidth /
-                                                                          50),
-                                                            )),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    });
+                                                ),
+                                              );
+                                            }),
+                                            communityscroll(sizeWidth,sizeHeight,constr,"Community Discussions",snapshot.data[1])                                           
+                                      ],
+                                    ),
+                                  ),
+                                );
                               }
                           }
                         }),

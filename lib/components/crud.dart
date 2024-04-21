@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -87,9 +89,11 @@ _firestore.collection('chatAvailable').doc('$currentUser').set({
 
 dynamic getUsers(currentuser) async {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  dynamic data = await _firestore.collection('chatAvailable').doc('$currentuser').get();
-  print(data.data().values);
-  return data.data();
+  dynamic user = await _firestore.collection('chatAvailable').doc('$currentuser').get();
+  print(user.data().values);
+  dynamic community = await _firestore.collection('community').get();
+  print(community.docs[0]['description']);
+  return [user.data(),community.docs];
 }
 
 Future<void> sendmessage(String receiverId, String message, currentid) async{
@@ -135,3 +139,41 @@ print(snap['email']);
     return _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).snapshots();
   }
 
+  // COMMUNITY DESCRIPTION RETRIEVE DATA 
+  Future<void> sendcommunitymessage(String message, currentid, String title, String subtitle) async{
+    // get user info
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    var snap = await getData(currentid);
+print(snap['email']);
+    // print(receiveremail);
+    print(currentid);
+    final String currentUserId = currentid;
+    final String currentEmailId = snap['email'];
+    final timestamp = Timestamp.now();
+
+
+    // create a new message
+    groupMessage newMessage = groupMessage(
+    senderEmail: currentEmailId,
+    senderid: currentUserId,
+    message: message,
+    timestamp: timestamp,
+    );
+
+
+
+    //add new message to database
+    await _firestore.collection('community').doc(title).collection(subtitle).add(newMessage.toMap());
+  }
+
+// GET COMMUNITY MESSAGES
+  Stream<QuerySnapshot> getcommunitymessages(String userId, String title, String subtitle) {
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    return _firestore.collection('community').doc(title).collection(subtitle).orderBy('timestamp', descending: false).snapshots();
+  }
+
+  // GET COMMUNTIY TITLES 
+  Future<QuerySnapshot<Map<String, dynamic>>> getcommunity() async {
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    return _firestore.collection('community').get();
+  }

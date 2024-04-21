@@ -26,3 +26,25 @@ class Message {
     };
   }
 }
+
+class groupMessage {
+   final String senderid;
+  final String senderEmail;
+  final String message;
+  final Timestamp timestamp;
+
+  groupMessage({
+    required this.senderid,
+  required this.senderEmail,
+  required this.message,
+  required this.timestamp
+  });
+  Map<String, dynamic> toMap() {
+    return {
+      'senderid' : senderid,
+    'senderEmail':senderEmail,
+    'message':message,
+    'timestamp':timestamp,
+    };
+  }
+}
