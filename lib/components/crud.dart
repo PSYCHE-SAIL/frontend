@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -7,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/model/message.dart';
+import 'package:psychesail/model/time.dart';
 import 'package:psychesail/model/userList.dart';
 
 
@@ -93,7 +92,37 @@ dynamic getUsers(currentuser) async {
   print(user.data().values);
   dynamic community = await _firestore.collection('community').get();
   print(community.docs[0]['description']);
-  return [user.data(),community.docs];
+  dynamic activity = await _firestore.collection('activity').get();
+  Map<String,String> distinctTimestamps = {};
+  List<List<String>> pairList = [];
+  String chatroomid = currentuser + "_"+ "Serenity";
+  QuerySnapshot querySnapshot = await _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).get();
+  print(activity.docs[0]['url']);
+   if (querySnapshot.docs.isNotEmpty) {
+    distinctTimestamps.clear(); // Clear the existing timestamps
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      // Extract the timestamp field from each document and convert it to DateTime
+       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      // Check if the 'timestamp' field exists in the data map
+      if (data.containsKey('timestamp')) {
+        // Extract the 'timestamp' field and convert it to DateTime
+        Timestamp timestamp = data['timestamp'] as Timestamp;
+        convertedTime newTime =convertedTime(dateTime: timestamp.toDate());
+  dynamic msg = newTime.toMap();
+        distinctTimestamps['${msg['day']}, ${msg['date']} ${msg['month']} ${msg['year']}'] = msg['time'];
+      }
+    
+    }
+     pairList = distinctTimestamps.entries
+      .map((entry) => [entry.key, entry.value])
+      .toList();
+    // Now, distinctTimestamps set contains all the distinct timestamps from Firestore
+    print('Distinct Timestamps: $distinctTimestamps');
+  } else {
+    print('No documents found in Firestore');
+  }
+  print(pairList);
+  return [user.data(),community.docs,activity.docs, pairList];
 }
 
 Future<void> sendmessage(String receiverId, String message, currentid) async{
@@ -177,3 +206,5 @@ print(snap['email']);
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
     return _firestore.collection('community').get();
   }
+
+

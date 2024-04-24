@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:psychesail/model/time.dart';
 import 'package:random_avatar/random_avatar.dart';
 import './button.dart';
 
@@ -308,7 +310,7 @@ Widget _maptextbubble(size) {
   );
 }
 
-Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description) {
+Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring) {
   return Container(
                                               constraints: BoxConstraints(
                                                 maxWidth: sizeWidth * 0.5
@@ -324,7 +326,7 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description) {
                                                 child: Column(
                                                   children: [
                                                     circleButton(
-                                                              constr, sizeWidth / 100, sizeWidth / 50, "assets/group_dp.png"),
+                                                              constr, sizeWidth / 100, sizeWidth / 50, imagestring),
                                                               Text(heading,style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: sizeWidth * sizeHeight * 0.00008,
@@ -336,6 +338,106 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description) {
                                                     
                                                   ),
                                                   textAlign: TextAlign.center,)
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+}
+Widget activityContainer(sizeWidth,sizeHeight,constr,heading,imagestring) {
+  return Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: sizeWidth * 0.5
+                                              ),
+                                              decoration: BoxDecoration(
+                                               
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Column(
+                                                  children: [
+                                                    circleButton(
+                                                              constr, sizeWidth / 120, sizeWidth / 100, imagestring),
+                                                              Text(heading,style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                    fontWeight: FontWeight.bold
+                                                  ),),
+                                      
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+}
+
+Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
+  return Container(
+                                              constraints: BoxConstraints(
+                                                minWidth: sizeWidth * 0.7
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start, 
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,children: [ 
+                                                      Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
+                                                       SizedBox(width: sizeWidth * 0.02),
+                                                      Text(date,style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.000055,
+                                                    fontWeight: FontWeight.bold
+                                                  ),)
+                                                    ],),
+                                                    SizedBox(height: sizeHeight * 0.01),
+                                                     Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [ 
+                                                      Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
+                                                      SizedBox(width: sizeWidth * 0.02),
+                                                      Text(time,style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.000055,
+                                                    
+                                                  ),)
+                                                    ],),
+                                                    SizedBox(height: sizeHeight * 0.01),
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  SizedBox(width: sizeWidth * 0.15),
+                                                                  Text("Summary of last chat",
+                                                                  textAlign:TextAlign.center,
+                                                                  style: TextStyle(
+                                                                                                                      color: Colors.black,
+                                                                                                                      fontSize: sizeWidth * sizeHeight * 0.000055,
+                                                                                                                     
+                                                                                                                    ),),
+                                                                                                                    SizedBox(width: sizeWidth * 0.15),
+                                                                ],
+                                                              ),             
+                                                  SizedBox(height: sizeHeight * 0.01),
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  SizedBox(width: sizeWidth * 0.6),
+                                                                  Text("More",style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                    fontWeight: FontWeight.bold
+                                                  ),),
+                                                                  Icon(Icons.arrow_forward_rounded,color: Colors.black,size: sizeWidth* sizeHeight * 0.00005)
+                                                                ],
+                                                              )
+                                      
                                                   ],
                                                 ),
                                               ),

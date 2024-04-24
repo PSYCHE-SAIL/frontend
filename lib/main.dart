@@ -14,7 +14,6 @@ import './pages/settings.dart';
 import 'firebase_options.dart';
 
 void main() async {
-
   if(Platform.isWindows || Platform.isLinux) {
    await FacebookAuth.i.webAndDesktopInitialize(
       appId: "918788496148996",
@@ -27,7 +26,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
-  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -38,7 +37,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'PsycheSail',
       initialRoute: '/',
-      
       routes: {
         '/': (context) => const onboarding(),
         '/login': (context) => const Login(),
@@ -52,8 +50,6 @@ class MyApp extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     theme: ThemeData.dark(useMaterial3: true),
     );
+  
   }
 }
-
-
-  
