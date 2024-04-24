@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:psychesail/pages/call.dart';
+import 'package:psychesail/pages/history.dart';
 import 'package:psychesail/pages/monkeybotchatroom.dart';
 import './pages/onboarding.dart';
 import './pages/login.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/monkeybot':(context) => const MonkeyBotChatRoom(),
         '/settings':(context)=> const Setting(),
         '/call_page':(context) => const CallPage(),
+        '/progress' :(context) => const Progress()
       },
     debugShowCheckedModeBanner: false,
     theme: ThemeData.dark(useMaterial3: true),
