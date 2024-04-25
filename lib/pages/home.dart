@@ -33,7 +33,7 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
-    const contents = [{"Exams", "Discussion forums having students prepping for some exams"},{"Exams", "Discussion forums having students prepping for some exams"}];
+    
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     var currentUserId = '';
@@ -203,7 +203,7 @@ class _homeState extends State<home> {
                                                 );
                                               }),
                                               SizedBox(height: sizeHeight * 0.03,),
-                                              historyscroll(sizeWidth,sizeHeight,constr,"History",snapshot.data[3]),
+                                              historyscroll(sizeWidth,sizeHeight,constr,"History",snapshot.data[3],context,currentUserId),
                                               SizedBox(height: sizeHeight * 0.03,),
                                               communityscroll(sizeWidth,sizeHeight,constr,"Community Discussions",snapshot.data[1]),
                                               SizedBox(height: sizeHeight * 0.03,),

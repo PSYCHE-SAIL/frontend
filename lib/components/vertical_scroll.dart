@@ -94,7 +94,7 @@ Widget activityscroll(sizeWidth,sizeHeight,constr,title,arr) {
                                             );
 }
 
-Widget historyscroll(sizeWidth,sizeHeight,constr,title,arr) {
+Widget historyscroll(sizeWidth,sizeHeight,constr,title,arr,context,currentUser) {
   return Wrap(
          spacing: 20,
          runSpacing: min(20,sizeWidth * 0.0006),
@@ -110,10 +110,16 @@ Widget historyscroll(sizeWidth,sizeHeight,constr,title,arr) {
                                                       fontWeight: FontWeight.bold
                                                     ),
                                                     ),
-                                                     Text("See All", 
-                                                     style : TextStyle(
-                                                      color: Colors.black
-                                                     )
+                                                     InkWell(
+                                                      onTap: () => Navigator.pushNamed(context, '/progress',arguments : {
+                                                        'currentuser' : currentUser,
+                                                        'historycollection' : arr
+                                                      }),
+                                                       child: Text("See All", 
+                                                       style : TextStyle(
+                                                        color: Colors.black
+                                                       )
+                                                       ),
                                                      ),
                                                   ],
                                                 ),
