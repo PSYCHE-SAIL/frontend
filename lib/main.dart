@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         '/Signup': (context) => const Signup(),
         '/home':(context) => const home(),
         '/chatroom':(context) => const ChatRoom(),
-        '/monkeybot':(context) => const MonkeyBotChatRoom(),
+        '/monkeybot':(context) => MonkeyBotChatRoom(),
         '/serenity' : (context) => const SerenityChat(),
         '/settings':(context)=> const Setting(),
         '/call_page':(context) => const CallPage(),
