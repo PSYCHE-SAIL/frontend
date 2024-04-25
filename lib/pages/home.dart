@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/components/vertical_scroll.dart';
 import 'package:random_avatar/random_avatar.dart';
 import '../components/button.dart';
 import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 
 class User {
@@ -31,11 +36,13 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
+  var pos ;
   @override
   Widget build(BuildContext context) {
     const contents = [{"Exams", "Discussion forums having students prepping for some exams"},{"Exams", "Discussion forums having students prepping for some exams"}];
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
+
     var currentUserId = '';
     final Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
@@ -45,7 +52,7 @@ class _homeState extends State<home> {
         builder: (BuildContext context, BoxConstraints constraints) {
       bool constr = false;
       if (constraints.maxWidth > 600) constr = true;
-      
+
       return Scaffold(
         backgroundColor : Colors.black,
           appBar: AppBar(
@@ -53,10 +60,18 @@ class _homeState extends State<home> {
             centerTitle: true,
             title: Text("Home"),
             actions: [
-              Padding(
+              GestureDetector(
+                onTap: () async {
+                  pos = await _determinePosition();
+                  print(pos);
+                  Navigator.pushNamed(context, "/search-nearby-places", arguments: {'pos' : pos});
+      },
+
+              child : Padding(
                 padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
-                child: RandomAvatar(currentUserId, trBackground: false, height: 50,width: 50))
+                child: RandomAvatar(currentUserId, trBackground: false, height: 50,width: 50, ))  ),
             ],
+
           ),
           body: Padding(
             padding: const EdgeInsets.only(top: 16.0),
@@ -207,7 +222,7 @@ class _homeState extends State<home> {
                                               SizedBox(height: sizeHeight * 0.03,),
                                               communityscroll(sizeWidth,sizeHeight,constr,"Community Discussions",snapshot.data[1]),
                                               SizedBox(height: sizeHeight * 0.03,),
-                                              activityscroll(sizeWidth,sizeHeight,constr,"Stress Busting Activities",snapshot.data[2])                                            
+                                              activityscroll(sizeWidth,sizeHeight,constr,"Stress Busting Activities",snapshot.data[2],pos)
                                         ],
                                       ),
                                     );
@@ -248,5 +263,33 @@ if(index == 2) { Navigator.pushNamed(context, '/settings',arguments: {'currentid
               ]));
     });
   }
+
+}
+Future<Position> _determinePosition() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    return Future.error('Location services are disabled');
+  }
+
+  permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.denied) {
+      return Future.error("Location permission denied");
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error('Location permissions are permanently denied');
+  }
+
+  Position position = await Geolocator.getCurrentPosition();
+
+  return position;
 }
  format(Duration d) => d.toString().split('.').first.padLeft(8, "0");

@@ -16,7 +16,7 @@ import 'package:psychesail/model/message.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 class MonkeyBotChatRoom extends StatefulWidget {
-  const MonkeyBotChatRoom({
+  const 34MonkeyBotChatRoom({
     super.key,
   });
 
@@ -293,6 +293,9 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                             children: [
                               Expanded(
                                   child: TextField(
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
                                     controller: _messageController,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -438,10 +441,15 @@ Widget _buildMessageList(receiverid,currentid){
         return Text('Error${snapshot.error}');
       }
       if(snapshot.connectionState == ConnectionState.waiting){
-        return const Text('Loading...');
+        return Text('Loading...');
       }
-      return ListView(
-        children: snapshot.data!.docs.map((document) => _buildMessageItem(document,currentid)).toList(),
+      return ListView.builder(
+        itemCount: snapshot.data!.docs.length,
+        itemBuilder: (context, index) {
+          // Build your message widget based on the data
+          return _buildMessageItem(snapshot.data!.docs[index],currentid);
+        },
+        // children: snapshot.data!.docs.map((document) => _buildMessageItem(document,currentid)).toList(),
       );
     });
   }

@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:psychesail/pages/call.dart';
 import 'package:psychesail/pages/history.dart';
 import 'package:psychesail/pages/monkeybotchatroom.dart';
+import 'package:psychesail/pages/serenitychatroom.dart';
+import 'package:psychesail/utils/SearchPlacesScreen.dart';
 import './pages/onboarding.dart';
 import './pages/login.dart';
 import './pages/home.dart';
@@ -13,6 +16,8 @@ import './pages/signup.dart';
 import './pages/chatroom.dart';
 import './pages/settings.dart';
 import 'firebase_options.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:psychesail/lib/repo/maps.dart';
 
 void main() async {
   if(Platform.isWindows || Platform.isLinux) {
@@ -23,15 +28,15 @@ void main() async {
       version: "v15.0",
     );
   }
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Gemini.init(apiKey: 'AIzaSyBVOgf5N_kO5_BdX7lZ-DDCRv7bRzYSOOs');
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -45,9 +50,11 @@ class MyApp extends StatelessWidget {
         '/home':(context) => const home(),
         '/chatroom':(context) => const ChatRoom(),
         '/monkeybot':(context) => const MonkeyBotChatRoom(),
+        '/serenity' : (context) => const SerenityChat(),
         '/settings':(context)=> const Setting(),
         '/call_page':(context) => const CallPage(),
-        '/progress' :(context) => const Progress()
+        '/progress' :(context) => const Progress(),
+'/search-nearby-places':(context) => SearchPlacesScreen(),
       },
     debugShowCheckedModeBanner: false,
     theme: ThemeData.dark(useMaterial3: true),
