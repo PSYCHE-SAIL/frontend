@@ -506,7 +506,7 @@ dynamic searchNearbyPlaces(List<String> places_type, pos) async {
   var headers = {
     'Content-Type': 'application/json',
     'X-Goog-Api-Key':
-        'AIzaSyC1ksDmMNde1jArPaZF1VK-Xad2yFyjjHk', // Replace 'YOUR_API_KEY' with your actual API key
+        '',
     'X-Goog-FieldMask': 'places.displayName,places.googleMapsUri'
   };
 // print("hell");

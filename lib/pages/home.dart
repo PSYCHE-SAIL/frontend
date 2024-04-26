@@ -10,8 +10,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
-
 class User {
   final String name;
   final String email;
@@ -28,9 +26,11 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
-class home extends StatefulWidget {
 
-  const home({super.key,});
+class home extends StatefulWidget {
+  const home({
+    super.key,
+  });
 
   @override
   State<home> createState() => _homeState();
@@ -40,7 +40,10 @@ class _homeState extends State<home> {
   //var position = null ;
   @override
   Widget build(BuildContext context) {
-    const contents = [{"Exams", "Discussion forums having students prepping for some exams"},{"Exams", "Discussion forums having students prepping for some exams"}];
+    const contents = [
+      {"Exams", "Discussion forums having students prepping for some exams"},
+      {"Exams", "Discussion forums having students prepping for some exams"}
+    ];
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     var currentUserId = '';
@@ -49,8 +52,8 @@ class _homeState extends State<home> {
     // Access individual parameters
 
     currentUserId = args?['currentuser'] ?? "";
-    var positionLong = args?['positionLong']?? 0;
-    var positionLat = args?['positionLat']?? 0;
+    var positionLong = args?['positionLong'] ?? 0;
+    var positionLat = args?['positionLat'] ?? 0;
     print("position Longitude: ");
     print(positionLong);
     print("position Latitude: ");
@@ -61,22 +64,26 @@ class _homeState extends State<home> {
       if (constraints.maxWidth > 600) constr = true;
 
       return Scaffold(
-        backgroundColor : Colors.black,
+          backgroundColor: Colors.black,
           appBar: AppBar(
             backgroundColor: Colors.black,
             centerTitle: true,
             title: Text("Home"),
             actions: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
-                child: RandomAvatar(currentUserId, trBackground: false, height: 50,width: 50, )),
+                  padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
+                  child: RandomAvatar(
+                    currentUserId,
+                    trBackground: false,
+                    height: 50,
+                    width: 50,
+                  )),
             ],
-
           ),
           body: Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Container(
-              height: sizeHeight,
+                height: sizeHeight,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -85,7 +92,6 @@ class _homeState extends State<home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: sizeWidth / 2.3),
                       child: Divider(
@@ -103,7 +109,10 @@ class _homeState extends State<home> {
                                 AsyncSnapshot<dynamic> snapshot) {
                               switch (snapshot.connectionState) {
                                 case ConnectionState.waiting:
-                                  return Text('Loading....',style: TextStyle(color: Colors.black),);
+                                  return Text(
+                                    'Loading....',
+                                    style: TextStyle(color: Colors.black),
+                                  );
                                 default:
                                   if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
@@ -111,102 +120,233 @@ class _homeState extends State<home> {
                                     return Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                         children: [
                                           ListView.builder(
                                               scrollDirection: Axis.vertical,
                                               shrinkWrap: true,
-                                              itemCount: snapshot.data[0].length,
+                                              itemCount:
+                                                  snapshot.data[0].length,
                                               itemBuilder:
-                                                  (BuildContext context, int index) {
-                                                   final DateTime now = DateTime.now();
-                                                                       final formattedDate = dateFormatter.format(now);
-                                                     final formattedTime = timeFormatter.format(now);
-                                                    
-                                                     DateTime checkTime = DateFormat("hh:mm:ss").parse(formattedTime);
-                                                    final diffTime = checkTime.difference(DateFormat("hh:mm:ss").parse(snapshot.data[0].values.elementAt(index)['time']));
+                                                  (BuildContext context,
+                                                      int index) {
+                                                final DateTime now =
+                                                    DateTime.now();
+                                                final formattedDate =
+                                                    dateFormatter.format(now);
+                                                final formattedTime =
+                                                    timeFormatter.format(now);
+
+                                                DateTime checkTime =
+                                                    DateFormat("hh:mm:ss")
+                                                        .parse(formattedTime);
+                                                final diffTime = checkTime
+                                                    .difference(DateFormat(
+                                                            "hh:mm:ss")
+                                                        .parse(snapshot
+                                                                .data[0].values
+                                                                .elementAt(
+                                                                    index)[
+                                                            'time']));
                                                 return Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical : 8.0),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 8.0),
                                                   child: InkWell(
                                                     onTap: () => {
-                                                      if(snapshot.data[0].keys.elementAt(index) == 'Serenity') {Navigator.pushNamed(context, '/monkeybot', arguments: {'receiverid' : snapshot.data[0].keys.elementAt(index),'currentid': currentUserId,'lastmessage': snapshot.data[0].values.elementAt(index)['message']} ) }
-                                                      else {Navigator.pushNamed(context, '/chatroom', arguments: {'receiverid' : snapshot.data[0].keys.elementAt(index),'currentid': currentUserId,'receiveremail': 'gaand_maarao'} ) }
+                                                      if (snapshot.data[0].keys
+                                                              .elementAt(
+                                                                  index) ==
+                                                          'Serenity')
+                                                        {
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              '/monkeybot',
+                                                              arguments: {
+                                                                'receiverid': snapshot
+                                                                    .data[0]
+                                                                    .keys
+                                                                    .elementAt(
+                                                                        index),
+                                                                'currentid':
+                                                                    currentUserId,
+                                                                'lastmessage': snapshot
+                                                                        .data[0]
+                                                                        .values
+                                                                        .elementAt(
+                                                                            index)[
+                                                                    'message']
+                                                              })
+                                                        }
+                                                      else
+                                                        {
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              '/chatroom',
+                                                              arguments: {
+                                                                'receiverid': snapshot
+                                                                    .data[0]
+                                                                    .keys
+                                                                    .elementAt(
+                                                                        index),
+                                                                'currentid':
+                                                                    currentUserId,
+                                                                'receiveremail':
+                                                                    'gaand_maarao'
+                                                              })
+                                                        }
                                                     },
                                                     child: Container(
-                                                       
                                                       child: Padding(
-                                                        padding: const EdgeInsets.symmetric(
-                                                            horizontal: 8.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    8.0),
                                                         child: Row(
                                                           mainAxisAlignment:
-                                                              MainAxisAlignment.spaceEvenly,
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
                                                           children: [
                                                             Container(
-                                                              width: sizeWidth/5,
+                                                              width:
+                                                                  sizeWidth / 5,
                                                               decoration: BoxDecoration(
                                                                   borderRadius:
-                                                                      BorderRadius.circular(
-                                                                          5)),
-                                                              child:!(snapshot.data[0].keys.elementAt(index) == "Groupchat" )?  RandomAvatar(snapshot.data[0].keys.elementAt(index), trBackground: false, height: 50,width: 50) : circleButton(
-                                                              constr, sizeWidth / 100, sizeWidth / 50, "assets/group_dp.png"),
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5)),
+                                                              child: !(snapshot
+                                                                          .data[
+                                                                              0]
+                                                                          .keys
+                                                                          .elementAt(
+                                                                              index) ==
+                                                                      "Groupchat")
+                                                                  ? RandomAvatar(
+                                                                      snapshot
+                                                                          .data[
+                                                                              0]
+                                                                          .keys
+                                                                          .elementAt(
+                                                                              index),
+                                                                      trBackground:
+                                                                          false,
+                                                                      height:
+                                                                          50,
+                                                                      width: 50)
+                                                                  : circleButton(
+                                                                      constr,
+                                                                      sizeWidth /
+                                                                          100,
+                                                                      sizeWidth /
+                                                                          50,
+                                                                      "assets/group_dp.png"),
                                                             ),
                                                             Container(
-                                                              width: sizeWidth/2.5,
+                                                              width: sizeWidth /
+                                                                  2.5,
                                                               child: Column(
                                                                 crossAxisAlignment:
-                                                                    CrossAxisAlignment.center,
+                                                                    CrossAxisAlignment
+                                                                        .center,
                                                                 children: [
                                                                   Text(
-                                                                    snapshot.data[0].keys.elementAt(index),
-                                                                    style: TextStyle(
-                                                                      color: Colors.black,
+                                                                    snapshot
+                                                                        .data[0]
+                                                                        .keys
+                                                                        .elementAt(
+                                                                            index),
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .black,
                                                                       fontSize: constr
-                                                                          ? sizeWidth / 40
-                                                                          : sizeWidth / 20,
+                                                                          ? sizeWidth /
+                                                                              40
+                                                                          : sizeWidth /
+                                                                              20,
                                                                       fontStyle:
-                                                                          FontStyle.italic,
-                                                                      fontFamily: 'ABeeZee',
+                                                                          FontStyle
+                                                                              .italic,
+                                                                      fontFamily:
+                                                                          'ABeeZee',
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    snapshot.data[0].values.elementAt(index)['message'].length < 20 ? snapshot.data[0].values.elementAt(index)['message']:snapshot.data[0].values.elementAt(index)['message'].substring(0,20),
-                                                                    style: TextStyle(
-                                                                      color: Colors.grey,
+                                                                    snapshot.data[0].values.elementAt(index)['message'].length <
+                                                                            20
+                                                                        ? snapshot.data[0].values.elementAt(index)[
+                                                                            'message']
+                                                                        : snapshot
+                                                                            .data[
+                                                                                0]
+                                                                            .values
+                                                                            .elementAt(index)[
+                                                                                'message']
+                                                                            .substring(0,
+                                                                                20),
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .grey,
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
                                                             ),
                                                             Container(
-                                                              width: sizeWidth/4,
+                                                              width:
+                                                                  sizeWidth / 4,
                                                               child: Column(
                                                                 crossAxisAlignment:
-                                                                    CrossAxisAlignment.center,
+                                                                    CrossAxisAlignment
+                                                                        .center,
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
                                                                         .spaceAround,
                                                                 children: [
                                                                   Text(
-                                                                    formattedDate == snapshot.data[0].values.elementAt(index)['date'] ? diffTime.inHours == 00 ? diffTime.inMinutes == 00 ? "${diffTime.inSeconds.toString()} sec" : "${diffTime.inMinutes.toString()} mins":"${diffTime.inHours.toString()} hours": snapshot.data[0].values.elementAt(index)['date'],
-                                                                    style: TextStyle(
-                                                                      color: Colors.grey,
+                                                                    formattedDate ==
+                                                                            snapshot.data[0].values.elementAt(index)[
+                                                                                'date']
+                                                                        ? diffTime.inHours ==
+                                                                                00
+                                                                            ? diffTime.inMinutes ==
+                                                                                    00
+                                                                                ? "${diffTime.inSeconds.toString()} sec"
+                                                                                : "${diffTime.inMinutes.toString()} mins"
+                                                                            : "${diffTime.inHours.toString()} hours"
+                                                                        : snapshot
+                                                                            .data[0]
+                                                                            .values
+                                                                            .elementAt(index)['date'],
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .grey,
                                                                       fontStyle:
-                                                                          FontStyle.italic,
-                                                                      fontFamily: 'ABeeZee',
+                                                                          FontStyle
+                                                                              .italic,
+                                                                      fontFamily:
+                                                                          'ABeeZee',
                                                                     ),
                                                                   ),
                                                                   CircleAvatar(
                                                                       maxRadius: constr
-                                                                          ? sizeWidth / 65
-                                                                          : sizeWidth / 40,
+                                                                          ? sizeWidth /
+                                                                              65
+                                                                          : sizeWidth /
+                                                                              40,
                                                                       backgroundColor:
-                                                                          Colors.transparent,
-                                                                      child: Text(
+                                                                          Colors
+                                                                              .transparent,
+                                                                      child:
+                                                                          Text(
                                                                         "",
                                                                         style: TextStyle(
                                                                             fontSize:
-                                                                                sizeWidth /
-                                                                                    50),
+                                                                                sizeWidth / 50),
                                                                       )),
                                                                 ],
                                                               ),
@@ -218,13 +358,38 @@ class _homeState extends State<home> {
                                                   ),
                                                 );
                                               }),
-                                              SizedBox(height: sizeHeight * 0.03,),
-                                              historyscroll(sizeWidth,sizeHeight,constr,"History",snapshot.data[3]),
-                                              SizedBox(height: sizeHeight * 0.03,),
-                                              communityscroll(sizeWidth,sizeHeight,constr,"Community Discussions",snapshot.data[1]),
-                                              SizedBox(height: sizeHeight * 0.03,),
-                                              activityscroll(context,sizeWidth,sizeHeight,constr,"Stress Busting Activities",snapshot.data[2],
-                                                  [positionLong, positionLat],currentUserId)
+                                          SizedBox(
+                                            height: sizeHeight * 0.03,
+                                          ),
+                                          historyscroll(
+                                              sizeWidth,
+                                              sizeHeight,
+                                              constr,
+                                              "History",
+                                              snapshot.data[3],
+                                              context,
+                                              currentUserId),
+                                          SizedBox(
+                                            height: sizeHeight * 0.03,
+                                          ),
+                                          communityscroll(
+                                              sizeWidth,
+                                              sizeHeight,
+                                              constr,
+                                              "Community Discussions",
+                                              snapshot.data[1]),
+                                          SizedBox(
+                                            height: sizeHeight * 0.03,
+                                          ),
+                                          activityscroll(
+                                              context,
+                                              sizeWidth,
+                                              sizeHeight,
+                                              constr,
+                                              "Stress Busting Activities",
+                                              snapshot.data[2],
+                                              [positionLong, positionLat],
+                                              currentUserId)
                                         ],
                                       ),
                                     );
@@ -237,9 +402,12 @@ class _homeState extends State<home> {
                 )),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            onTap: (int index){
-if(index == 2) { Navigator.pushNamed(context, '/settings',arguments: {'currentid':currentUserId});} 
-            },
+              onTap: (int index) {
+                if (index == 2) {
+                  Navigator.pushNamed(context, '/settings',
+                      arguments: {'currentid': currentUserId});
+                }
+              },
               unselectedItemColor: Color.fromRGBO(35, 154, 139, 75),
               fixedColor: Color.fromRGBO(35, 154, 139, 75),
               backgroundColor: Colors.white,
@@ -260,13 +428,12 @@ if(index == 2) { Navigator.pushNamed(context, '/settings',arguments: {'currentid
                   icon: Icon(Icons.settings,
                       color: Color.fromRGBO(35, 154, 139, 75)),
                   label: "Settings",
-                  
                 ),
               ]));
     });
   }
-
 }
+
 Future<Position> _determinePosition() async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -294,4 +461,5 @@ Future<Position> _determinePosition() async {
 
   return position;
 }
- format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+
+format(Duration d) => d.toString().split('.').first.padLeft(8, "0");

@@ -1,3 +1,4 @@
+// import 'dart:js';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -103,7 +104,8 @@ Widget activityscroll(
   );
 }
 
-Widget historyscroll(sizeWidth, sizeHeight, constr, title, arr) {
+Widget historyscroll(
+    sizeWidth, sizeHeight, constr, title, arr, context, currentUser) {
   Emoji stressEmoji = Emoji();
   return Wrap(
     spacing: 20,
@@ -139,7 +141,12 @@ Widget historyscroll(sizeWidth, sizeHeight, constr, title, arr) {
           itemCount: arr.length,
           itemBuilder: (context, index) {
             return historyContainer(
-                sizeWidth, sizeHeight, constr, arr[index][0], arr[index][1]);
+                sizeWidth,
+                sizeHeight,
+                constr,
+                arr[index][0],
+                arr[index][1],
+                stressEmoji.stressEmoji((index + 1).toString()));
           },
           separatorBuilder: ((context, index) => SizedBox(
                 width: min(sizeWidth * 0.05, 30),

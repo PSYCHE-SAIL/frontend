@@ -31,7 +31,7 @@ void main() async {
   }
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Gemini.init(apiKey: 'AIzaSyBVOgf5N_kO5_BdX7lZ-DDCRv7bRzYSOOs');
+  Gemini.init(apiKey: '');
   runApp(MyApp());
 }
 
