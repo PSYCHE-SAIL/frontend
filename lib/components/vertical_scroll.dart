@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
+import 'package:psychesail/model/emoji.dart';
 
 Widget communityscroll(sizeWidth,sizeHeight,constr,title,arr) {
   return Wrap(
@@ -95,6 +96,7 @@ Widget activityscroll(sizeWidth,sizeHeight,constr,title,arr) {
 }
 
 Widget historyscroll(sizeWidth,sizeHeight,constr,title,arr,context,currentUser) {
+  Emoji stressEmoji = Emoji();
   return Wrap(
          spacing: 20,
          runSpacing: min(20,sizeWidth * 0.0006),
@@ -135,7 +137,7 @@ maxHeight: sizeHeight * 0.2,
                                                                                                 shrinkWrap: true,
                                                                                                 itemCount: arr.length,
                                                                                                 itemBuilder: (context,index) {
-                                                                                                  return historyContainer(sizeWidth, sizeHeight, constr, arr[index][0],arr[index][1]);
+                                                                                                  return historyContainer(sizeWidth, sizeHeight, true, arr[index][0],arr[index][1],stressEmoji.stressEmoji((index+1).toString()));
                                                                                                 },
                                                                                                 separatorBuilder : ((context, index) => SizedBox(
                                                                                                   width : min(sizeWidth * 0.05, 30),

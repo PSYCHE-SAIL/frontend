@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:psychesail/model/time.dart';
 import 'package:random_avatar/random_avatar.dart';
 import './button.dart';
-
+import 'package:animations/animations.dart';
 Widget HigthlightText(fontsize, minheight, txt) {
   return Container(
     constraints: BoxConstraints(
@@ -370,7 +370,7 @@ Widget activityContainer(sizeWidth,sizeHeight,constr,heading,imagestring) {
                                             );
 }
 
-Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
+Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji) {
   return Container(
                                               constraints: BoxConstraints(
                                                 minWidth: sizeWidth * 0.7
@@ -388,45 +388,66 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
                                                   crossAxisAlignment: CrossAxisAlignment.start, 
                                                   children: [
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,children: [ 
-                                                      Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
-                                                       SizedBox(width: sizeWidth * 0.02),
-                                                      Text(date,style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: sizeWidth * sizeHeight * 0.000055,
-                                                    fontWeight: FontWeight.bold
-                                                  ),)
-                                                    ],),
-                                                    SizedBox(height: sizeHeight * 0.01),
-                                                     Row(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [ 
-                                                      Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
-                                                      SizedBox(width: sizeWidth * 0.02),
-                                                      Text(time,style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: sizeWidth * sizeHeight * 0.000055,
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Column(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start, 
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,children: [ 
+                                                              Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
+                                                               SizedBox(width: sizeWidth * 0.02),
+                                                              Text(date,style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: sizeWidth * sizeHeight * 0.000055,
+                                                            fontWeight: FontWeight.bold
+                                                                                                              ),)
+                                                            ],),
+                                                            SizedBox(height: sizeHeight * 0.01),
+                                                         Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [ 
+                                                          Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
+                                                          SizedBox(width: sizeWidth * 0.02),
+                                                          Text(time,style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: sizeWidth * sizeHeight * 0.000055,
+                                                        
+                                                                                                          ),)
+                                                        ],),
+                                                        
+                                                          ],
+                                                        ),
+                                                        if(constr) SizedBox(width : sizeWidth * 0.05),
+                                                        circleButton(
+                                                              constr, sizeWidth / 100, sizeWidth / 50, stressEmoji[0]),
+                                                      ],
+                                                    ),
                                                     
-                                                  ),)
-                                                    ],),
                                                     SizedBox(height: sizeHeight * 0.01),
                                                               Row(
                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                 children: [
-                                                                  SizedBox(width: sizeWidth * 0.15),
-                                                                  Text("Summary of last chat",
-                                                                  textAlign:TextAlign.center,
-                                                                  style: TextStyle(
-                                                                                                                      color: Colors.black,
-                                                                                                                      fontSize: sizeWidth * sizeHeight * 0.000055,
-                                                                                                                     
-                                                                                                                    ),),
-                                                                                                                    SizedBox(width: sizeWidth * 0.15),
-                                                                ],
+              SizedBox(width: sizeWidth * 0.15),
+              AnimatedContainer(
+                duration: Duration(milliseconds: 5000),
+                curve: Curves.linear,
+                child: Text(
+                  stressEmoji[1],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: stressEmoji[2],
+                    fontSize: sizeWidth * sizeHeight * 0.000055,
+                  ),
+                ),
+              ),
+              SizedBox(width: sizeWidth * 0.15),
+            ],
                                                               ),             
                                                   SizedBox(height: sizeHeight * 0.01),
                                                               Row(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                mainAxisAlignment: MainAxisAlignment.end,
                                                                 children: [
                                                                   SizedBox(width: sizeWidth * 0.6),
                                                                   Text("More",style: TextStyle(
@@ -434,6 +455,7 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
                                                     fontSize: sizeWidth * sizeHeight * 0.00005,
                                                     fontWeight: FontWeight.bold
                                                   ),),
+                                                  SizedBox(width: sizeWidth * 0.006),
                                                                   Icon(Icons.arrow_forward_rounded,color: Colors.black,size: sizeWidth* sizeHeight * 0.00005)
                                                                 ],
                                                               )

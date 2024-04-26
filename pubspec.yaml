@@ -46,6 +46,7 @@ dependencies:
   bloc:
   flutter_bloc:
   dio:
+  animations: ^2.0.11
   # js: ^0.7.0
 
 dev_dependencies:
