@@ -9,7 +9,8 @@ import 'package:psychesail/bloc/chat_bloc.dart';
 import 'package:psychesail/bloc/chat_state.dart';
 import 'package:psychesail/model/botchatmessagemodel.dart';
 import 'package:psychesail/model/textField.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/model/message.dart';
@@ -23,11 +24,14 @@ class MonkeyBotChatRoom extends StatefulWidget {
   @override
   State<MonkeyBotChatRoom> createState() => _MonkeyBotChatRoomState();
 }
-
+// Future _fetchStressScore() {
+//   var response = http.get(Uri.parse('http://localhost:8000'));
+//
+// }
 class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
   final TextEditingController _messageController = TextEditingController();
   final ChatBloc chatbloc = ChatBloc();
-
+  List<String> userinputs = [];
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var lastmessage;
   var receiverid;
@@ -54,12 +58,36 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     print(receiverid);
     print(lastmessage);
     print(currentid);
-  
+    Future _fetchStressScore(userinputs) async{
+      var url = Uri.parse('http://localhost:8000/process_inputs/');
+      try {
+        var response = await http.post(
+          url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({"inputs": userinputs}),
+        );
+        if (response.statusCode == 200) {
+          print("Data sent successfully");
+          print("Response from server: ${response.body}");
+        } else {
+          print("Failed to send data. Status code: ${response.statusCode}");
+        }
+      } catch (e) {
+        print("Error sending data: $e");
+      }
+//       var response = http.get(Uri.parse('http://localhost:8000'));
+//       print()
+//       print(response);
+// return response;
+    }
     dynamic sendMessage(messages) async{
     if(_messageController.text.isNotEmpty){
       await sendmessage(receiverid, _messageController.text,currentid);
        updateChat(currentid, receiverid, messages[messages.length - 1].parts.first.text);
-    
+      setState(() {
+        userinputs.add(_messageController.text); // Add the message to userinputs
+      });
+      print(userinputs);
       _messageController.clear();
       return;
     }
@@ -129,11 +157,17 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                       InkWell(
-                                        onTap: ()=>{
-                                          print(messages),
+                                        onTap: () {
+                                          // print(messages[index].role == "user"),
+                                          // print(messages[index]);
+                                          print("hello");
+                                          print(userinputs);
+                                          var res = _fetchStressScore(userinputs);
+                                          print("after sending and fetching response");
+                                          print(res);
                                           setState(() {
                                             endchat = true;
-                                          }),
+                                          });
                                         },
                                         child: Container(
                                           width: sizeWidth/3,
