@@ -16,7 +16,7 @@ import 'package:psychesail/model/message.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 class MonkeyBotChatRoom extends StatefulWidget {
-  const 34MonkeyBotChatRoom({
+  MonkeyBotChatRoom({
     super.key,
   });
 
@@ -39,7 +39,6 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     // TODO: implement initState
     super.initState();
     endchat = false;
-
   }
   @override
   Widget build(BuildContext context) {
@@ -131,6 +130,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                       children: [
                                       InkWell(
                                         onTap: ()=>{
+                                          print(messages),
                                           setState(() {
                                             endchat = true;
                                           }),

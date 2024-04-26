@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -317,14 +318,14 @@ Widget _maptextbubble(size) {
 Widget communityContainer(
     sizeWidth, sizeHeight, constr, heading, description, imagestring) {
   return Container(
-    constraints: BoxConstraints(maxWidth: sizeWidth * 0.5),
+    constraints: BoxConstraints(maxWidth: sizeWidth *0.8),
     decoration: BoxDecoration(
         border: Border.all(
           color: Colors.grey.shade300,
         ),
         borderRadius: BorderRadius.all(Radius.circular(8.0))),
     child: Padding(
-      padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+      padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00004),
       child: Column(
         children: [
           circleButton(constr, sizeWidth / 100, sizeWidth / 50, imagestring),
@@ -332,6 +333,7 @@ Widget communityContainer(
             heading,
             style: TextStyle(
                 color: Colors.black,
+
                 fontSize: sizeWidth * sizeHeight * 0.00008,
                 fontWeight: FontWeight.bold),
           ),
@@ -339,7 +341,7 @@ Widget communityContainer(
             description,
             style: TextStyle(
               color: Colors.black,
-              fontSize: sizeWidth * sizeHeight * 0.00005,
+              fontSize: sizeWidth * sizeHeight * 0.00004,
             ),
             textAlign: TextAlign.center,
           )
@@ -348,8 +350,82 @@ Widget communityContainer(
     ),
   );
 }
+Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
+  return Container(
+    constraints: BoxConstraints(
+        minWidth: sizeWidth * 0.7
+    ),
+    decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(8.0))
+    ),
+    child: Padding(
+      padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,children: [
+            Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
+            SizedBox(width: sizeWidth * 0.02),
+            Text(date,style: TextStyle(
+                color: Colors.black,
+                fontSize: sizeWidth * sizeHeight * 0.000055,
+                fontWeight: FontWeight.bold
+            ),)
+          ],),
+          SizedBox(height: sizeHeight * 0.01),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
+              SizedBox(width: sizeWidth * 0.02),
+              Text(time,style: TextStyle(
+                color: Colors.black,
+                fontSize: sizeWidth * sizeHeight * 0.000055,
 
-Widget activityContainer(sizeWidth, sizeHeight, constr, heading, imagestring,pos) {
+              ),)
+            ],),
+          SizedBox(height: sizeHeight * 0.01),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(width: sizeWidth * 0.15),
+              Text("Summary of last chat",
+                textAlign:TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: sizeWidth * sizeHeight * 0.000055,
+
+                ),),
+              SizedBox(width: sizeWidth * 0.15),
+            ],
+          ),
+          SizedBox(height: sizeHeight * 0.01),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(width: sizeWidth * 0.6),
+              Text("More",style: TextStyle(
+                  color: Colors.black,
+                  fontSize: sizeWidth * sizeHeight * 0.00005,
+                  fontWeight: FontWeight.bold
+              ),),
+              Icon(Icons.arrow_forward_rounded,color: Colors.black,size: sizeWidth* sizeHeight * 0.00005)
+            ],
+          )
+
+        ],
+      ),
+    ),
+  );
+}
+Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagestring , pos,currentUserId) {
+  print(pos);
+  var response ;
   return GestureDetector(
     onTap: () async {
       List<String> places =["hospital"];
@@ -362,7 +438,11 @@ Widget activityContainer(sizeWidth, sizeHeight, constr, heading, imagestring,pos
       if(heading == "Cafe") {
         places = ["cafe","restaurant"];
       }
-      var response = searchNearbyPlaces(places, pos);
+      // print(hello)
+      response = await searchNearbyPlaces(places, pos);
+      // print("take me to hell");
+      print(response);
+      Navigator.pushNamed(context, '/activity-maps', arguments: {'places':response,'imagestring':imagestring,'currentUserId':currentUserId});
 
     },
     child: Container(
@@ -381,6 +461,7 @@ Widget activityContainer(sizeWidth, sizeHeight, constr, heading, imagestring,pos
                   fontSize: sizeWidth * sizeHeight * 0.00005,
                   fontWeight: FontWeight.bold),
             ),
+              // activitymaps(sizeWidth, sizeHeight,constr, response, imagestring,currentUserId),
           ],
         ),
       ),
@@ -388,23 +469,24 @@ Widget activityContainer(sizeWidth, sizeHeight, constr, heading, imagestring,pos
   );
 }
 
-dynamic searchNearbyPlaces(List<String> places_type, Position pos) async {
+dynamic searchNearbyPlaces(List<String> places_type, pos) async {
   var responseData;
+  print(pos);
   // Define the request body as a JSON object
   var requestBody = {
     "includedTypes": places_type,
     "maxResultCount": 5,
     "locationRestriction": {
       "circle": {
-        "center": {"latitude": pos.latitude, "longitude": pos.longitude},
+        "center": {"latitude": pos[1], "longitude": pos[0]},
         "radius": 2000.0
       }
     }
   };
-
+print("hellooo");
   // Encode the request body to JSON
   var requestBodyJson = jsonEncode(requestBody);
-
+print("hiii");
   // Define the headers
   var headers = {
     'Content-Type': 'application/json',
@@ -412,7 +494,7 @@ dynamic searchNearbyPlaces(List<String> places_type, Position pos) async {
         'AIzaSyC1ksDmMNde1jArPaZF1VK-Xad2yFyjjHk', // Replace 'YOUR_API_KEY' with your actual API key
     'X-Goog-FieldMask': 'places.displayName,places.googleMapsUri'
   };
-
+// print("hell");
   try {
     // Make the HTTP POST request
     var response = await http.post(
@@ -427,98 +509,19 @@ dynamic searchNearbyPlaces(List<String> places_type, Position pos) async {
       responseData = jsonDecode(response.body);
       // Process the responseData here
       print(responseData);
-      return responseData;
+
+      // return responseData;
     } else {
       // Request was not successful
       print('Request failed with status: ${response.statusCode}');
       print('Response body: ${response.body}');
       responseData = jsonDecode(response.body);
-      return responseData;
+
     }
   } catch (e) {
     // Handle any errors that occurred during the HTTP request
     print('Error occurred: $e');
   }
+  return responseData;
 }
 
-Widget historyContainer(sizeWidth, sizeHeight, constr, date, time) {
-  return Container(
-    constraints: BoxConstraints(minWidth: sizeWidth * 0.7),
-    decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey.shade300,
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(8.0))),
-    child: Padding(
-      padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.calendar_month_rounded,
-                  color: Color.fromRGBO(35, 154, 139, 75)),
-              SizedBox(width: sizeWidth * 0.02),
-              Text(
-                date,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: sizeWidth * sizeHeight * 0.000055,
-                    fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-          SizedBox(height: sizeHeight * 0.01),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.schedule, color: Color.fromRGBO(35, 154, 139, 75)),
-              SizedBox(width: sizeWidth * 0.02),
-              Text(
-                time,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: sizeWidth * sizeHeight * 0.000055,
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: sizeHeight * 0.01),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(width: sizeWidth * 0.15),
-              Text(
-                "Summary of last chat",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: sizeWidth * sizeHeight * 0.000055,
-                ),
-              ),
-              SizedBox(width: sizeWidth * 0.15),
-            ],
-          ),
-          SizedBox(height: sizeHeight * 0.01),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(width: sizeWidth * 0.6),
-              Text(
-                "More",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: sizeWidth * sizeHeight * 0.00005,
-                    fontWeight: FontWeight.bold),
-              ),
-              Icon(Icons.arrow_forward_rounded,
-                  color: Colors.black, size: sizeWidth * sizeHeight * 0.00005)
-            ],
-          )
-        ],
-      ),
-    ),
-  );
-}

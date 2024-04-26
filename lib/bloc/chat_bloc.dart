@@ -33,6 +33,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     // await prompting("can you act like a therapist and talk to the future messages like a therapist. Dont hallucinate, Dont be creative. just act like a helping person and keep the responses short and sweet and helping the person. dont give a dialogue of therapist and future messages. you have to remember you are a therapist and respond to t");
     messages.add(BotChatMessageModel(
         role: "user", parts: [ChatPartModel(text: event.inputMessage)]));
+
+    emit(ChatSuccessState(messages: messages));
     String generatedText  = await ChatRepo.chatTextGenerationRepo(messages);
     if(generatedText.length>0) {
       messages.add(BotChatMessageModel(role: 'model', parts: [ChatPartModel(text: generatedText)]));

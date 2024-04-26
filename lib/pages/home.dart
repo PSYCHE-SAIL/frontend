@@ -29,25 +29,32 @@ class UserProvider extends ChangeNotifier {
   }
 }
 class home extends StatefulWidget {
-  const home({super.key});
+
+  const home({super.key,});
 
   @override
   State<home> createState() => _homeState();
 }
 
 class _homeState extends State<home> {
-  var pos ;
+  //var position = null ;
   @override
   Widget build(BuildContext context) {
     const contents = [{"Exams", "Discussion forums having students prepping for some exams"},{"Exams", "Discussion forums having students prepping for some exams"}];
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
-
     var currentUserId = '';
     final Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     // Access individual parameters
+
     currentUserId = args?['currentuser'] ?? "";
+    var positionLong = args?['positionLong']?? 0;
+    var positionLat = args?['positionLat']?? 0;
+    print("position Longitude: ");
+    print(positionLong);
+    print("position Latitude: ");
+    print(positionLat);
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       bool constr = false;
@@ -60,16 +67,9 @@ class _homeState extends State<home> {
             centerTitle: true,
             title: Text("Home"),
             actions: [
-              GestureDetector(
-                onTap: () async {
-                  pos = await _determinePosition();
-                  print(pos);
-                  Navigator.pushNamed(context, "/search-nearby-places", arguments: {'pos' : pos});
-      },
-
-              child : Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
-                child: RandomAvatar(currentUserId, trBackground: false, height: 50,width: 50, ))  ),
+                child: RandomAvatar(currentUserId, trBackground: false, height: 50,width: 50, )),
             ],
 
           ),
@@ -85,6 +85,7 @@ class _homeState extends State<home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: sizeWidth / 2.3),
                       child: Divider(
@@ -222,7 +223,8 @@ class _homeState extends State<home> {
                                               SizedBox(height: sizeHeight * 0.03,),
                                               communityscroll(sizeWidth,sizeHeight,constr,"Community Discussions",snapshot.data[1]),
                                               SizedBox(height: sizeHeight * 0.03,),
-                                              activityscroll(sizeWidth,sizeHeight,constr,"Stress Busting Activities",snapshot.data[2],pos)
+                                              activityscroll(context,sizeWidth,sizeHeight,constr,"Stress Busting Activities",snapshot.data[2],
+                                                  [positionLong, positionLat],currentUserId)
                                         ],
                                       ),
                                     );

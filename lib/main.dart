@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:psychesail/pages/activitymaps.dart';
 import 'package:psychesail/pages/call.dart';
 import 'package:psychesail/pages/history.dart';
 import 'package:psychesail/pages/monkeybotchatroom.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         '/settings':(context)=> const Setting(),
         '/call_page':(context) => const CallPage(),
         '/progress' :(context) => const Progress(),
-'/search-nearby-places':(context) => SearchPlacesScreen(),
+'/activity-maps':(context) => ActivityMaps(),
       },
     debugShowCheckedModeBanner: false,
     theme: ThemeData.dark(useMaterial3: true),
