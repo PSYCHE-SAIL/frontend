@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:psychesail/model/time.dart';
 import 'package:random_avatar/random_avatar.dart';
 import './button.dart';
+import 'package:animations/animations.dart';
 
 Widget HigthlightText(fontsize, minheight, txt) {
   return Container(
@@ -318,7 +319,7 @@ Widget _maptextbubble(size) {
 Widget communityContainer(
     sizeWidth, sizeHeight, constr, heading, description, imagestring) {
   return Container(
-    constraints: BoxConstraints(maxWidth: sizeWidth *0.8),
+    constraints: BoxConstraints(maxWidth: sizeWidth * 0.8),
     decoration: BoxDecoration(
         border: Border.all(
           color: Colors.grey.shade300,
@@ -333,7 +334,6 @@ Widget communityContainer(
             heading,
             style: TextStyle(
                 color: Colors.black,
-
                 fontSize: sizeWidth * sizeHeight * 0.00008,
                 fontWeight: FontWeight.bold),
           ),
@@ -350,17 +350,16 @@ Widget communityContainer(
     ),
   );
 }
-Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
+
+Widget historyContainer(
+    sizeWidth, sizeHeight, constr, date, time, stressEmoji) {
   return Container(
-    constraints: BoxConstraints(
-        minWidth: sizeWidth * 0.7
-    ),
+    constraints: BoxConstraints(minWidth: sizeWidth * 0.7),
     decoration: BoxDecoration(
         border: Border.all(
           color: Colors.grey.shade300,
         ),
-        borderRadius: BorderRadius.all(Radius.circular(8.0))
-    ),
+        borderRadius: BorderRadius.all(Radius.circular(8.0))),
     child: Padding(
       padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
       child: Column(
@@ -368,39 +367,48 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,children: [
-            Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
-            SizedBox(width: sizeWidth * 0.02),
-            Text(date,style: TextStyle(
-                color: Colors.black,
-                fontSize: sizeWidth * sizeHeight * 0.000055,
-                fontWeight: FontWeight.bold
-            ),)
-          ],),
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.calendar_month_rounded,
+                  color: Color.fromRGBO(35, 154, 139, 75)),
+              SizedBox(width: sizeWidth * 0.02),
+              Text(
+                date,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: sizeWidth * sizeHeight * 0.000055,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
           SizedBox(height: sizeHeight * 0.01),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
+              Icon(Icons.schedule, color: Color.fromRGBO(35, 154, 139, 75)),
               SizedBox(width: sizeWidth * 0.02),
-              Text(time,style: TextStyle(
-                color: Colors.black,
-                fontSize: sizeWidth * sizeHeight * 0.000055,
-
-              ),)
-            ],),
+              Text(
+                time,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: sizeWidth * sizeHeight * 0.000055,
+                ),
+              )
+            ],
+          ),
           SizedBox(height: sizeHeight * 0.01),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(width: sizeWidth * 0.15),
-              Text("Summary of last chat",
-                textAlign:TextAlign.center,
+              Text(
+                "Summary of last chat",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: sizeWidth * sizeHeight * 0.000055,
-
-                ),),
+                ),
+              ),
               SizedBox(width: sizeWidth * 0.15),
             ],
           ),
@@ -409,41 +417,48 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(width: sizeWidth * 0.6),
-              Text("More",style: TextStyle(
-                  color: Colors.black,
-                  fontSize: sizeWidth * sizeHeight * 0.00005,
-                  fontWeight: FontWeight.bold
-              ),),
-              Icon(Icons.arrow_forward_rounded,color: Colors.black,size: sizeWidth* sizeHeight * 0.00005)
+              Text(
+                "More",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: sizeWidth * sizeHeight * 0.00005,
+                    fontWeight: FontWeight.bold),
+              ),
+              Icon(Icons.arrow_forward_rounded,
+                  color: Colors.black, size: sizeWidth * sizeHeight * 0.00005)
             ],
           )
-
         ],
       ),
     ),
   );
 }
-Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagestring , pos,currentUserId) {
+
+Widget activityContainer(context, sizeWidth, sizeHeight, constr, heading,
+    imagestring, pos, currentUserId) {
   print(pos);
-  var response ;
+  var response;
   return GestureDetector(
     onTap: () async {
-      List<String> places =["hospital"];
-      if(heading == "Movies") {
+      List<String> places = ["hospital"];
+      if (heading == "Movies") {
         places = ["movie_theater"];
       }
-      if(heading == "Games") {
-        places = ["amusement_park","amusement_center"];
+      if (heading == "Games") {
+        places = ["amusement_park", "amusement_center"];
       }
-      if(heading == "Cafe") {
-        places = ["cafe","restaurant"];
+      if (heading == "Cafe") {
+        places = ["cafe", "restaurant"];
       }
       // print(hello)
       response = await searchNearbyPlaces(places, pos);
       // print("take me to hell");
       print(response);
-      Navigator.pushNamed(context, '/activity-maps', arguments: {'places':response,'imagestring':imagestring,'currentUserId':currentUserId});
-
+      Navigator.pushNamed(context, '/activity-maps', arguments: {
+        'places': response,
+        'imagestring': imagestring,
+        'currentUserId': currentUserId
+      });
     },
     child: Container(
       constraints: BoxConstraints(maxWidth: sizeWidth * 0.5),
@@ -461,7 +476,7 @@ Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagest
                   fontSize: sizeWidth * sizeHeight * 0.00005,
                   fontWeight: FontWeight.bold),
             ),
-              // activitymaps(sizeWidth, sizeHeight,constr, response, imagestring,currentUserId),
+            // activitymaps(sizeWidth, sizeHeight,constr, response, imagestring,currentUserId),
           ],
         ),
       ),
@@ -483,10 +498,10 @@ dynamic searchNearbyPlaces(List<String> places_type, pos) async {
       }
     }
   };
-print("hellooo");
+  print("hellooo");
   // Encode the request body to JSON
   var requestBodyJson = jsonEncode(requestBody);
-print("hiii");
+  print("hiii");
   // Define the headers
   var headers = {
     'Content-Type': 'application/json',
@@ -516,7 +531,6 @@ print("hiii");
       print('Request failed with status: ${response.statusCode}');
       print('Response body: ${response.body}');
       responseData = jsonDecode(response.body);
-
     }
   } catch (e) {
     // Handle any errors that occurred during the HTTP request
@@ -524,4 +538,3 @@ print("hiii");
   }
   return responseData;
 }
-

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator_platform_interface/src/models/position.dart';
 import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
+import 'package:psychesail/model/emoji.dart';
 
 Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr) {
   return Wrap(
@@ -51,7 +52,8 @@ Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr) {
   );
 }
 
-Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,currentUserId) {
+Widget activityscroll(
+    context, sizeWidth, sizeHeight, constr, title, arr, pos, currentUserId) {
   print(pos);
 
   return Wrap(
@@ -83,7 +85,7 @@ Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,cur
           itemCount: arr.length,
           itemBuilder: (context, index) {
             return activityContainer(
-              context,
+                context,
                 sizeWidth,
                 sizeHeight,
                 constr,
@@ -102,6 +104,7 @@ Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,cur
 }
 
 Widget historyscroll(sizeWidth, sizeHeight, constr, title, arr) {
+  Emoji stressEmoji = Emoji();
   return Wrap(
     spacing: 20,
     runSpacing: min(20, sizeWidth * 0.0006),
@@ -116,7 +119,13 @@ Widget historyscroll(sizeWidth, sizeHeight, constr, title, arr) {
                 fontSize: sizeWidth * sizeHeight * 0.000067,
                 fontWeight: FontWeight.bold),
           ),
-          Text("See All", style: TextStyle(color: Colors.black)),
+          InkWell(
+            onTap: () => Navigator.pushNamed(context, '/progress', arguments: {
+              'currentuser': currentUser,
+              'historycollection': arr
+            }),
+            child: Text("See All", style: TextStyle(color: Colors.black)),
+          ),
         ],
       ),
       Container(
