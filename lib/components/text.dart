@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:psychesail/model/time.dart';
@@ -343,31 +345,50 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                               ),
                                             );
 }
-Widget activityContainer(sizeWidth,sizeHeight,constr,heading,imagestring) {
-  return Container(
-                                              constraints: BoxConstraints(
-                                                maxWidth: sizeWidth * 0.5
-                                              ),
-                                              decoration: BoxDecoration(
-                                               
-                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
-                                                child: Column(
-                                                  children: [
-                                                    circleButton(
-                                                              constr, sizeWidth / 120, sizeWidth / 100, imagestring),
-                                                              Text(heading,style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: sizeWidth * sizeHeight * 0.00005,
-                                                    fontWeight: FontWeight.bold
-                                                  ),),
-                                      
-                                                  ],
-                                                ),
-                                              ),
-                                            );
+Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagestring , pos,currentUserId) {
+  print(pos);
+  var response ;
+  return GestureDetector(
+    onTap: () async {
+      List<String> places =["hospital"];
+      if(heading == "Movies") {
+        places = ["movie_theater"];
+      }
+      if(heading == "Games") {
+        places = ["amusement_park","amusement_center"];
+      }
+      if(heading == "Cafe") {
+        places = ["cafe","restaurant"];
+      }
+      // print(hello)
+      response = await searchNearbyPlaces(places, pos);
+      // print("take me to hell");
+      print(response);
+      Navigator.pushNamed(context, '/activity-maps', arguments: {'places':response,'imagestring':imagestring,'currentUserId':currentUserId});
+
+    },
+    child: Container(
+      constraints: BoxConstraints(maxWidth: sizeWidth * 0.5),
+      decoration:
+      BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      child: Padding(
+        padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+        child: Column(
+          children: [
+            circleButton(constr, sizeWidth / 120, sizeWidth / 100, imagestring),
+            Text(
+              heading,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: sizeWidth * sizeHeight * 0.00005,
+                  fontWeight: FontWeight.bold),
+            ),
+            // activitymaps(sizeWidth, sizeHeight,constr, response, imagestring,currentUserId),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji) {
@@ -465,3 +486,60 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji) {
                                               ),
                                             );
 }
+
+dynamic searchNearbyPlaces(List<String> places_type, pos) async {
+  var responseData;
+  print(pos);
+  // Define the request body as a JSON object
+  var requestBody = {
+    "includedTypes": places_type,
+    "maxResultCount": 5,
+    "locationRestriction": {
+      "circle": {
+        "center": {"latitude": pos[1], "longitude": pos[0]},
+        "radius": 2000.0
+      }
+    }
+  };
+  print("hellooo");
+  // Encode the request body to JSON
+  var requestBodyJson = jsonEncode(requestBody);
+  print("hiii");
+  // Define the headers
+  var headers = {
+    'Content-Type': 'application/json',
+    'X-Goog-Api-Key':
+    'AIzaSyC1ksDmMNde1jArPaZF1VK-Xad2yFyjjHk', // Replace 'YOUR_API_KEY' with your actual API key
+    'X-Goog-FieldMask': 'places.displayName,places.googleMapsUri'
+  };
+// print("hell");
+  try {
+    // Make the HTTP POST request
+    var response = await http.post(
+      Uri.parse('https://places.googleapis.com/v1/places:searchNearby'),
+      headers: headers,
+      body: requestBodyJson,
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Parse the response body (assuming it's JSON) into a Map
+      responseData = jsonDecode(response.body);
+      // Process the responseData here
+      print(responseData);
+
+      // return responseData;
+    } else {
+      // Request was not successful
+      print('Request failed with status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      responseData = jsonDecode(response.body);
+
+    }
+  } catch (e) {
+    // Handle any errors that occurred during the HTTP request
+    print('Error occurred: $e');
+  }
+  return responseData;
+}
+
