@@ -57,29 +57,36 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     currentid = args?['currentid'] ?? '';
     print(receiverid);
     print(lastmessage);
+
     print(currentid);
-    Future _fetchStressScore(userinputs) async{
-      var url = Uri.parse('http://localhost:8000/process_inputs/');
+    Future<void> _fetchStressScore(userinputs) async {
+      var url = Uri.parse('http://192.168.41.133:8000/process_data');
       try {
+        print("Sending request...");
+        print(jsonEncode({"inputs": userinputs}));
         var response = await http.post(
           url,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode({"inputs": userinputs}),
+          headers: {
+            "content-type": "application/json" ,
+            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+            "Access-Control-Allow-Credentials": 'true', // Required for cookies, authorization headers with HTTPS
+            "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+            "Access-Control-Allow-Methods": "GET, POST,OPTIONS"
+          },
+          body : jsonEncode({"inputs": userinputs}),
         );
         if (response.statusCode == 200) {
           print("Data sent successfully");
           print("Response from server: ${response.body}");
         } else {
           print("Failed to send data. Status code: ${response.statusCode}");
+          print("Response body: ${response.body}");
         }
       } catch (e) {
         print("Error sending data: $e");
       }
-//       var response = http.get(Uri.parse('http://localhost:8000'));
-//       print()
-//       print(response);
-// return response;
     }
+
     dynamic sendMessage(messages) async{
     if(_messageController.text.isNotEmpty){
       await sendmessage(receiverid, _messageController.text,currentid);
@@ -130,7 +137,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                           child: ListView.builder(
                               itemCount: messages.length,
                               itemBuilder: (context, index) {
-                                return !(index%8 == 7) ? Container(
+                                return !(index%8 == 2) ? Container(
                                   margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
                                     padding: const EdgeInsets.all(12.0),
                                     decoration: BoxDecoration(
@@ -157,17 +164,21 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                       InkWell(
-                                        onTap: () {
+                                        onTap: () async {
                                           // print(messages[index].role == "user"),
                                           // print(messages[index]);
                                           print("hello");
                                           print(userinputs);
-                                          var res = _fetchStressScore(userinputs);
-                                          print("after sending and fetching response");
-                                          print(res);
+                                          // print(jsonEncode({"inputs": userinputs}));
+                                          // await _fetchStressScore(userinputs);
+                                          // print("after sending and fetching response");
+                                          // print(res);
                                           setState(() {
                                             endchat = true;
                                           });
+                                          print(jsonEncode({"inputs": userinputs}));
+                                          await _fetchStressScore(userinputs);
+                                          print("after sending and fetching response");
                                         },
                                         child: Container(
                                           width: sizeWidth/3,
