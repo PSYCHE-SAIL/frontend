@@ -49,7 +49,7 @@ class _VideoSDKQuickStartState extends State<VideoSDKQuickStart> {
                     roomId: snapshot.data,
                     token: token,
                     leaveRoom: () {
-                      setState(() => isRoomActive = false);
+                      
                     },
                   )
                 

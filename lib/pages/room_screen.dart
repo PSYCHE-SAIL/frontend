@@ -53,7 +53,6 @@ class _RoomScreenState extends State<RoomScreen> {
     });
     _room.on(Events.roomLeft, () {
       participantVideoStreams.clear();
-      widget.leaveRoom();
     });
   }
   
@@ -85,32 +84,35 @@ class _RoomScreenState extends State<RoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text("Room ID: ${widget.roomId}"),
-          RoomControls(
-            onToggleMicButtonPressed: () {
-              micEnabled ? room.muteMic() : room.unmuteMic();
-              micEnabled = !micEnabled;
-            },
-            onToggleCameraButtonPressed: () {
-              camEnabled
-                  ? room.disableCam()
-                  : room.enableCam();
-              camEnabled = !camEnabled;
-            },
-            onLeaveButtonPressed: () => room.leave(),
-          ),
-          ...participantVideoStreams.values
-              .map(
-                (e) => ParticipantTile(
-                  stream: e!,
-                ),
-              )
-              .toList(),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Room ID: ${widget.roomId}"),
+            RoomControls(
+              onToggleMicButtonPressed: () {
+                micEnabled ? room.muteMic() : room.unmuteMic();
+                micEnabled = !micEnabled;
+              },
+              onToggleCameraButtonPressed: () {
+                camEnabled
+                    ? room.disableCam()
+                    : room.enableCam();
+                camEnabled = !camEnabled;
+              },
+              onLeaveButtonPressed: () => {room.leave(),Navigator.pop(context,"Result"),}
+            ),
+            ...participantVideoStreams.values
+                .map(
+                  (e) => ParticipantTile(
+                    stream: e!,
+                  ),
+                )
+                .toList(),
+          ],
+        ),
       ),
     );
   }

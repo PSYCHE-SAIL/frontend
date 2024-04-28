@@ -393,12 +393,28 @@ class _homeState extends State<home> {
                                                 currentUserId : currentUserId,
                                                  arr: snapshot.data[2],
                                                     ),
-                                           callingscroll(
-                                              sizeWidth,
-                                              sizeHeight,
-                                              constr,
-                                              "Calling",
-                                              snapshot.data[4]),
+                                           FutureBuilder<dynamic>(
+                            future: getUsers(currentUserId), // async work
+                            builder: (BuildContext context,snapshots) {
+                                     switch (snapshots.connectionState) {
+                                case ConnectionState.waiting:
+                                  return Text(
+                                    'Loading....',
+                                    style: TextStyle(color: Colors.black),
+                                  );
+                                default:
+                                  if (snapshots.hasError) {
+                                    return Text('Error: ${snapshots.error}');
+                                  } else {
+                                    return  callingscroll(
+                                                  sizeWidth,
+                                                  sizeHeight,
+                                                  constr,
+                                                  "Calls",
+                                                  snapshots.data[4]);
+                                    }}
+                                             }
+                                           ),
                                           SizedBox(
                                             height: sizeHeight * 0.03,
                                           ),

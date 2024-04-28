@@ -92,7 +92,7 @@ Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr) {
                   builder: (context) => RoomScreen(
                     roomId: arr[arr.length - 1 - index][1],
                     token: token,
-                    leaveRoom: () => Navigator.pushNamed(context, '/home'),
+                    leaveRoom: () => {},
                   ),
                 ),),
               child: callingContainer(
