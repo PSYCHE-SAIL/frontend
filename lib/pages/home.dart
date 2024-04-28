@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:psychesail/components/activity_widget.dart';
 import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/components/vertical_scroll.dart';
+import 'package:psychesail/model/places.dart';
 import 'package:random_avatar/random_avatar.dart';
 import '../components/button.dart';
 import 'package:intl/intl.dart';
@@ -37,13 +40,11 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
+  
+  
   //var position = null ;
   @override
   Widget build(BuildContext context) {
-    const contents = [
-      {"Exams", "Discussion forums having students prepping for some exams"},
-      {"Exams", "Discussion forums having students prepping for some exams"}
-    ];
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     var currentUserId = '';
@@ -381,15 +382,45 @@ class _homeState extends State<home> {
                                           SizedBox(
                                             height: sizeHeight * 0.03,
                                           ),
-                                          activityscroll(
-                                              context,
-                                              sizeWidth,
-                                              sizeHeight,
-                                              constr,
-                                              "Stress Busting Activities",
-                                              snapshot.data[2],
-                                              [positionLong, positionLat],
-                                              currentUserId)
+                                          
+                                              ActivityMapsWidget(
+                                                      sizeWidth: sizeWidth,
+                                                      sizeHeight: sizeHeight,
+                                                      constr: constr,
+                                                     pos: [positionLong, positionLat],
+                                                 con:context,
+                                                activityString: "Stress Busting Activities",
+                                                currentUserId : currentUserId,
+                                                 arr: snapshot.data[2],
+                                                    ),
+                                           FutureBuilder<dynamic>(
+                            future: getUsers(currentUserId), // async work
+                            builder: (BuildContext context,snapshots) {
+                                     switch (snapshots.connectionState) {
+                                case ConnectionState.waiting:
+                                  return Text(
+                                    'Loading....',
+                                    style: TextStyle(color: Colors.black),
+                                  );
+                                default:
+                                  if (snapshots.hasError) {
+                                    return Text('Error: ${snapshots.error}');
+                                  } else {
+                                    return  callingscroll(
+                                                  sizeWidth,
+                                                  sizeHeight,
+                                                  constr,
+                                                  "Calls",
+                                                  snapshots.data[4]);
+                                    }}
+                                             }
+                                           ),
+                                          SizedBox(
+                                            height: sizeHeight * 0.03,
+                                          ),
+
+                                            
+                                          
                                         ],
                                       ),
                                     );
@@ -403,6 +434,11 @@ class _homeState extends State<home> {
           ),
           bottomNavigationBar: BottomNavigationBar(
               onTap: (int index) {
+                if(index == 1) {
+ Navigator.pushNamed(context, '/video',
+  arguments: {'currentid': currentUserId}
+                      );
+                } else
                 if (index == 2) {
                   Navigator.pushNamed(context, '/settings',
                       arguments: {'currentid': currentUserId});

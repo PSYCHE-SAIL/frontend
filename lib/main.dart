@@ -2,11 +2,14 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:psychesail/model/places.dart';
 import 'package:psychesail/pages/activitymaps.dart';
 import 'package:psychesail/pages/call.dart';
 import 'package:psychesail/pages/history.dart';
 import 'package:psychesail/pages/monkeybotchatroom.dart';
 import 'package:psychesail/pages/serenitychatroom.dart';
+import 'package:psychesail/pages/video_screen.dart';
 import 'package:psychesail/utils/SearchPlacesScreen.dart';
 import './pages/onboarding.dart';
 import './pages/login.dart';
@@ -34,31 +37,39 @@ void main() async {
   runApp(MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'PsycheSail',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const onboarding(),
-        '/login': (context) => const Login(),
-        '/Signup': (context) => const Signup(),
-        '/home':(context) => const home(),
-        '/chatroom':(context) => const ChatRoom(),
-        '/monkeybot':(context) => MonkeyBotChatRoom(),
-        '/serenity' : (context) => const SerenityChat(),
-        '/settings':(context)=> const Setting(),
-        '/call_page':(context) => const CallPage(),
-        '/progress' :(context) => const Progress(),
-'/activity-maps':(context) => ActivityMaps(),
-      },
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData.dark(useMaterial3: true),
+    return ChangeNotifierProvider(
+      create: (context) => Places(),
+      child: MaterialApp(
+        title: 'PsycheSail',
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const onboarding(),
+          '/login': (context) => const Login(),
+          '/Signup': (context) => const Signup(),
+          '/home':(context) => const home(),
+          '/chatroom':(context) => const ChatRoom(),
+          '/monkeybot':(context) => MonkeyBotChatRoom(),
+          '/serenity' : (context) => const SerenityChat(),
+          '/settings':(context)=> const Setting(),
+          '/call_page':(context) => const CallPage(),
+          '/progress' :(context) => const Progress(),
+          '/activity-maps':(context) => ActivityMaps(),
+          '/video' : (context) => VideoSDKQuickStart(),
+        },
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(useMaterial3: true),
+      ),
     );
   
   }
 }
+
+
