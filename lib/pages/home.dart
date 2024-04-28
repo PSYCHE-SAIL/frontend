@@ -393,6 +393,16 @@ class _homeState extends State<home> {
                                                 currentUserId : currentUserId,
                                                  arr: snapshot.data[2],
                                                     ),
+                                           callingscroll(
+                                              sizeWidth,
+                                              sizeHeight,
+                                              constr,
+                                              "Calling",
+                                              snapshot.data[4]),
+                                          SizedBox(
+                                            height: sizeHeight * 0.03,
+                                          ),
+
                                             
                                           
                                         ],
@@ -408,6 +418,11 @@ class _homeState extends State<home> {
           ),
           bottomNavigationBar: BottomNavigationBar(
               onTap: (int index) {
+                if(index == 1) {
+ Navigator.pushNamed(context, '/video',
+  arguments: {'currentid': currentUserId}
+                      );
+                } else
                 if (index == 2) {
                   Navigator.pushNamed(context, '/settings',
                       arguments: {'currentid': currentUserId});

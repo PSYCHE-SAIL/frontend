@@ -9,6 +9,7 @@ import 'package:psychesail/pages/call.dart';
 import 'package:psychesail/pages/history.dart';
 import 'package:psychesail/pages/monkeybotchatroom.dart';
 import 'package:psychesail/pages/serenitychatroom.dart';
+import 'package:psychesail/pages/video_screen.dart';
 import 'package:psychesail/utils/SearchPlacesScreen.dart';
 import './pages/onboarding.dart';
 import './pages/login.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
           '/call_page':(context) => const CallPage(),
           '/progress' :(context) => const Progress(),
           '/activity-maps':(context) => ActivityMaps(),
+          '/video' : (context) => VideoSDKQuickStart(),
         },
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(useMaterial3: true),

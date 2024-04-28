@@ -349,6 +349,67 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                               ),
                                             );
 }
+
+Widget callingContainer(sizeWidth,sizeHeight,constr,user) {
+  List<String> callQuote = [
+  "Answer with kindness.",
+  "Speak with purpose.",
+  "Listen to understand.",
+  "Communicate with empathy.",
+  "Connect through words."
+];
+Random random = Random();
+  return Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: sizeWidth * 0.5
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                    Icon(Icons.call,color: Color.fromRGBO(35, 154, 139, 75)),
+                                                    SizedBox(width: sizeWidth * 0.01),
+                                                    Text("Calling ...",style: TextStyle(
+                                                    color: Color.fromRGBO(35, 154, 139, 75),
+                                                    fontSize:          sizeWidth * sizeHeight * 0.00005,
+                                                    fontWeight: FontWeight.bold
+                                                    
+                                                  ),)
+                                                  ],),
+                                                    RandomAvatar(
+                                                                    user,
+                                                                      trBackground:
+                                                                          false,
+                                                                      height:
+                                                                          50,
+                                                                      width: 50),
+                                                              Text(user,style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                    fontWeight: FontWeight.bold
+                                                  ),),
+                                                  Text(callQuote[random.nextInt(callQuote.length)],style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                    
+                                                  ),
+                                                  textAlign: TextAlign.center,),
+                                                  
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+}
 Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagestring , pos,currentUserId,Places place) {
   print(pos);
   var response ;

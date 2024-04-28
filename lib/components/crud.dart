@@ -95,6 +95,8 @@ dynamic getUsers(currentuser) async {
   dynamic activity = await _firestore.collection('activity').get();
   Map<String,String> distinctTimestamps = {};
   List<List<String>> pairList = [];
+  Map<String,String> distinctUsers = {};
+  List<List<String>> callerUsers =[];
   String chatroomid = currentuser + "_"+ "Serenity";
   QuerySnapshot querySnapshot = await _firestore.collection('chat_rooms').doc(chatroomid).collection('messages').orderBy('timestamp', descending: false).get();
   print(activity.docs[0]['url']);
@@ -122,7 +124,17 @@ dynamic getUsers(currentuser) async {
     print('No documents found in Firestore');
   }
   print(pairList);
-  return [user.data(),community.docs,activity.docs, pairList];
+   querySnapshot = await _firestore.collection('calling').get();
+   if(querySnapshot.docs.isNotEmpty) {
+    for(DocumentSnapshot doc in querySnapshot.docs) {
+       if(doc.id == currentuser) {
+        Map<String,dynamic> data = doc.data() as Map<String,dynamic>;
+       callerUsers.addAll(data.entries.map((e) => [e.key,e.value.toString()]));
+       }
+    }
+   }
+   print(callerUsers);
+  return [user.data(),community.docs,activity.docs, pairList,callerUsers];
 }
 
 Future<void> sendmessage(String receiverId, String message, currentid) async{
@@ -205,6 +217,13 @@ print(snap['email']);
   Future<QuerySnapshot<Map<String, dynamic>>> getcommunity() async {
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
     return _firestore.collection('community').get();
+  }
+
+  void addCall(String userId, String currentUserId,roomId) {
+     FirebaseFirestore _firestore = FirebaseFirestore.instance;
+     _firestore.collection('calling').doc(userId).set({
+      currentUserId : roomId
+     },SetOptions(merge: true)).then((res) => print("created"));
   }
 
 
