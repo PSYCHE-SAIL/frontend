@@ -90,7 +90,7 @@ class _ActivityMapsState extends State<ActivityMaps> {
 }
 
 Widget activitymaps(sizeWidth, sizeHeight, constr, places, imagestring) {
-    print(places['places']['places']);
+    print(places['places']);
     return Wrap(
       spacing: 20,
       runSpacing: min(20, sizeWidth * 0.0006),
@@ -102,7 +102,7 @@ Widget activitymaps(sizeWidth, sizeHeight, constr, places, imagestring) {
           height: sizeHeight * 0.25,
           child: ListView.separated(
             reverse: false,
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: places['places']['places'].length,
             itemBuilder: (context, index) {
@@ -110,8 +110,8 @@ Widget activitymaps(sizeWidth, sizeHeight, constr, places, imagestring) {
                   sizeWidth,
                   sizeHeight,
                   constr,
-                  places['places']['places'][index]['displayName']['text'].length > 20 ?  places['places']['places'][index]['displayName']['text'].substring(0,20) :  places['places']['places'][index]['displayName']['text'],
-                  places['places']['places'][index]['googleMapsUri'],
+                  places['places'][index]['displayName']['text'].length > 20 ?  places['places'][index]['displayName']['text'].substring(0,20) :  places['places'][index]['displayName']['text'],
+                  places['places'][index]['googleMapsUri'],
                   imagestring);
             },
             separatorBuilder: ((context, index) => SizedBox(

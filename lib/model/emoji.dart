@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Emoji {
+   String _stress = "1";
    Map<String,List<dynamic>> _stressToEmoji = {
    '1' : ['assets/stress_1.png','Bouncing with joy today!',Colors.green],
    '2' : ['assets/stress_2.png','Taking it easy and breezy.',Colors.lime],
@@ -14,5 +15,13 @@ class Emoji {
 
   List<dynamic> stressEmoji(String stress) {
     return _stressToEmoji[stress] ?? ['assets/stress_5.png','Therapist needed',Colors.red];
+  }
+
+  void setStress(String stress) {
+    _stress = stress;
+  }
+
+  String getStress() {
+    return _stress;
   }
 }

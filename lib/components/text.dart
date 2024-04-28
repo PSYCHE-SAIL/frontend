@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:psychesail/model/places.dart';
 import 'package:psychesail/model/time.dart';
 import 'package:random_avatar/random_avatar.dart';
+import 'package:url_launcher/url_launcher.dart';
 import './button.dart';
 import 'package:animations/animations.dart';
 Widget HigthlightText(fontsize, minheight, txt) {
@@ -345,26 +349,20 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                               ),
                                             );
 }
-Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagestring , pos,currentUserId) {
+Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagestring , pos,currentUserId,Places place) {
   print(pos);
   var response ;
+
   return GestureDetector(
     onTap: () async {
-      List<String> places =["hospital"];
-      if(heading == "Movies") {
-        places = ["movie_theater"];
-      }
-      if(heading == "Games") {
-        places = ["amusement_park","amusement_center"];
-      }
-      if(heading == "Cafe") {
-        places = ["cafe","restaurant"];
-      }
+      place.setPlace(heading);
+      place.setImagestring(imagestring);
       // print(hello)
-      response = await searchNearbyPlaces(places, pos);
+      response = await searchNearbyPlaces(place.getPlace(), pos);
       // print("take me to hell");
       print(response);
-      Navigator.pushNamed(context, '/activity-maps', arguments: {'places':response,'imagestring':imagestring,'currentUserId':currentUserId});
+      place.setObject(response);
+      print(place.getObject());
 
     },
     child: Container(
@@ -542,4 +540,78 @@ dynamic searchNearbyPlaces(List<String> places_type, pos) async {
   }
   return responseData;
 }
-
+Widget communitycontainer(
+    sizeWidth, sizeHeight, constr, heading, googlemapsuri, imagestring) {
+  return Container(
+    constraints: BoxConstraints(maxWidth: sizeWidth *0.8),
+    decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey.shade300,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(8.0))),
+    child: Padding(
+      padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00004),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          circleButton(constr, sizeWidth / 100, sizeWidth / 50, imagestring),
+          Text(
+            heading,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: sizeWidth * sizeHeight * 0.00008,
+                fontWeight: FontWeight.bold),
+          ),
+          InkWell(
+            onTap:() => _launchUrl(Uri.parse(googlemapsuri)),
+          child: Text(
+            'Open in Google Maps',
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+          )
+          )],
+      ),
+    ),
+  );
+}
+Future<void> _launchUrl(Uri _url) async {
+  if (!await launchUrl(_url)) {
+    throw Exception('Could not launch $_url');
+  }
+}
+format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+Widget activitymaps(sizeWidth, sizeHeight, constr, places,imagestring) {
+    print(places['places']);
+    return Wrap(
+      spacing: 20,
+      runSpacing: min(20, sizeWidth * 0.0006),
+      children: [
+        SizedBox(
+          height: sizeHeight * 0.01,
+        ),
+        SizedBox(
+          height: sizeHeight * 0.25,
+          child: ListView.separated(
+            reverse: false,
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: places['places'].length,
+            itemBuilder: (context, index) {
+              return communitycontainer(
+                  sizeWidth,
+                  sizeHeight,
+                  constr,
+                  places['places'][index]['displayName']['text'].length > 20 ?  places['places'][index]['displayName']['text'].substring(0,20) :  places['places'][index]['displayName']['text'],
+                  places['places'][index]['googleMapsUri'],
+                  imagestring);
+            },
+            separatorBuilder: ((context, index) => SizedBox(
+              width: min(sizeWidth * 0.05, 30),
+            )),
+          ),
+        )
+      ],
+    );
+  }

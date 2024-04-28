@@ -51,7 +51,7 @@ Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr) {
   );
 }
 
-Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,currentUserId) {
+Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,currentUserId,place) {
   print(pos);
 
   return Wrap(
@@ -90,7 +90,7 @@ Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,cur
                 arr[arr.length - 1 - index].id,
                 arr[arr.length - 1 - index]['url'],
                 pos,
-                currentUserId);
+                currentUserId,place);
           },
           separatorBuilder: ((context, index) => SizedBox(
             width: min(sizeWidth * 0.05, 30),
