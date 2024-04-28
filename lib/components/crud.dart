@@ -27,7 +27,8 @@ dynamic createRecord(name,email,id,password) async {
     _firestore.collection('customers').doc(id).set({
       'id' : id,
       'email' : email,
-      'password': password
+      'password': password,
+      'stresshistory': [],
     });
     createChatrooms(name, "Serenity", "");
     createChatrooms(name, "Groupchat", "");

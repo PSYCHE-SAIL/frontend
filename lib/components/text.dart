@@ -383,7 +383,6 @@ Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagest
                   fontSize: sizeWidth * sizeHeight * 0.00005,
                   fontWeight: FontWeight.bold),
             ),
-            // activitymaps(sizeWidth, sizeHeight,constr, response, imagestring,currentUserId),
           ],
         ),
       ),

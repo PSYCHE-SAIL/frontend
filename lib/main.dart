@@ -18,7 +18,6 @@ import './pages/chatroom.dart';
 import './pages/settings.dart';
 import 'firebase_options.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-import 'package:psychesail/lib/repo/maps.dart';
 
 void main() async {
   if(Platform.isWindows || Platform.isLinux) {

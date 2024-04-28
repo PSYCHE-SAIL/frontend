@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +17,9 @@ import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/model/message.dart';
 import 'package:random_avatar/random_avatar.dart';
+import 'package:psychesail/model/emoji.dart';
+
+import '../components/button.dart';
 
 class MonkeyBotChatRoom extends StatefulWidget {
   MonkeyBotChatRoom({
@@ -24,60 +29,77 @@ class MonkeyBotChatRoom extends StatefulWidget {
   @override
   State<MonkeyBotChatRoom> createState() => _MonkeyBotChatRoomState();
 }
-// Future _fetchStressScore() {
-//   var response = http.get(Uri.parse('http://localhost:8000'));
-//
-// }
+
 class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
+
   final TextEditingController _messageController = TextEditingController();
   final ChatBloc chatbloc = ChatBloc();
   List<String> userinputs = [];
-  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<List<String>> arr = [
+    ["Movies", "assets/movie.png"],
+    ["Games", "assets/games.png"],
+    ["Cafe", "assets/cafe.png"]
+  ];
   var lastmessage;
   var receiverid;
-    bool endchat = false;
-    bool suggestplaces = false;
+  bool endchat = false;
+  bool suggestplaces = false;
   var currentid;
+  bool _isLoading = false;
+  var stressScore = '0';
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     endchat = false;
   }
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     final size = MediaQuery.of(context).size;
- double sizeHeight = MediaQuery.of(context).size.height;
+    double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     // Access individual parameters
     lastmessage = args?['lastmessage'] ?? '';
     receiverid = 'Serenity';
     currentid = args?['currentid'] ?? '';
+
     print(receiverid);
     print(lastmessage);
-
     print(currentid);
+
     Future<void> _fetchStressScore(userinputs) async {
-      var url = Uri.parse('http://192.168.41.133:8000/process_data');
+      var url = Uri.parse('http://172.70.101.9:8000/process_data');
       try {
         print("Sending request...");
         print(jsonEncode({"inputs": userinputs}));
         var response = await http.post(
           url,
           headers: {
-            "content-type": "application/json" ,
-            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-            "Access-Control-Allow-Credentials": 'true', // Required for cookies, authorization headers with HTTPS
-            "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+            "content-type": "application/json",
+            "Access-Control-Allow-Origin":
+                "*", // Required for CORS support to work
+            "Access-Control-Allow-Credentials":
+                'true', // Required for cookies, authorization headers with HTTPS
+            "Access-Control-Allow-Headers":
+                "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
             "Access-Control-Allow-Methods": "GET, POST,OPTIONS"
           },
-          body : jsonEncode({"inputs": userinputs}),
+          body: jsonEncode({"inputs": userinputs}),
         );
         if (response.statusCode == 200) {
           print("Data sent successfully");
           print("Response from server: ${response.body}");
+
+          var decode_score = jsonDecode(response.body);
+          var stress_score = decode_score["Final Stress Level"];
+          print(stress_score);
+          setState(() {
+            stressScore = stress_score;
+          });
         } else {
           print("Failed to send data. Status code: ${response.statusCode}");
           print("Response body: ${response.body}");
@@ -87,24 +109,35 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
       }
     }
 
-    dynamic sendMessage(messages) async{
-    if(_messageController.text.isNotEmpty){
-      await sendmessage(receiverid, _messageController.text,currentid);
-       updateChat(currentid, receiverid, messages[messages.length - 1].parts.first.text);
-      setState(() {
-        userinputs.add(_messageController.text); // Add the message to userinputs
-      });
-      print(userinputs);
-      _messageController.clear();
+    dynamic sendMessage(messages) async {
+      if (_messageController.text.isNotEmpty) {
+        setState(() {
+          _isLoading = true;
+        });
+        setState(() {
+          userinputs.add(_messageController.text);
+        });
+        print(userinputs);
+        var inputMessage = _messageController.text;
+        _messageController.clear();
+        await sendmessage(receiverid, inputMessage, currentid);
+        setState(() {
+          _isLoading = false;
+        });
+        updateChat(currentid, receiverid,
+            messages[messages.length - 1].parts.first.text);
+
+        return;
+      }
       return;
     }
-    return;
-    }
+
+
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
-          title: Text(receiverid),
+          backgroundColor: Colors.black,
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+          title: Center(child: Text(receiverid)),
           actions: [
             Padding(
                 padding: EdgeInsets.only(right: size.width / 50),
@@ -113,16 +146,15 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                       print("Pressed call button");
                     },
                     icon: Icon(Icons.call),
-                    color: Colors.black))
+                    color: Colors.white))
           ],
         ),
         body: BlocConsumer<ChatBloc, ChatState>(
             bloc: chatbloc,
             listener: (context, state) {},
             builder: (context, state) {
-              List<BotChatMessageModel> messages =
-                  chatbloc.messages;
-        
+              List<BotChatMessageModel> messages = chatbloc.messages;
+
               switch (messages.isNotEmpty) {
                 case true:
                   return Container(
@@ -137,166 +169,297 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                           child: ListView.builder(
                               itemCount: messages.length,
                               itemBuilder: (context, index) {
-                                return !(index%8 == 2) ? Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
-                                    padding: const EdgeInsets.all(12.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color:(messages[index].role == "user")? Color.fromRGBO(32, 160, 144, 100) :Colors.grey,
-                                    ),
-                                    child:
-                                        Text(style: TextStyle(color:(messages[index].role == "user")? Colors.white:Colors.black, fontSize: 17),
-                                            messages[index].parts.first.text),
-                                ) : Column(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                                return !(index % 8 == 7)
+                                    ? Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 12, horizontal: 12),
                                         padding: const EdgeInsets.all(12.0),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
-                                          color:(messages[index].role == "user")? Color.fromRGBO(32, 160, 144, 100) :Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color:
+                                              (messages[index].role == "user")
+                                                  ? Color.fromRGBO(
+                                                      32, 160, 144, 100)
+                                                  : Colors.grey,
                                         ),
-                                        child:
-                                            Text(style: TextStyle(color:(messages[index].role == "user")? Colors.white:Colors.black, fontSize: 17),
-                                                messages[index].parts.first.text),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                      InkWell(
-                                        onTap: () async {
-                                          // print(messages[index].role == "user"),
-                                          // print(messages[index]);
-                                          print("hello");
-                                          print(userinputs);
-                                          // print(jsonEncode({"inputs": userinputs}));
-                                          // await _fetchStressScore(userinputs);
-                                          // print("after sending and fetching response");
-                                          // print(res);
-                                          setState(() {
-                                            endchat = true;
-                                          });
-                                          print(jsonEncode({"inputs": userinputs}));
-                                          await _fetchStressScore(userinputs);
-                                          print("after sending and fetching response");
-                                        },
-                                        child: Container(
-                                          width: sizeWidth/3,
-                                          height: sizeHeight/25,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12),
-                                            color: Colors.grey,
+                                        child: Text(
+                                            style: TextStyle(
+                                                color: (messages[index].role ==
+                                                        "user")
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                fontSize: 17),
+                                            messages[index].parts.first.text),
+                                      )
+                                    : Column(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 12, horizontal: 12),
+                                            padding: const EdgeInsets.all(12.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: (messages[index].role ==
+                                                      "user")
+                                                  ? Color.fromRGBO(
+                                                      32, 160, 144, 100)
+                                                  : Colors.grey,
+                                            ),
+                                            child: Text(
+                                                style: TextStyle(
+                                                    color:
+                                                        (messages[index].role ==
+                                                                "user")
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                    fontSize: 17),
+                                                messages[index]
+                                                    .parts
+                                                    .first
+                                                    .text),
                                           ),
-                                          child: Center(child: Text("End chat")),
-                                        ),
-                                      ),
-                                      InkWell(
-                                          onTap: ()=>{
-                                            setState(() {
-                                              suggestplaces = true;
-                                            }),
-                                          },
-                                          child:
-                                      Container(
-                                        width: sizeWidth/3,
-                                        height: sizeHeight/25,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
-                                          color: Colors.grey,
-                                        ),
-                                        child: Center(child: Text("Suggest Places")),
-                                      )
-                                      )
-                                    ],)
-                                  ],
-                                );
-                                
+                                          (!endchat || !suggestplaces)
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        print("hello");
+                                                        print(userinputs);
+                                                        setState(() {
+                                                          endchat = true;
+                                                        });
+                                                        print(jsonEncode({
+                                                          "inputs": userinputs
+                                                        }));
+                                                        await _fetchStressScore(
+                                                            userinputs);
+                                                        print(
+                                                            "after sending and fetching response");
+                                                      },
+                                                      child: (!endchat &&
+                                                              !suggestplaces)
+                                                          ? Container(
+                                                              width:
+                                                                  sizeWidth / 3,
+                                                              height:
+                                                                  sizeHeight /
+                                                                      25,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                              child: Center(
+                                                                  child: Text(
+                                                                      "End chat")),
+                                                            )
+                                                          : (endchat)
+                                                              ? Container(
+                                                                  width:
+                                                                      sizeWidth,
+                                                                  height:
+                                                                      sizeHeight /
+                                                                          25,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                  ),
+                                                                  child: Center(
+                                                                      child: Text(
+                                                                          "CHAT ENDED",style: TextStyle( color: Colors.black))),
+                                                                )
+                                                              : SizedBox(),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () => {
+                                                        setState(() {
+                                                          suggestplaces = true;
+                                                        }),
+                                                      },
+                                                      child:
+                                                          (!suggestplaces &&
+                                                                  !endchat)
+                                                              ? Container(
+                                                                  width:
+                                                                      sizeWidth /
+                                                                          3,
+                                                                  height:
+                                                                      sizeHeight /
+                                                                          25,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12),
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                  child: Center(
+                                                                      child: Text(
+                                                                          "Suggest Places")),
+                                                                )
+                                                              : (suggestplaces)
+                                                                  ? Container(
+                                                                      width:
+                                                                          sizeWidth,
+                                                                      height:
+                                                                          sizeHeight /
+                                                                              25,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        border:
+                                                                            Border(
+                                                                          top:
+                                                                              BorderSide(
+                                                                            color:
+                                                                                Colors.black38, // Color of the top border
+                                                                            width:
+                                                                                1.5, // Width of the top border
+                                                                          ),
+                                                                        ),
+                                                                        color: Colors
+                                                                            .transparent,
+                                                                      ),
+                                                                      child: Center(
+                                                                          child: Text(
+                                                                        "CHAT ENDED ... SUGGESTING PLACES",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black),
+                                                                      )),
+                                                                    )
+                                                                  : SizedBox(),
+                                                    ),
+                                                  ],
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      );
                               }),
                         ),
-                        if(suggestplaces) _maptextbubble(size),
-                        if(endchat)Container(
-                           margin: const EdgeInsets.symmetric(vertical: 12,horizontal: 12),
-                                    padding: const EdgeInsets.all(12.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      
-                                    ),
-                          child: Center(child: Text("I hope i was hopefull in making this situation better for you.\nCome back whenever you need help.\nHave a great day.",
-                          style: TextStyle(
-                            color: Colors.black
-                          ),
-                          textAlign: TextAlign.center,
-                          ))),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 10),
-                          height: 120,
-                          color: Colors.white,
-                          child: Row(
+                        if (suggestplaces)
+                          Row(
                             children: [
-                              Expanded(
-                                  child: TextField(
-                                    style: TextStyle(color: Colors.black),
-                                    controller: _messageController,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(100),
+                              Wrap(
+                                spacing: 20,
+                                runSpacing: min(20, sizeWidth * 0.0006),
+                                children: [
+                                  SizedBox(
+                                    height: sizeHeight * 0.01,
+                                  ),
+                                  SizedBox(
+                                    height: sizeHeight * 0.15,
+                                    child: ListView.separated(
+                                      reverse: false,
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemCount: arr.length,
+                                      itemBuilder: (context, index) {
+                                        return _suggestplaces(
+                                            sizeHeight,
+                                            sizeWidth,
+                                            arr[arr.length - 1 - index][0],
+                                            arr[arr.length - 1 - index][1],
+                                            true);
+                                      },
+                                      separatorBuilder: ((context, index) =>
+                                          SizedBox(
+                                            width: min(sizeWidth * 0.05, 30),
+                                          )),
                                     ),
-                                    filled: true,
-                                    fillColor: Colors.transparent,
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        borderSide:
-                                            BorderSide(color: Colors.black))),
-                              )),
-                              const SizedBox(
-                                width: 12,
+                                  )
+                                ],
                               ),
-                             ( !endchat && !suggestplaces )  ? InkWell(
-                                onTap: () async{
-                                  if(_messageController.text.isNotEmpty) {
-                                    print(_messageController.text);
-                                    print( ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text));
-                                    print(await chatbloc.chatGenerateNewTextMessageEvent(ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text)));
-                                    await sendMessage(messages);
-                                    _messageController.clear();
-                                  }
-                                },
-                                child : CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.black,
-                                child: Icon(
-                                  Icons.send,
-                                  color: Colors.white,
-                                ),
-                              ),) : CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.black,
-                              child: Icon(
-                                Icons.send,
-                                color: Colors.white,
-                              ),
-                                                            )
                             ],
                           ),
-                        )
+                        if (endchat)
+                          _endchat(stressScore, sizeWidth, sizeHeight,currentid),
+                        (!endchat && !suggestplaces)
+                            ? Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 10),
+                                height: 120,
+                                color: Colors.white,
+                                child: Row(
+                                  children: [
+                                    _chatField(_messageController),
+                                    const SizedBox(
+                                      width: 12,
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        if (_messageController
+                                            .text.isNotEmpty) {
+                                          print(_messageController.text);
+                                          var userInput =
+                                              _messageController.text;
+                                          _messageController.clear();
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                          print(ChatGenerateNewTextMessageEvent(
+                                              inputMessage: userInput));
+                                          print(await chatbloc
+                                              .chatGenerateNewTextMessageEvent(
+                                                  ChatGenerateNewTextMessageEvent(
+                                                      inputMessage:
+                                                          userInput)));
+                                          setState(() {
+                                            _isLoading = false;
+                                            userinputs.add(userInput);
+                                          });
+
+                                          await sendMessage(messages);
+                                          print(userinputs);
+                                        }
+                                      },
+                                      child: ((!endchat))
+                                          ? (_isLoading)
+                                              ? Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          color: Colors.black),
+                                                )
+                                              : CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundColor: Colors.black,
+                                                  child: Icon(
+                                                    Icons.send,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                          : _endchat(stressScore, sizeWidth,
+                                              sizeHeight,currentid),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : SizedBox()
                       ],
                     ),
                   );
                 default:
-                  return Column(
-              children: [
-                Flexible(
-                  child: Container(
-                    color: Colors.white,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
+                  return Column(children: [
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Container(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 10),
-                      height: 120,
+                          vertical: 12, horizontal: 9),
+                      height: sizeHeight / 4,
                       color: Colors.white,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -305,91 +468,95 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               InkWell(
-                                onTap: ()=>{
+                                onTap: () => {
                                   _messageController.text = "I don't feel well"
                                 },
                                 child: Container(
-                                  width: sizeWidth/3,
-                                  height: sizeHeight/25,
+                                  width: sizeWidth / 3,
+                                  height: sizeHeight / 25,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: Colors.grey,
                                   ),
-                                  child: Center(child: Text("I don't feel well")),
+                                  child:
+                                      Center(child: Text("I don't feel well")),
                                 ),
                               ),
                               InkWell(
-                                  onTap: ()=>{
-                                    _messageController.text = "Help me! I am stressed!"
-                                  },
-                                  child:
-                                  Container(
-                                    width: sizeWidth/2,
-                                    height: sizeHeight/25,
+                                  onTap: () => {
+                                        _messageController.text =
+                                            "Help me! I am stressed!"
+                                      },
+                                  child: Container(
+                                    width: sizeWidth / 2,
+                                    height: sizeHeight / 25,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       color: Colors.grey,
                                     ),
-                                    child: Center(child: Text("Help me! I am stressed!")),
-                                  )
-                              )
-                            ],),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: TextField(
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    controller: _messageController,
-                                    decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(100),
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.transparent,
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(100),
-                                            borderSide:
-                                            BorderSide(color: Colors.black))),
-                                  )),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              InkWell(
-                                onTap: () async{
-                                  if(_messageController.text.isNotEmpty) {
-                                    print(_messageController.text);
-                                    print( ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text));
-                                    print(await chatbloc.chatGenerateNewTextMessageEvent(ChatGenerateNewTextMessageEvent(inputMessage: _messageController.text)));
-                                  // print(chatbloc.messages.length);
-                                  await sendMessage(messages);
-                                    _messageController.clear();
-                                  }
-                                },
-                                child : CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.black,
-                                  child: Icon(
-                                    Icons.send,
-                                    color: Colors.white,
-                                  ),
-                                ),)
+                                    child: Center(
+                                        child: Text("Help me! I am stressed!")),
+                                  ))
                             ],
                           ),
+                          ((!endchat && !suggestplaces))
+                              ? Row(
+                                  children: [
+                                    _chatField(_messageController),
+                                    const SizedBox(
+                                      width: 9,
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        if (_messageController
+                                            .text.isNotEmpty) {
+                                          print(_messageController.text);
+                                          var userInput =
+                                              _messageController.text;
+                                          _messageController.clear();
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                          print(ChatGenerateNewTextMessageEvent(
+                                              inputMessage: userInput));
+                                          print(await chatbloc
+                                              .chatGenerateNewTextMessageEvent(
+                                                  ChatGenerateNewTextMessageEvent(
+                                                      inputMessage:
+                                                          userInput)));
+                                          // print(chatbloc.messages.length);
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                          await sendMessage(messages);
+                                          // _messageController.clear();
+                                        }
+                                      },
+                                      child: (_isLoading)
+                                          ? Center(
+                                              child: CircularProgressIndicator(
+                                                  color: Colors.black),
+                                            )
+                                          : CircleAvatar(
+                                              radius: 30,
+                                              backgroundColor: Colors.black,
+                                              child: Icon(
+                                                Icons.send,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                    ),
+                                  ],
+                                )
+                              : _endchat(stressScore, sizeWidth, sizeHeight,currentid),
                         ],
                       ),
-                    ),
-                )
+                    )
                   ]);
               }
             }));
-
-    // }
-    //     )
-    // );
   }
+
   Widget _maptextbubble(size) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -414,12 +581,13 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    constraints: BoxConstraints(minHeight: size.height/3 , minWidth: size.width/4),
+                    constraints: BoxConstraints(
+                        minHeight: size.height / 3, minWidth: size.width / 4),
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage("assets/maps_image.png"),
-                          fit: BoxFit.cover,
-                        )),
+                      image: AssetImage("assets/maps_image.png"),
+                      fit: BoxFit.cover,
+                    )),
                   ),
                   // Text(
                   //   message,
@@ -441,103 +609,237 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     );
   }
 
-
-
 //   // build message input
-  Widget _buildMessageInput(messages) {
-    return Row(
-      children: [
-        //textfield
-        Expanded(
-          child: MyTextField(
-            controller: _messageController,
-            hinttext: 'Enter message...',
-            obscureText: false,
-          ),
-        ),
-
-        // send button
-        InkWell(
-            onTap: () async {
-              print(ChatSuccessState(messages: messages).toString());
-              if (_messageController.text.isNotEmpty) {
-                chatbloc.add(ChatGenerateNewTextMessageEvent(
-                    inputMessage: _messageController.text));
-
-                _messageController.clear();
-              }
-            },
-            child: CircleAvatar(
-              radius: 32,
-              backgroundColor: Colors.transparent,
-              child: Icon(
-                Icons.send,
-                color: Colors.black,
-              ),
-            ))
-      ],
-    );
-  }
+//   Widget _buildMessageInput(messages) {
+//     return Row(
+//       children: [
+//         //textfield
+//         Expanded(
+//           child: MyTextField(
+//             controller: _messageController,
+//             hinttext: 'Enter message...',
+//             obscureText: false,
+//           ),
+//         ),
+//
+//         // send button
+//         InkWell(
+//             onTap: () async {
+//               print(ChatSuccessState(messages: messages).toString());
+//               if (_messageController.text.isNotEmpty) {
+//                 var userInput = _messageController.text;
+//                 _messageController.clear();
+//                 chatbloc.add(ChatGenerateNewTextMessageEvent(
+//                     inputMessage: userInput));
+//
+//
+//               }
+//             },
+//             child: CircleAvatar(
+//               radius: 32,
+//               backgroundColor: Colors.transparent,
+//               child: Icon(
+//                 Icons.send,
+//                 color: Colors.black,
+//               ),
+//             ))
+//       ],
+//     );
+//   }
 }
 
-Widget _buildMessageList(receiverid,currentid){
-    return StreamBuilder(stream: getmessages(receiverid,currentid), builder: (context,snapshot){
-      if(snapshot.hasError){
-        return Text('Error${snapshot.error}');
-      }
-      if(snapshot.connectionState == ConnectionState.waiting){
-        return Text('Loading...');
-      }
-      return ListView.builder(
-        itemCount: snapshot.data!.docs.length,
-        itemBuilder: (context, index) {
-          // Build your message widget based on the data
-          return _buildMessageItem(snapshot.data!.docs[index],currentid);
-        },
-        // children: snapshot.data!.docs.map((document) => _buildMessageItem(document,currentid)).toList(),
-      );
-    });
-  }
+// Widget _buildMessageList(receiverid, currentid) {
+//   return StreamBuilder(
+//       stream: getmessages(receiverid, currentid),
+//       builder: (context, snapshot) {
+//         if (snapshot.hasError) {
+//           return Text('Error${snapshot.error}');
+//         }
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return Text('Loading...');
+//         }
+//         return ListView.builder(
+//           itemCount: snapshot.data!.docs.length,
+//           itemBuilder: (context, index) {
+//             // Build your message widget based on the data
+//             return _buildMessageItem(snapshot.data!.docs[index], currentid);
+//           },
+//           // children: snapshot.data!.docs.map((document) => _buildMessageItem(document,currentid)).toList(),
+//         );
+//       });
+// }
 
-  Widget  _buildMessageItem(DocumentSnapshot document, currentid) {
-    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-    // align sender messages => left ; receiver messages => right
+Widget _buildMessageItem(DocumentSnapshot document, currentid) {
+  Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+  // align sender messages => left ; receiver messages => right
 
-    var alignment = (data['senderid'] == currentid)
-        ? Alignment.centerRight
-        : Alignment.centerLeft;
-    var bgcolor = (data['senderid'] == currentid) ? Color.fromRGBO(
-        32, 160, 144, 100) : Color.fromRGBO(121, 124, 123, 100);
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints)
-    {
-      bool constr = false;
-      if (constraints.maxWidth > 600) constr = true;
-      return Container(
-        alignment: alignment,
-        child: Column(
-          crossAxisAlignment:
-          (data['senderid'] == currentid)
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
-          mainAxisAlignment: (data['senderid'] == currentid)
-              ? MainAxisAlignment.end
-              : MainAxisAlignment.start,
+  var alignment = (data['senderid'] == currentid)
+      ? Alignment.centerRight
+      : Alignment.centerLeft;
+  var bgcolor = (data['senderid'] == currentid)
+      ? Color.fromRGBO(32, 160, 144, 100)
+      : Color.fromRGBO(121, 124, 123, 100);
+  return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+    bool constr = false;
+    if (constraints.maxWidth > 600) constr = true;
+    return Container(
+      alignment: alignment,
+      child: Column(
+        crossAxisAlignment: (data['senderid'] == currentid)
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
+        mainAxisAlignment: (data['senderid'] == currentid)
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
+        children: [
+          // Text(data['senderid'],style: const TextStyle(backgroundColor: Colors.transparent,color: Colors.black,fontSize: 15,),),
+          textbubble(
+              data['message'],
+              '${data['timestamp'].toDate().toLocal().hour}:' +
+                  '${data['timestamp'].toDate().toLocal().minute.toString().padLeft(2, '0')}',
+              data['senderid'],
+              currentid,
+              bgcolor,
+              constr,
+              context),
+        ],
+      ),
+    );
+  });
+}
+
+Widget _endchat(stressScore, sizeWidth, sizeHeight,currentid) {
+  Emoji stressEmoji = Emoji();
+  var displayMood = (stressScore == '0')
+      ? ['assets/stress_5.png', 'Therapist needed', Colors.red]
+      : stressEmoji.stressEmoji(stressScore);
+  // await addStressHistory(currentid, {
+  //   "stressScore": stressScore, // Assuming stressScore is a variable holding the score
+  //   "timestamp": FieldValue.serverTimestamp() // This will get the current timestamp from the server
+  // });
+  return Container(
+    margin: EdgeInsets.only(top: 5),
+    height: sizeHeight / 8,
+    // color: displayMood[2],
+    decoration: BoxDecoration(
+      color: displayMood[2], // Assuming displayMood[2] is a Color
+      // Define the border for the top side of the Container
+      border: Border(
+        top: BorderSide(
+          color: Colors.black38, // Color of the top border
+          width: 1.5, // Width of the top border
+        ),
+      ),
+    ),
+// decoration: BoxDecoration(
+//   border: Border(top:BorderSide(color: Colors.black, width: 2.0)),
+// ),
+    child: Column(
+      children: [
+        Row(
           children: [
-            // Text(data['senderid'],style: const TextStyle(backgroundColor: Colors.transparent,color: Colors.black,fontSize: 15,),),
-            textbubble(data['message'], '${data['timestamp']
-                .toDate()
-                .toLocal()
-                .hour}:' + '${data['timestamp']
-                .toDate()
-                .toLocal()
-                .minute
-                .toString()
-                .padLeft(2, '0')}', data['senderid'], currentid, bgcolor,constr, context),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: sizeWidth / 8,
+                  right: sizeWidth / 15,
+                  top: sizeHeight / 90,
+                  bottom: sizeHeight / 140),
+              child: circleButton(false, sizeWidth / 100, sizeWidth / 50,
+                  displayMood[0].toString()),
+            ),
+            Text(
+              "\"" + displayMood[1] + "\"",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 15,
+                  fontFamily: 'AbeeZee'),
+            ),
           ],
         ),
-      );
+        Text(
+          "Your Final Stress Score Is : " + stressScore,
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'AbeeZee',
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
+            fontSize: 15,
+          ),
+        )
+      ],
+    ),
+  );
+}
+void addStressHistory(String currentid, Map<Timestamp,String> newEntry) async {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    }
-    );
-  }
+  DocumentReference userdoc = _firestore.collection('customers').doc(currentid);
+
+  await userdoc.update({
+    'stressHistory': FieldValue.arrayUnion([newEntry])
+  }).then((_) {
+    print('Stress history updated successfully.');
+    print(userdoc);
+  }).catchError((error) {
+    print('Error updating stress history: $error');
+  });
+}
+Widget _chatField(_messageController) {
+  return Expanded(
+    child: TextField(
+      style: TextStyle(
+        color: Colors.black,
+      ),
+      controller: _messageController,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          filled: true,
+          fillColor: Colors.transparent,
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(100),
+              borderSide: BorderSide(color: Colors.black))),
+    ),
+  );
+}
+
+Widget _suggestplaces(sizeHeight, sizeWidth, heading, imagestring, constr) {
+  return Container(
+    constraints: BoxConstraints(maxWidth: sizeWidth * 0.5),
+    decoration:
+        BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+    child: Padding(
+      padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00009),
+      child: Column(
+        children: [
+          circleButton(constr, sizeWidth / 120, sizeWidth / 100, imagestring),
+          Text(
+            heading,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: sizeWidth * sizeHeight * 0.00005,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// void addStressHistory(String currentid, Map<Timestamp,String> newEntry) async {
+//   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+//
+//   DocumentReference userdoc = _firestore.collection('customers').doc(currentid);
+//
+//   await userdoc.update({
+//     'stressHistory': FieldValue.arrayUnion([newEntry])
+//   }).then((_) {
+//     print('Stress history updated successfully.');
+//     print(userdoc);
+//   }).catchError((error) {
+//     print('Error updating stress history: $error');
+//   });
+// }

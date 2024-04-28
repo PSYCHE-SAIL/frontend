@@ -64,14 +64,9 @@ class _ActivityMapsState extends State<ActivityMaps> {
     ),
     Padding(
     padding: EdgeInsets.all(16.0),
-    child: Row(
+    child: Column(
     // mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
-
-    // Container(
-    // width: sizeWidth/4,
-    // child: RandomAvatar(currentUserId, trBackground: false, height: 50,width: 50)
-    // ),
     SizedBox(
     child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,10 +94,10 @@ Widget activitymaps(sizeWidth, sizeHeight, constr, places, imagestring) {
           height: sizeHeight * 0.01,
         ),
         SizedBox(
-          height: sizeHeight * 0.25,
+          height: sizeHeight *0.77,
           child: ListView.separated(
             reverse: false,
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: places['places']['places'].length,
             itemBuilder: (context, index) {
@@ -114,8 +109,11 @@ Widget activitymaps(sizeWidth, sizeHeight, constr, places, imagestring) {
                   places['places']['places'][index]['googleMapsUri'],
                   imagestring);
             },
-            separatorBuilder: ((context, index) => SizedBox(
-              width: min(sizeWidth * 0.05, 30),
+            separatorBuilder: ((context, index) => Padding(
+              padding: const EdgeInsets.all(10),
+              child: SizedBox(
+                width: min(sizeWidth * 0.05, 30),
+              ),
             )),
           ),
         )
