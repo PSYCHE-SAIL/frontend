@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:psychesail/components/video.dart';
 import 'package:psychesail/pages/join_room.dart';
 import 'package:psychesail/pages/room_screen.dart';
+import 'package:random_avatar/random_avatar.dart';
 
 import '../components/crud.dart';
 
@@ -21,17 +22,31 @@ class _VideoSDKQuickStartState extends State<VideoSDKQuickStart> {
     double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     var currentUserId = '';
+    var senderUserId = '';
     final Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     // Access individual parameters
 
     currentUserId = args?['currentid'] ?? "";
+    senderUserId = args?['senderid'] ?? "";
     return Scaffold(
       appBar: AppBar(
-        title: const Text("VideoSDK QuickStart"),
-      ),
+            backgroundColor: Colors.black,
+            centerTitle: true,
+            title: Text("Video Calls"),
+            actions: [
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
+                  child: RandomAvatar(
+                    currentUserId,
+                    trBackground: false,
+                    height: 50,
+                    width: 50,
+                  )),
+            ],
+          ),
       body: FutureBuilder<dynamic>(
-                            future: calling(currentUserId),
+                            future: calling(currentUserId,senderUserId),
         builder: (context,snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -51,6 +66,8 @@ class _VideoSDKQuickStartState extends State<VideoSDKQuickStart> {
                     leaveRoom: () {
                       
                     },
+                    currentId: currentUserId,
+                    userId: senderUserId,
                   )
                 
           );
@@ -62,9 +79,9 @@ class _VideoSDKQuickStartState extends State<VideoSDKQuickStart> {
   }
 }
 
-calling(currentUserId) async {
+calling(currentUserId,senderId) async {
   dynamic roomId = await createRoom();
-   addCall("Joe",currentUserId,roomId);
+   addCall(senderId,currentUserId,roomId);
   return roomId;
  
 

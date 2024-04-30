@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:videosdk/videosdk.dart';
 
 class ParticipantTile extends StatelessWidget {
-  final Stream stream;
+  final Stream? stream;
+  final double width;
+  final double height;
   const ParticipantTile({
     Key? key, required this.stream,
+    required this.width, required this.height
   }) : super(key: key);
 
   @override
@@ -12,12 +15,16 @@ class ParticipantTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
-        height: 200,
-        width: 200,
-        child: RTCVideoView(
-          stream.renderer!,
+        height: height,
+        width: width,
+        child: stream != null ? RTCVideoView(
+          stream!.renderer!,
           objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-        ),
+        ) : Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white)
+          ),
+          child: Icon(Icons.videocam_off,fill: 1.0,size: 200.0)),
       ),
     );
   }

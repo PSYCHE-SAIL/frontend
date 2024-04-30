@@ -54,7 +54,7 @@ Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr) {
   );
 }
 
-Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr) {
+Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr,user) {
   return Wrap(
     spacing: 20,
     runSpacing: min(20, sizeWidth * 0.0006),
@@ -93,7 +93,9 @@ Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr) {
                     roomId: arr[arr.length - 1 - index][1],
                     token: token,
                     leaveRoom: () => {},
-                  ),
+                    currentId: user,
+                     userId : arr[arr.length - 1 - index][0]
+                   ),
                 ),),
               child: callingContainer(
                   sizeWidth,
