@@ -58,7 +58,9 @@ final size = MediaQuery.of(context).size;
         actions: [
           Padding(padding: EdgeInsets.only(right: size.width/50),
           child :
-          IconButton(onPressed: () {Navigator.pushNamed(context,'/call_page');}, icon: Icon(Icons.call), color: Colors.black))
+          IconButton(onPressed: () { Navigator.pushNamed(context, '/video',
+  arguments: {'currentid': currentid, 'senderid' : receiverid}
+                      );}, icon: Icon(Icons.call), color: Colors.black))
         ],
       ),
       body: Container (

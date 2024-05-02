@@ -393,32 +393,19 @@ class _homeState extends State<home> {
                                                 currentUserId : currentUserId,
                                                  arr: snapshot.data[2],
                                                     ),
-                                           FutureBuilder<dynamic>(
-                            future: getUsers(currentUserId), // async work
-                            builder: (BuildContext context,snapshots) {
-                                     switch (snapshots.connectionState) {
-                                case ConnectionState.waiting:
-                                  return Text(
-                                    'Loading....',
-                                    style: TextStyle(color: Colors.black),
-                                  );
-                                default:
-                                  if (snapshots.hasError) {
-                                    return Text('Error: ${snapshots.error}');
-                                  } else {
-                                    return  callingscroll(
+                                            callingscroll(
                                                   sizeWidth,
                                                   sizeHeight,
                                                   constr,
                                                   "Calls",
-                                                  snapshots.data[4]);
-                                    }}
-                                             }
-                                           ),
+                                                  snapshot.data[4],
+                                                  currentUserId),
                                           SizedBox(
                                             height: sizeHeight * 0.03,
                                           ),
-
+                                          InkWell(
+                                            onTap: () => createChatrooms(currentUserId, "Disha", "Hi"),
+                                            child: Text("video"))
                                             
                                           
                                         ],
@@ -436,7 +423,7 @@ class _homeState extends State<home> {
               onTap: (int index) {
                 if(index == 1) {
  Navigator.pushNamed(context, '/video',
-  arguments: {'currentid': currentUserId}
+  arguments: {'currentid': currentUserId, 'senderid' : "Joe"}
                       );
                 } else
                 if (index == 2) {

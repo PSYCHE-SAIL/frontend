@@ -237,4 +237,13 @@ void addStressValue(String userId, String stressValue ) async {
      },SetOptions(merge: true)).then((res) => print("created"));
   }
 
+void deleteCall(String userId, String currentUserId) {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  _firestore.collection('calling').doc(userId).update({
+    currentUserId: FieldValue.delete(),
+  }).then((res) => print("deleted")).catchError((error) => print("Error deleting call: $error"));
+}
+
+
+
 
