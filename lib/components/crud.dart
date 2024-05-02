@@ -164,11 +164,9 @@ print(snap['email']);
     ids.sort();
     String chatroomId = ids.join("_");
 
-
-
-
     //add new message to database
     await _firestore.collection('chat_rooms').doc(chatroomId).collection('messages').add(newMessage.toMap());
+
   }
 
   // GET MESSAGES
@@ -219,6 +217,18 @@ print(snap['email']);
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
     return _firestore.collection('community').get();
   }
+
+  // ADD FINAL STRESS VALUE
+void addStressValue(String userId, String stressValue ) async {
+  final reff = FirebaseDatabase.instance.ref();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final snapshot = await _firestore.collection('customers').doc(userId).update(
+    {
+
+    }
+  );
+
+}
 
   void addCall(String userId, String currentUserId,roomId) {
      FirebaseFirestore _firestore = FirebaseFirestore.instance;
