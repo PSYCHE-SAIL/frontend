@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/model/emoji.dart';
 import 'package:random_avatar/random_avatar.dart';
@@ -48,6 +49,9 @@ class _ProgressState extends State<Progress> {
     // Access individual parameters
     var currentUserId = args?['currentuser'] ?? "";
     var data = args?['historycollection'] ?? "";
+
+
+
     double sizeHeight = MediaQuery
         .of(context)
         .size
@@ -136,8 +140,8 @@ class _ProgressState extends State<Progress> {
         shrinkWrap: true,
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return historyContainer(sizeWidth, sizeHeight, false, data[index][0],
-              data[index][1], stressEmoji.stressEmoji((index + 1).toString()));
+          return historyContainer(sizeWidth, sizeHeight, false,data[index][0],
+              data[index][1] , stressEmoji.stressEmoji((data[index][2]).toString()),true);
         },
         separatorBuilder: ((context, index) =>
             SizedBox(
@@ -180,33 +184,94 @@ class _ProgressState extends State<Progress> {
                 ),
               ]),
           )
-            ,_buildUI(sizeHeight, sizeWidth, isSelectedWeekly)],),
+            ,_buildUI(sizeHeight, sizeWidth, isSelectedWeekly,data)],),
         ),
       );
   }
 
-  Widget _buildUI(sizeHeight, sizeWidth, isSelectedWeekly) {
-    // return isSelectedWeekly[0]?_stressScoreGraph(sizeHeight,sizeWidth,true):_stressScoreGraph(sizeHeight,sizeWidth,false);
+
+  List<FlSpot> weeklySpots(List<List<dynamic>> stressHistory) {
+    var daysOfWeek = {"Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6, "Sunday": 7};
+    DateTime now = DateTime.now();
+    int currentWeekOfYear = weekOfYear(now);
+    int currentYear = now.year;
+
+    Map<String, List<double>> groupedByDay = {};
+    for (var entry in stressHistory) {
+      DateFormat format = DateFormat("EEEE ,d MMMM yyyy");
+      DateTime entryDate = format.parse(entry[0]);
+      if (weekOfYear(entryDate) == currentWeekOfYear && entryDate.year == currentYear) {
+        String dayKey = DateFormat('EEEE').format(entryDate);
+        double stressValue = double.parse(entry[2].toString());
+        if (!groupedByDay.containsKey(dayKey)) {
+          groupedByDay[dayKey] = [stressValue];
+        } else {
+          groupedByDay[dayKey]!.add(stressValue);
+        }
+      }
+    }
+
+    List<FlSpot> spots = [];
+    groupedByDay.forEach((day, values) {
+      double averageStress = values.reduce((a, b) => a + b) / values.length;
+      num? dayIndex = daysOfWeek[day];
+      if (dayIndex != null) {
+        spots.add(FlSpot(dayIndex.toDouble(), averageStress));
+      }
+    });
+
+    return spots;
+  }
+
+  int weekOfYear(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    int woy = ((dayOfYear - date.weekday + 10) / 7).floor();
+    return woy;
+  }
+
+  List<FlSpot> monthlySpots(List<List<dynamic>> stressHistory) {
+    DateTime now = DateTime.now();
+    int currentYear = now.year;
+    List<FlSpot> spots = [];
+    Map<int, List<double>> groupedByMonth = {};
+    for (var entry in stressHistory) {
+      DateFormat format = DateFormat("EEEE ,d MMMM yyyy");
+      DateTime entryDate = format.parse(entry[0]);
+      if (entryDate.year == currentYear) {
+        double stressValue = double.parse(entry[2].toString());
+        if (!groupedByMonth.containsKey(entryDate.month)) {
+          groupedByMonth[entryDate.month] = [stressValue];
+        } else {
+          groupedByMonth[entryDate.month]!.add(stressValue);
+        }
+      }
+    }
+    groupedByMonth.forEach((mon, values) {
+      double averageStress = values.reduce((a, b) => a + b) / values.length;
+      spots.add(FlSpot(mon.toDouble(), averageStress));
+    });
+print(spots);
+spots.sort((a,b) => a.x.compareTo(b.x));
+    print(spots);
+    return spots;
+  }
+  
+  
+  Widget _buildUI(sizeHeight, sizeWidth, isSelectedWeekly,data) {
     var check = isSelectedWeekly[0]?true:false;
     return Center(
       child: SizedBox(
         width: sizeWidth,
         height: sizeHeight/2,
         child: Container(
-          // foregroundDecoration: BorderRadius.circular(2.0),
-          // color: Color.fromRGBO(10, 149, 120, 90),
           color: Colors.black,
-          // height: sizeHeight /3, // Specify the height of the chart
           padding: EdgeInsets.symmetric(horizontal: sizeHeight/50, vertical: sizeWidth/25), // Add some padding
           child: LineChart(
             LineChartData(
               gridData: FlGridData(show: true,
                 drawHorizontalLine:(check)? true:false,
                 drawVerticalLine: (check)?false:true,
-                // horizontalInterval:(check)? 1 :0,
-                // verticalInterval: (check)?0:1,
               ),
-              // Hide the grid lines
               titlesData: FlTitlesData(
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
@@ -238,7 +303,7 @@ class _ProgressState extends State<Progress> {
                 topTitles: AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
-                bottomTitles: AxisTitles(
+               bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
                     getTitlesWidget: (double value, TitleMeta meta) {
@@ -344,28 +409,7 @@ class _ProgressState extends State<Progress> {
               // Maximum value on the y-axis (for stress level)
               lineBarsData: [
                 LineChartBarData(
-                  spots: check ? [
-                    FlSpot(1, 3), // Data point for Monday
-                    FlSpot(2, 4), // Data point for Tuesday
-                    FlSpot(3, 1), // Data point for Wednesday
-                    FlSpot(4, 2), // Data point for Thursday
-                    FlSpot(5, 5), // Data point for Friday
-                    FlSpot(6, 3), // Data point for Saturday
-                    FlSpot(7 ,1), // Data point for Sunday
-                  ]: [
-                    FlSpot(1, 3), // Data point for  January
-                    FlSpot(2, 4), // Data point for  February
-                    FlSpot(3, 2), // Data point for  March
-                    FlSpot(4, 2), // Data point for  April
-                    FlSpot(5, 1), // Data point for  May
-                    FlSpot(6, 2), // Data point for  June
-                    FlSpot(7 ,3), // Data point for  July
-                    FlSpot(8, 5), // Data point for  August
-                    FlSpot(9, 3), // Data point for  September
-                    FlSpot(10, 1), // Data point for October
-                    FlSpot(11, 3), // Data point for November
-                    FlSpot(12, 2), // Data point for December
-                  ],
+                  spots: check ? weeklySpots(data) : monthlySpots(data),
                   isCurved: true,
                   color: Color.fromRGBO(10, 149, 120, 90),
                   barWidth: 4,
@@ -392,15 +436,15 @@ class _ProgressState extends State<Progress> {
     );
   }
   Color _getDotColor(double yValue) {
-    if (yValue == 1) {
+    if (yValue <= 1 && yValue > 0) {
       return Colors.green.shade800; // Low values
-    } else if (yValue == 2) {
+    } else if (yValue > 1 && yValue <= 2) {
       return Colors.green.shade400; // Medium values
     }
-    else if (yValue == 3) {
+    else if (yValue <= 3 && yValue > 2) {
       return Colors.orange.shade300;
     }
-    else if (yValue == 4) {
+    else if (yValue > 3 && yValue <= 4) {
       return Colors.orange.shade800;
     } else {
       return Colors.red; // High values

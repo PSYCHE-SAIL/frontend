@@ -100,6 +100,9 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
           setState(() {
             stressScore = stress_score;
           });
+
+          // update in customers
+          addStressValue(currentid,stressScore);
         } else {
           print("Failed to send data. Status code: ${response.statusCode}");
           print("Response body: ${response.body}");
@@ -383,7 +386,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                             ],
                           ),
                         if (endchat)
-                          _endchat(stressScore, sizeWidth, sizeHeight,currentid),
+                          _endchat(stressScore, sizeWidth, sizeHeight,currentid,context),
                         (!endchat && !suggestplaces)
                             ? Container(
                                 padding: const EdgeInsets.symmetric(
@@ -439,7 +442,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                                   ),
                                                 )
                                           : _endchat(stressScore, sizeWidth,
-                                              sizeHeight,currentid),
+                                              sizeHeight,currentid,context),
                                     ),
                                   ],
                                 ),
@@ -548,7 +551,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                                     ),
                                   ],
                                 )
-                              : _endchat(stressScore, sizeWidth, sizeHeight,currentid),
+                              : _endchat(stressScore, sizeWidth, sizeHeight,currentid,context),
                         ],
                       ),
                     )
@@ -557,57 +560,6 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
             }));
   }
 
-  Widget _maptextbubble(size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Container(
-          //     child: Padding(
-          //   padding: EdgeInsets.all(9.0),
-          //   child: RandomAvatar("Serenity",
-          //       trBackground: false, height: 50, width: 50),
-          // )),
-          Flexible(
-            child: Container(
-              padding: EdgeInsets.all(11),
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    constraints: BoxConstraints(
-                        minHeight: size.height / 3, minWidth: size.width / 4),
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image: AssetImage("assets/maps_image.png"),
-                      fit: BoxFit.cover,
-                    )),
-                  ),
-                  // Text(
-                  //   message,
-                  //   style: TextStyle(
-                  //       color: Colors.black,
-                  //       fontSize: 17),
-                  // ),
-                  // SizedBox(height: 4),
-                  Text(
-                    "https://maps.app.goo.gl/smBnLVPhTkBku2uk8",
-                    style: TextStyle(color: Colors.black, fontSize: 17),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
 //   // build message input
 //   Widget _buildMessageInput(messages) {
@@ -709,7 +661,7 @@ Widget _buildMessageItem(DocumentSnapshot document, currentid) {
   });
 }
 
-Widget _endchat(stressScore, sizeWidth, sizeHeight,currentid) {
+Widget _endchat(stressScore, sizeWidth, sizeHeight,currentid, context) {
   Emoji stressEmoji = Emoji();
   var displayMood = (stressScore == '0')
       ? ['assets/stress_5.png', 'Therapist needed', Colors.red]
@@ -718,74 +670,94 @@ Widget _endchat(stressScore, sizeWidth, sizeHeight,currentid) {
   //   "stressScore": stressScore, // Assuming stressScore is a variable holding the score
   //   "timestamp": FieldValue.serverTimestamp() // This will get the current timestamp from the server
   // });
-  return Container(
-    margin: EdgeInsets.only(top: 5),
-    height: sizeHeight / 8,
-    // color: displayMood[2],
-    decoration: BoxDecoration(
-      color: displayMood[2], // Assuming displayMood[2] is a Color
-      // Define the border for the top side of the Container
-      border: Border(
-        top: BorderSide(
-          color: Colors.black38, // Color of the top border
-          width: 1.5, // Width of the top border
+  return Column(
+    children: [
+      Container(
+        margin: EdgeInsets.only(top: 5,),
+        height: sizeHeight / 8,
+        // color: displayMood[2],
+        decoration: BoxDecoration(
+          color: displayMood[2], // Assuming displayMood[2] is a Color
+          // Define the border for the top side of the Container
+          border: Border(
+            top: BorderSide(
+              color: Colors.black38, // Color of the top border
+              width: 1.5, // Width of the top border
+            ),
+            bottom: BorderSide(
+              color: Colors.black38, // Color of the top border
+              width: 1.5, // Width of the top border
+            ),
+          ),
         ),
-      ),
-    ),
-// decoration: BoxDecoration(
-//   border: Border(top:BorderSide(color: Colors.black, width: 2.0)),
-// ),
-    child: Column(
-      children: [
-        Row(
+      // decoration: BoxDecoration(
+      //   border: Border(top:BorderSide(color: Colors.black, width: 2.0)),
+      // ),
+        child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: sizeWidth / 8,
-                  right: sizeWidth / 15,
-                  top: sizeHeight / 90,
-                  bottom: sizeHeight / 140),
-              child: circleButton(false, sizeWidth / 100, sizeWidth / 50,
-                  displayMood[0].toString()),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: sizeWidth / 8,
+                      right: sizeWidth / 15,
+                      top: sizeHeight / 90,
+                      bottom: sizeHeight / 140),
+                  child: circleButton(false, sizeWidth / 100, sizeWidth / 50,
+                      displayMood[0].toString()),
+                ),
+                Text(
+                  "\"" + displayMood[1] + "\"",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 15,
+                      fontFamily: 'AbeeZee'),
+                ),
+              ],
             ),
             Text(
-              "\"" + displayMood[1] + "\"",
+              "Your Final Stress Score Is : " + stressScore,
               style: TextStyle(
-                  color: Colors.black,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 15,
-                  fontFamily: 'AbeeZee'),
-            ),
+                color: Colors.black,
+                fontFamily: 'AbeeZee',
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+                fontSize: 15,
+              ),
+            )
           ],
         ),
-        Text(
-          "Your Final Stress Score Is : " + stressScore,
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'AbeeZee',
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-            fontSize: 15,
+      ),
+      SizedBox(
+        width: sizeWidth,
+        height: sizeHeight / 20,
+        child: Container(
+          color: Colors.black,
+        child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/chatroom', arguments: {
+              'currentuser': currentid,
+              'receiverid': 'Disha',
+              'communityname' : 'Exams',
+            });
+          },
+          child: Center(
+            child: Text("Connect & Heal: Join Our Circle of Support", style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'AbeeZee',
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+              fontSize: 13,
+            ),),
           ),
-        )
-      ],
-    ),
+        ) ,
+        ),
+      )
+    ],
   );
 }
-void addStressHistory(String currentid, Map<Timestamp,String> newEntry) async {
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  DocumentReference userdoc = _firestore.collection('customers').doc(currentid);
-
-  await userdoc.update({
-    'stressHistory': FieldValue.arrayUnion([newEntry])
-  }).then((_) {
-    print('Stress history updated successfully.');
-    print(userdoc);
-  }).catchError((error) {
-    print('Error updating stress history: $error');
-  });
-}
 Widget _chatField(_messageController) {
   return Expanded(
     child: TextField(
@@ -828,18 +800,3 @@ Widget _suggestplaces(sizeHeight, sizeWidth, heading, imagestring, constr) {
     ),
   );
 }
-
-// void addStressHistory(String currentid, Map<Timestamp,String> newEntry) async {
-//   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-//
-//   DocumentReference userdoc = _firestore.collection('customers').doc(currentid);
-//
-//   await userdoc.update({
-//     'stressHistory': FieldValue.arrayUnion([newEntry])
-//   }).then((_) {
-//     print('Stress history updated successfully.');
-//     print(userdoc);
-//   }).catchError((error) {
-//     print('Error updating stress history: $error');
-//   });
-// }

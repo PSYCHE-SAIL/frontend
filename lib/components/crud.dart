@@ -32,6 +32,12 @@ dynamic createRecord(name,email,id,password) async {
     });
     createChatrooms(name, "Serenity", "");
     createChatrooms(name, "Groupchat", "");
+    _firestore.collection('community').doc('Exams')
+        .collection('users').doc(id).collection('messages')
+        .add({'senderEmail': email,
+      'senderid': id,
+      'message': '',
+      'timestamp': DateTime.now()});
     return 'created';
   }  else if(check['email'] == email) return 'userExists';
   return {};
@@ -92,7 +98,7 @@ dynamic getUsers(currentuser) async {
   dynamic user = await _firestore.collection('chatAvailable').doc('$currentuser').get();
   print(user.data().values);
   dynamic community = await _firestore.collection('community').get();
-  print(community.docs[0]['description']);
+  print(community.docs[1]['description']);
   dynamic activity = await _firestore.collection('activity').get();
   Map<String,String> distinctTimestamps = {};
   List<List<String>> pairList = [];
@@ -135,7 +141,8 @@ dynamic getUsers(currentuser) async {
     }
    }
    print(callerUsers);
-  return [user.data(),community.docs,activity.docs, pairList,callerUsers];
+   var stresshistory = await getStressHistory(currentuser);
+  return [user.data(),community.docs,activity.docs, pairList,callerUsers,stresshistory];
 }
 
 Future<void> sendmessage(String receiverId, String message, currentid) async{
@@ -183,33 +190,37 @@ print(snap['email']);
   Future<void> sendcommunitymessage(String message, currentid, String title, String subtitle) async{
     // get user info
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    var snap = await getData(currentid);
-print(snap['email']);
-    // print(receiveremail);
-    print(currentid);
-    final String currentUserId = currentid;
-    final String currentEmailId = snap['email'];
-    final timestamp = Timestamp.now();
+      var snap = await getData(currentid);
+      print(snap['email']);
+      // print(receiveremail);
+      print(currentid);
+      final String currentUserId = currentid;
+      final String currentEmailId = snap['email'];
+      final timestamp = Timestamp.now();
 
 
-    // create a new message
-    groupMessage newMessage = groupMessage(
-    senderEmail: currentEmailId,
-    senderid: currentUserId,
-    message: message,
-    timestamp: timestamp,
-    );
+      // create a new message
+      groupMessage newMessage = groupMessage(
+        senderEmail: currentEmailId,
+        senderid: currentUserId,
+        message: message,
+        timestamp: timestamp,
+      );
 
 
+      //add new message to database
+      await _firestore.collection('community').doc(title)
+          .collection('users').doc(currentUserId).collection('messages')
+          .add(newMessage.toMap());
 
-    //add new message to database
-    await _firestore.collection('community').doc(title).collection(subtitle).add(newMessage.toMap());
   }
 
 // GET COMMUNITY MESSAGES
-  Stream<QuerySnapshot> getcommunitymessages(String userId, String title, String subtitle) {
+  Stream<QuerySnapshot> getcommunitymessages(String userId, String title) {
+  print("userID : "+userId);
+  print("title :"+title);
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    return _firestore.collection('community').doc(title).collection(subtitle).orderBy('timestamp', descending: false).snapshots();
+    return _firestore.collection('community').doc(title).collection('users').doc(userId).collection('messages').snapshots();
   }
 
   // GET COMMUNTIY TITLES 
@@ -220,15 +231,47 @@ print(snap['email']);
 
   // ADD FINAL STRESS VALUE
 void addStressValue(String userId, String stressValue ) async {
-  final reff = FirebaseDatabase.instance.ref();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final snapshot = await _firestore.collection('customers').doc(userId).update(
-    {
-
-    }
-  );
-
+  print(DateTime.now());
+  Map<String, dynamic> newStressEntry = {
+    'timestamp': DateTime.now(),
+    'stressScore': stressValue,
+  };
+  await _firestore.collection('customers').doc(userId).update({
+    'stressHistory': FieldValue.arrayUnion([newStressEntry]),
+  }).catchError((error) => print("Failed to update stress history: $error"));
 }
+
+// GET THE STRESS HISTORY
+Future<List<List<dynamic>>> getStressHistory(String userId ) async {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final snapshot = await _firestore.collection('customers').doc(userId).get();
+  if (snapshot.exists) {
+    Map<String, dynamic>? data = snapshot.data();
+    if (data != null && data.containsKey('stressHistory')) {
+      var stressHistory = List<Map<String, dynamic>>.from(data['stressHistory']);
+      stressHistory.sort((a, b) {
+        DateTime dateA = a['timestamp'].toDate();
+        DateTime dateB = b['timestamp'].toDate();
+        return dateB.compareTo(dateA);
+      });
+      List<List<dynamic>> convertedStressHistory = stressHistory.map((entry) {
+        DateTime dateTime = entry['timestamp'].toDate();
+        String formattedTime = DateFormat('HH:mm:ss').format(dateTime);
+        String formattedDate = DateFormat('EEEE ,d MMMM yyyy').format(dateTime);
+        var stressScore = entry['stressScore'];
+        return [formattedDate, formattedTime, stressScore];
+      }).toList();
+      print(convertedStressHistory);
+      return convertedStressHistory;
+    } else {
+      throw Exception('No stress history available.');
+    }
+  } else {
+    throw Exception('No data available.');
+  }
+}
+
 
   void addCall(String userId, String currentUserId,roomId) {
      FirebaseFirestore _firestore = FirebaseFirestore.instance;

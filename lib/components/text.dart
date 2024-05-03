@@ -316,38 +316,47 @@ Widget _maptextbubble(size) {
   );
 }
 
-Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring) {
-  return Container(
-                                              constraints: BoxConstraints(
-                                                maxWidth: sizeWidth * 0.5
-                                              ),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.grey.shade300,
+Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,currentid,context) {
+  print("inside container");
+  print(currentid);
+  return InkWell(
+    onTap: () {
+      Navigator.pushNamed(context, '/chatroom', arguments:{'currentid': currentid,
+        'receiverid': 'Disha',
+        'communityname' : heading, });
+    },
+    child: Container(
+                                                constraints: BoxConstraints(
+                                                  maxWidth: sizeWidth * 0.5
                                                 ),
-                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
-                                                child: Column(
-                                                  children: [
-                                                    circleButton(
-                                                              constr, sizeWidth / 100, sizeWidth / 50, imagestring),
-                                                              Text(heading,style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: sizeWidth * sizeHeight * 0.00008,
-                                                    fontWeight: FontWeight.bold
-                                                  ),),
-                                                  Text(description,style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: sizeWidth * sizeHeight * 0.00005,
-                                                    
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.grey.shade300,
                                                   ),
-                                                  textAlign: TextAlign.center,)
-                                                  ],
+                                                  borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                  child: Column(
+                                                    children: [
+                                                      circleButton(
+                                                                constr, sizeWidth / 100, sizeWidth / 50, imagestring),
+                                                                Text(heading,style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                      fontWeight: FontWeight.bold
+                                                    ),),
+                                                    Text(description,style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: sizeWidth * sizeHeight * 0.00005,
+
+                                                    ),
+                                                    textAlign: TextAlign.center,)
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            );
+  );
 }
 
 Widget callingContainer(sizeWidth,sizeHeight,constr,user) {
@@ -449,12 +458,13 @@ Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagest
   );
 }
 
-Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji) {
+Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji,seeall) {
   return Container(
                                               constraints: BoxConstraints(
                                                 minWidth: sizeWidth * 0.7
                                               ),
                                               decoration: BoxDecoration(
+                                                color: (seeall)?Colors.black87: Colors.white,
                                                 border: Border.all(
                                                   color: Colors.grey.shade300,
                                                 ),
@@ -478,7 +488,7 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji) {
                                                               Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
                                                                SizedBox(width: sizeWidth * 0.02),
                                                               Text(date,style: TextStyle(
-                                                            color: Colors.black,
+                                                            color: (seeall)?Colors.white:Colors.black,
                                                             fontSize: sizeWidth * sizeHeight * 0.000055,
                                                             fontWeight: FontWeight.bold
                                                                                                               ),)
@@ -490,7 +500,7 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji) {
                                                           Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
                                                           SizedBox(width: sizeWidth * 0.02),
                                                           Text(time,style: TextStyle(
-                                                        color: Colors.black,
+                                                        color:(seeall)? Colors.white:Colors.black,
                                                         fontSize: sizeWidth * sizeHeight * 0.000055,
                                                         
                                                                                                           ),)
@@ -530,12 +540,12 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji) {
                                                                 children: [
                                                                   SizedBox(width: sizeWidth * 0.6),
                                                                   Text("More",style: TextStyle(
-                                                    color: Colors.black,
+                                                    color:(seeall)?Colors.white:Colors.black,
                                                     fontSize: sizeWidth * sizeHeight * 0.00005,
                                                     fontWeight: FontWeight.bold
                                                   ),),
                                                   SizedBox(width: sizeWidth * 0.006),
-                                                                  Icon(Icons.arrow_forward_rounded,color: Colors.black,size: sizeWidth* sizeHeight * 0.00005)
+                                                                  Icon(Icons.arrow_forward_rounded,color: (seeall)?Colors.white:Colors.black,size: sizeWidth* sizeHeight * 0.00005)
                                                                 ],
                                                               )
                                       

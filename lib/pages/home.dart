@@ -40,8 +40,8 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  
-  
+
+
   //var position = null ;
   @override
   Widget build(BuildContext context) {
@@ -59,11 +59,14 @@ class _homeState extends State<home> {
     print(positionLong);
     print("position Latitude: ");
     print(positionLat);
+
+    // List<List<dynamic>> stressHistory = getStressHistory();
+    // var stressHistory = (getStressHistory(currentUserId)==[])? getStressHistory(currentUserId):[['yyyy-mm-dd','hh:mm:ss','5']];
+
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       bool constr = false;
       if (constraints.maxWidth > 600) constr = true;
-
       return Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
@@ -105,7 +108,7 @@ class _homeState extends State<home> {
                       height: sizeHeight * 0.73,
                       child: SingleChildScrollView(
                         child: FutureBuilder<dynamic>(
-                            future: getUsers(currentUserId), // async work
+                            future: getUsers(currentUserId),  // async work
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> snapshot) {
                               switch (snapshot.connectionState) {
@@ -367,7 +370,7 @@ class _homeState extends State<home> {
                                               sizeHeight,
                                               constr,
                                               "History",
-                                              snapshot.data[3],
+                                              snapshot.data[5],
                                               context,
                                               currentUserId),
                                           SizedBox(
@@ -378,7 +381,9 @@ class _homeState extends State<home> {
                                               sizeHeight,
                                               constr,
                                               "Community Discussions",
-                                              snapshot.data[1]),
+                                              snapshot.data[1],
+                                              currentUserId,
+                                              context),
                                           SizedBox(
                                             height: sizeHeight * 0.03,
                                           ),

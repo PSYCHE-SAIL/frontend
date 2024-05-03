@@ -8,7 +8,9 @@ import 'package:psychesail/model/emoji.dart';
 import 'package:psychesail/pages/join_room.dart';
 import 'package:psychesail/pages/room_screen.dart';
 
-Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr) {
+Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr,currentid,context) {
+  print(arr);
+  print(currentid);
   return Wrap(
     spacing: 20,
     runSpacing: min(20, sizeWidth * 0.0006),
@@ -35,15 +37,17 @@ Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr) {
           reverse: false,
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          itemCount: arr.length,
+          itemCount: arr.length-1,
           itemBuilder: (context, index) {
             return communityContainer(
                 sizeWidth,
                 sizeHeight,
                 constr,
-                arr[arr.length - 1 - index].id,
-                arr[arr.length - 1 - index]['description'],
-                arr[arr.length - 1 - index]['url']);
+                arr[arr.length - 2 - index].id,
+                arr[arr.length - 2 - index]['description'],
+                arr[arr.length - 2 - index]['url'],
+            currentid,
+            context);
           },
           separatorBuilder: ((context, index) => SizedBox(
                 width: min(sizeWidth * 0.05, 30),
@@ -167,6 +171,7 @@ Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,cur
 Widget historyscroll(
     sizeWidth, sizeHeight, constr, title, arr, context, currentUser) {
   Emoji stressEmoji = Emoji();
+
   return Wrap(
     spacing: 20,
     runSpacing: min(20, sizeWidth * 0.0006),
@@ -201,7 +206,7 @@ Widget historyscroll(
           itemCount: arr.length,
           itemBuilder: (context, index) {
             return historyContainer(sizeWidth, sizeHeight, true, arr[index][0],
-                arr[index][1], stressEmoji.stressEmoji((index + 1).toString()));
+                arr[index][1], stressEmoji.stressEmoji((index + 1).toString()),false);
           },
           separatorBuilder: ((context, index) => SizedBox(
                 width: min(sizeWidth * 0.05, 30),
