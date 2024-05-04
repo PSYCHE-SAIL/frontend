@@ -72,7 +72,7 @@ class _ChatRoomState extends State<ChatRoom> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/video', arguments: {
                         'currentid': currentid,
-                        'senderid': receiverid
+                        'senderid': 'community'
                       });
                     },
                     icon: Icon(Icons.call),
@@ -140,9 +140,7 @@ class _ChatRoomState extends State<ChatRoom> {
           for (var docSnapshot in documents) {
  var docDataRaw = docSnapshot.data();
  print(docDataRaw);
-
-  
-  
+ 
   // Accessing a sub-co // Print the data of each document in the sub-collection
   
 }

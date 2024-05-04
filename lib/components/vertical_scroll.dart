@@ -58,6 +58,63 @@ Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr,currentid,conte
   );
 }
 
+Widget bookscroll(sizeWidth, sizeHeight, constr, title, arr,currentid,context) {
+  print(arr);
+  print(currentid);
+  return Wrap(
+    spacing: 20,
+    runSpacing: min(20, sizeWidth * 0.0006),
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: sizeWidth * sizeHeight * 0.000067,
+                fontWeight: FontWeight.bold),
+          ),
+          Text("See All", style: TextStyle(color: Colors.black)),
+        ],
+      ),
+      SizedBox(
+        height: sizeHeight * 0.01,
+      ),
+      SizedBox(
+        height: sizeHeight * 0.5,
+        child: ListView.separated(
+          reverse: false,
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: arr.length,
+          itemBuilder: (context, index) {
+           if (arr[arr.length - 1 - index].volumeInfo.description != null &&
+        arr[arr.length - 1 - index].volumeInfo.description.isNotEmpty &&
+        arr[arr.length - 1 - index].volumeInfo.description.length <= 214) {
+      return bookContainer(
+        sizeWidth,
+        sizeHeight,
+        constr,
+        arr[arr.length - 1 - index].volumeInfo.title,
+        arr[arr.length - 1 - index].volumeInfo.description,
+        arr[arr.length - 1 - index].volumeInfo.previewLink,
+        currentid,
+        context,
+      );
+    } else {
+      return SizedBox(width: 0.0, height: 0.0);
+    };
+          },
+          separatorBuilder: ((context, index) => SizedBox(
+                width: min(sizeWidth * 0.05, 30),
+              )),
+        ),
+      )
+    ],
+  );
+}
+
 Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr,user) {
   return Wrap(
     spacing: 20,

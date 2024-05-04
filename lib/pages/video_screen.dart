@@ -50,9 +50,11 @@ class _VideoSDKQuickStartState extends State<VideoSDKQuickStart> {
         builder: (context,snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-                                  return Text(
-                                    'Loading....',
-                                    style: TextStyle(color: Colors.white),
+                                  return Center(
+                                    child: Text(
+                                      'Loading....',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   );
             default:
             if (snapshot.hasError) {
@@ -81,8 +83,18 @@ class _VideoSDKQuickStartState extends State<VideoSDKQuickStart> {
 
 calling(currentUserId,senderId) async {
   dynamic roomId = await createRoom();
+  if(senderId == 'community') {
+    print("start");
+    var snapshot = await getcommunityconstmessages(currentUserId,'Exams');
+    print(snapshot);
+//     for (var docSnapshot in snapshot) {
+//       print("no" + docSnapshot);
+//  var docDataRaw = docSnapshot.data();
+//  listOfPeople.add(docDataRaw['senderid']);
+//   }
+  snapshot.forEach((element) { addCall(element,'Exams',roomId);});
+//   } else
    addCall(senderId,currentUserId,roomId);
   return roomId;
- 
-
+  }
 }

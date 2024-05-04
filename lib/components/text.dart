@@ -358,6 +358,52 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                               ),
   );
 }
+Widget bookContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,currentid,context) {
+  print("inside container");
+  print(description.length);
+  return Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: sizeWidth *0.9
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Center(
+                                                  child: Column(
+                                                    children: [
+                                                      
+                                                                Text(heading,textAlign:TextAlign.center,style: TextStyle(
+                                                                                                                      color: Colors.black,
+                                                                                                                      fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                                                                                      fontWeight: FontWeight.bold
+                                                                                                                    ),),
+                                                    Text(description,style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                  
+                                                    ),
+                                                    textAlign: TextAlign.center,),
+                                                    InkWell(
+          onTap:() => _launchUrl(imagestring),
+        child: Text(
+          'Preview the recommended book',
+          style: TextStyle(
+            color: Colors.red,
+            decoration: TextDecoration.underline,
+          ),
+        )
+        )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+}
 
 Widget callingContainer(sizeWidth,sizeHeight,constr,user) {
   List<String> callQuote = [
