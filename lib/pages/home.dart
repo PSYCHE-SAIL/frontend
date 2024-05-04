@@ -43,7 +43,7 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
   bool _showTopContainer = true;
   bool _showBottomContainer = false;
 
@@ -80,7 +80,7 @@ ScrollController _scrollController = ScrollController();
     double sizeWidth = MediaQuery.of(context).size.width;
     var currentUserId = '';
     final Map<String, dynamic>? args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     // Access individual parameters
 
     currentUserId = args?['currentuser'] ?? "";
@@ -91,508 +91,509 @@ ScrollController _scrollController = ScrollController();
     print("position Latitude: ");
     print(positionLat);
     Places place = Provider.of<Places>(context);
-     print(place.getPlace());
-place.setPlace('Games');
-                    place.setImagestring('assets/games.png');
+    print(place.getPlace());
+    place.setPlace('Games');
+    place.setImagestring('assets/games.png');
 
     // List<List<dynamic>> stressHistory = getStressHistory();
     // var stressHistory = (getStressHistory(currentUserId)==[])? getStressHistory(currentUserId):[['yyyy-mm-dd','hh:mm:ss','5']];
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      bool constr = false;
-      if (constraints.maxWidth > 600) constr = true;
-      return Scaffold(
-          backgroundColor: Colors.black,
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            centerTitle: true,
-            title: Text("Home"),
-            actions: [
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
-                  child: RandomAvatar(
-                    currentUserId,
-                    trBackground: false,
-                    height: 50,
-                    width: 50,
-                  )),
-            ],
-          ),
-          body: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-SliverToBoxAdapter(
-            child: AnimatedOpacity(
-              opacity: _showTopContainer ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 200),
-              child: Container(
-                height: sizeHeight*0.7,
-                color: Colors.transparent,
-                child: Container(
-                              height: sizeHeight * 0.73,
-                              child: SingleChildScrollView(
-                                child: FutureBuilder<dynamic>(
-                                    future: buildAPI(), // async work
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<dynamic> snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.waiting:
-                                          return Center(
-                                            child: Text(
-                                              'Loading....',
-                                              style: TextStyle(color: Colors.white),
-                                            ),
-                                          );
-                                        default:
-                                          if (snapshot.hasError) {
-                                            return Text('Error: ${snapshot.error}');
-                                          } else {
-                                            return Padding(
-                                              padding: const EdgeInsets.all(16.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
-                                                children: [
-                                                  bookscroll(
-                                                      sizeWidth,
-                                                      sizeHeight,
-                                                      constr,
-                                                      "Books",
-                                                      snapshot.data[0],
-                                                      currentUserId,
-                                                      context),
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.03,
-                                                  ),
-                                                  youtubescroll(
-                                                      sizeWidth,
-                                                      sizeHeight,
-                                                      constr,
-                                                      "YouTube",
-                                                      snapshot.data[1],
-                                                      currentUserId,
-                                                      context),
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.03,
-                                                  ),
-                                                  
-                                                      
-                                                    
-                                                  
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                      }
-                                    }),
-                              ),
-                            ),
+          bool constr = false;
+          if (constraints.maxWidth > 600) constr = true;
+          return Scaffold(
+              backgroundColor: Colors.black,
+              appBar: AppBar(
+                backgroundColor: Colors.black,
+                centerTitle: true,
+                title: Text("Home"),
+                actions: [
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: sizeWidth / 20),
+                      child: RandomAvatar(
+                        currentUserId,
+                        trBackground: false,
+                        height: 50,
+                        width: 50,
+                      )),
+                ],
               ),
-            ),
-          ),
-          
-              SliverList(
-                
-                delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                    return Container(
-                        height: sizeHeight*0.73,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(50.0),
-                                topRight: Radius.circular(50.0))),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: sizeWidth / 2.3),
-                              child: Divider(
-                                color: const Color.fromARGB(255, 201, 195, 195),
-                                height: 36,
-                                thickness: 3,
-                              ),
-                            ),
-                            AnimatedOpacity(
-                              opacity: _showTopContainer ? 0.0 : 1.0,
-              duration: Duration(milliseconds: 200),
-                              child: Container(
-                                height: sizeHeight * 0.68,
-                                child: SingleChildScrollView(
-                                  child: FutureBuilder<dynamic>(
-                                      future: getDataFuture(currentUserId,place,[positionLong, positionLat]),  // async work
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<dynamic> snapshot) {
-                                        switch (snapshot.connectionState) {
-                                          case ConnectionState.waiting:
-                                            return Text(
-                                              'Loading....',
-                                              style: TextStyle(color: Colors.black),
-                                            );
-                                          default:
-                                            if (snapshot.hasError) {
-                                              return Text('Error: ${snapshot.error}');
-                                            } else {
-                                              return Padding(
-                                                padding: const EdgeInsets.all(16.0),
-                                                child: Column(
-                                                  mainAxisAlignment:
+              body: CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: AnimatedOpacity(
+                      opacity: _showTopContainer ? 1.0 : 0.0,
+                      duration: Duration(milliseconds: 200),
+                      child: Container(
+                        height: sizeHeight*0.7,
+                        color: Colors.transparent,
+                        child: Container(
+                          height: sizeHeight * 0.73,
+                          child: SingleChildScrollView(
+                            child: FutureBuilder<dynamic>(
+                                future: buildAPI(), // async work
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return Center(
+                                        child: Text(
+                                          'Loading....',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      );
+                                    default:
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                            children: [
+                                              bookscroll(
+                                                  sizeWidth,
+                                                  sizeHeight,
+                                                  constr,
+                                                  "Books",
+                                                  snapshot.data[0],
+                                                  currentUserId,
+                                                  context),
+                                              SizedBox(
+                                                height: sizeHeight * 0.03,
+                                              ),
+                                              youtubescroll(
+                                                  sizeWidth,
+                                                  sizeHeight,
+                                                  constr,
+                                                  "YouTube",
+                                                  snapshot.data[1],
+                                                  currentUserId,
+                                                  context),
+                                              SizedBox(
+                                                height: sizeHeight * 0.03,
+                                              ),
+
+
+
+
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                  }
+                                }),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                        return Container(
+                            height: sizeHeight*0.73,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(50.0),
+                                    topRight: Radius.circular(50.0))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: sizeWidth / 2.3),
+                                  child: Divider(
+                                    color: const Color.fromARGB(255, 201, 195, 195),
+                                    height: 36,
+                                    thickness: 3,
+                                  ),
+                                ),
+                                AnimatedOpacity(
+                                  opacity: _showTopContainer ? 0.0 : 1.0,
+                                  duration: Duration(milliseconds: 200),
+                                  child: Container(
+                                    height: sizeHeight * 0.68,
+                                    child: SingleChildScrollView(
+                                      child: FutureBuilder<dynamic>(
+                                          future: getDataFuture(currentUserId,place,[positionLong, positionLat]),  // async work
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<dynamic> snapshot) {
+                                            switch (snapshot.connectionState) {
+                                              case ConnectionState.waiting:
+                                                return Text(
+                                                  'Loading....',
+                                                  style: TextStyle(color: Colors.black),
+                                                );
+                                              default:
+                                                if (snapshot.hasError) {
+                                                  return Text('Error: ${snapshot.error}');
+                                                } else {
+                                                  return Padding(
+                                                    padding: const EdgeInsets.all(16.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
                                                       MainAxisAlignment.spaceAround,
-                                                  children: [
-                                                    ListView.builder(
-                                                        scrollDirection: Axis.vertical,
-                                                        shrinkWrap: true,
-                                                        itemCount:
+                                                      children: [
+                                                        ListView.builder(
+                                                            scrollDirection: Axis.vertical,
+                                                            shrinkWrap: true,
+                                                            itemCount:
                                                             snapshot.data[0].length,
-                                                        itemBuilder:
-                                                            (BuildContext context,
+                                                            itemBuilder:
+                                                                (BuildContext context,
                                                                 int index) {
-                                                          final DateTime now =
+                                                              final DateTime now =
                                                               DateTime.now();
-                                                          final formattedDate =
+                                                              final formattedDate =
                                                               dateFormatter.format(now);
-                                                          final formattedTime =
+                                                              final formattedTime =
                                                               timeFormatter.format(now);
-                                  
-                                                          DateTime checkTime =
+
+                                                              DateTime checkTime =
                                                               DateFormat("hh:mm:ss")
                                                                   .parse(formattedTime);
-                                                          final diffTime = checkTime
-                                                              .difference(DateFormat(
-                                                                      "hh:mm:ss")
+                                                              final diffTime = checkTime
+                                                                  .difference(DateFormat(
+                                                                  "hh:mm:ss")
                                                                   .parse(snapshot
-                                                                          .data[0][index][1][
-                                                                      'time']));
-                                                          return Padding(
-                                                            padding: const EdgeInsets
-                                                                .symmetric(vertical: 8.0),
-                                                            child: InkWell(
-                                                              onTap: () => {
-                                                                if (snapshot.data[0][index][0] ==
-                                                                    'Serenity')
-                                                                  {
-                                                                    Navigator.pushNamed(
-                                                                        context,
-                                                                        '/monkeybot',
-                                                                        arguments: {
-                                                                          'receiverid': snapshot
-                                                                              .data[0]
-                                                                              [index][0],
-                                                                          'currentid':
-                                                                              currentUserId,
-                                                                          'lastmessage': snapshot
+                                                                  .data[0][index][1][
+                                                              'time']));
+                                                              return Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(vertical: 8.0),
+                                                                child: InkWell(
+                                                                  onTap: () => {
+                                                                    if (snapshot.data[0][index][0] ==
+                                                                        'Serenity')
+                                                                      {
+                                                                        Navigator.pushNamed(
+                                                                            context,
+                                                                            '/monkeybot',
+                                                                            arguments: {
+                                                                              'receiverid': snapshot
                                                                                   .data[0]
-                                                                                  [index][1][
+                                                                              [index][0],
+                                                                              'currentid':
+                                                                              currentUserId,
+                                                                              'lastmessage': snapshot
+                                                                                  .data[0]
+                                                                              [index][1][
                                                                               'message'],
                                                                               'obj': place.getObject(),
                                                                               'url' : place.getImagestring()
-                                                                              
-                                                                        })
-                                                                  }
-                                                                else
-                                                                  {
-                                                                    Navigator.pushNamed(
-                                                                        context,
-                                                                        '/chatroom',
-                                                                        arguments: {
-                                                                          'receiverid': snapshot
-                                                                              .data[0]
+
+                                                                            })
+                                                                      }
+                                                                    else
+                                                                      {
+                                                                        Navigator.pushNamed(
+                                                                            context,
+                                                                            '/chatroom',
+                                                                            arguments: {
+                                                                              'receiverid': snapshot
+                                                                                  .data[0]
                                                                               [index][0],
-                                                                          'currentid':
+                                                                              'currentid':
                                                                               currentUserId,
-                                                                          'receiveremail':
+                                                                              'receiveremail':
                                                                               'gaand_maarao'
-                                                                        })
-                                                                  }
-                                                              },
-                                                              child: Container(
-                                                                decoration: BoxDecoration(
-                                                                  
-                                                                  
-                                                                   boxShadow: [
-                                                      BoxShadow(
-                                                        color: (snapshot.data[0][index][0] ==
-                                                                    'Serenity') ? Colors.grey.withOpacity(0.5) : Colors.transparent, // Greyish color with opacity
-                                                        spreadRadius: 2, // Controls how far the shadow spreads
-                                                        blurRadius: 5, // Controls the blurriness of the shadow
-                                                        offset: Offset(0, 2), // Controls the position of the shadow
-                                                      ),
-                                                    ],
-                                                  ),
-                                                                
-                                                                child: Padding(
-                                                                  padding:
+                                                                            })
+                                                                      }
+                                                                  },
+                                                                  child: Container(
+                                                                    decoration: BoxDecoration(
+                                                                      color: Colors.white.withOpacity(0.9) ,
+                                                                      borderRadius: BorderRadius.all(Radius.circular(20.0),),
+                                                                      boxShadow: [
+                                                                        BoxShadow(
+                                                                          color: (snapshot.data[0][index][0] ==
+                                                                              'Serenity') ? Colors.grey.withOpacity(0.5) :Colors.black26 , // Greyish color with opacity
+                                                                          spreadRadius: 2, // Controls how far the shadow spreads
+                                                                          blurRadius: 3, // Controls the blurriness of the shadow
+                                                                          offset: Offset(0, 1), // Controls the position of the shadow
+                                                                        ),
+                                                                      ],
+                                                                    ),
+
+                                                                    child: Padding(
+                                                                      padding:
                                                                       EdgeInsets
                                                                           .symmetric(
                                                                           horizontal:
-                                                                              8.0, vertical: (snapshot.data[0][index][0] ==
-                                                                    'Serenity') ? 8.0 : 0.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
+                                                                          9.0, vertical: (snapshot.data[0][index][0] ==
+                                                                          'Serenity') ? 8.0 : 6.0),
+                                                                      child: Row(
+                                                                        mainAxisAlignment:
                                                                         MainAxisAlignment
                                                                             .spaceEvenly,
-                                                                    children: [
-                                                                      Container(
-                                                                        width:
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
                                                                             sizeWidth / 5,
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius:
+                                                                            decoration: BoxDecoration(
+                                                                                borderRadius:
                                                                                 BorderRadius
                                                                                     .circular(
-                                                                                        5)),
-                                                                        child: !(snapshot
-                                                                                    .data[
-                                                                                        0]
-                                                                                    [index][0] ==
+                                                                                    5)),
+                                                                            child: !(snapshot
+                                                                                .data[
+                                                                            0]
+                                                                            [index][0] ==
                                                                                 "Serenity")
-                                                                            ? RandomAvatar(
+                                                                                ? RandomAvatar(
                                                                                 snapshot
                                                                                     .data[
-                                                                                        0]
-                                                                                    [index][0],
+                                                                                0]
+                                                                                [index][0],
                                                                                 trBackground:
-                                                                                    false,
+                                                                                false,
                                                                                 height:
-                                                                                    50,
+                                                                                50,
                                                                                 width: 50)
-                                                                            : circleButton(
+                                                                                : circleButton(
                                                                                 constr,
                                                                                 sizeWidth /
                                                                                     150,
                                                                                 sizeWidth /
                                                                                     45,
-                                                                                "assets/serenity.png",borderneed : false),
-                                                                      ),
-                                                                      Container(
-                                                                        width: sizeWidth /
-                                                                            2.5,
-                                                                        child: Column(
-                                                                          crossAxisAlignment:
+                                                                                "assets/serenity_1.png",borderneed : false),
+                                                                          ),
+                                                                          Container(
+                                                                            width: sizeWidth /
+                                                                                2.6,
+                                                                            child: Column(
+                                                                              crossAxisAlignment:
                                                                               CrossAxisAlignment
                                                                                   .center,
-                                                                          children: [
-                                                                            Text(
-                                                                              snapshot
-                                                                                  .data[0]
+                                                                              children: [
+                                                                                Text(
+                                                                                  snapshot
+                                                                                      .data[0]
                                                                                   [index][0],
-                                                                              style:
+                                                                                  style:
                                                                                   TextStyle(
-                                                                                color: Colors
-                                                                                    .black,
-                                                                                fontSize: constr
-                                                                                    ? sizeWidth /
+                                                                                    color: Colors
+                                                                                        .black,
+                                                                                    fontSize: constr
+                                                                                        ? sizeWidth /
                                                                                         40
-                                                                                    : sizeWidth /
+                                                                                        : sizeWidth /
                                                                                         20,
-                                                                                fontStyle:
+                                                                                    fontStyle:
                                                                                     FontStyle
                                                                                         .italic,
-                                                                                fontFamily:
+                                                                                    fontFamily:
                                                                                     'ABeeZee',
-                                                                              ),
-                                                                            ),
-                                                                            Text(
-                                                                              (snapshot.data[0][index][0] ==
-                                                                    'Serenity') ?"Always there for u 😇" : snapshot.data[0][index][1]['message'].length <
+                                                                                  ),
+                                                                                ),
+                                                                                Text(
+                                                                                  (snapshot.data[0][index][0] ==
+                                                                                      'Serenity') ?"Always there for u 😇" : snapshot.data[0][index][1]['message'].length <
                                                                                       20
-                                                                                  ? snapshot.data[0][index][1][
-                                                                                      'message']
-                                                                                  : snapshot
+                                                                                      ? snapshot.data[0][index][1][
+                                                                                  'message']
+                                                                                      : snapshot
                                                                                       .data[
-                                                                                          0]
-                                                                                      [index][1][
-                                                                                          'message']
+                                                                                  0]
+                                                                                  [index][1][
+                                                                                  'message']
                                                                                       .substring(0,
-                                                                                          20) ,
-                                                                              style:
+                                                                                      20) ,
+                                                                                  style:
                                                                                   TextStyle(
-                                                                                color:  (snapshot.data[0][index][0] ==
-                                                                    'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
-                                                                                    .grey,
-                                                                              ),
+                                                                                    color:  (snapshot.data[0][index][0] ==
+                                                                                        'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
+                                                                                        .grey,
+                                                                                    fontFamily: 'AbeeZee'
+                                                                                  ),
+                                                                                ),
+                                                                              ],
                                                                             ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        width:
+                                                                          ),
+                                                                          Container(
+                                                                            width:
                                                                             sizeWidth / 4,
-                                                                        child: Column(
-                                                                          crossAxisAlignment:
+                                                                            child: Column(
+                                                                              crossAxisAlignment:
                                                                               CrossAxisAlignment
                                                                                   .center,
-                                                                          mainAxisAlignment:
+                                                                              mainAxisAlignment:
                                                                               MainAxisAlignment
                                                                                   .spaceAround,
-                                                                          children: [
-                                                                            Text(
-                                                                              formattedDate ==
+                                                                              children: [
+                                                                                Text(
+                                                                                  formattedDate ==
                                                                                       snapshot.data[0][index][1][
-                                                                                          'date']
-                                                                                  ? diffTime.inHours ==
-                                                                                          00
+                                                                                      'date']
+                                                                                      ? diffTime.inHours ==
+                                                                                      00
                                                                                       ? diffTime.inMinutes ==
-                                                                                              00
-                                                                                          ? "${diffTime.inSeconds.toString()} sec"
-                                                                                          : "${diffTime.inMinutes.toString()} mins"
+                                                                                      00
+                                                                                      ? "${diffTime.inSeconds.toString()} sec"
+                                                                                      : "${diffTime.inMinutes.toString()} mins"
                                                                                       : "${diffTime.inHours.toString()} hours"
-                                                                                  : snapshot
+                                                                                      : snapshot
                                                                                       .data[0]
-                                                                                      [index][1]['date'],
-                                                                              style:
+                                                                                  [index][1]['date'],
+                                                                                  style:
                                                                                   TextStyle(
-                                                                                color: (snapshot.data[0][index][0] ==
-                                                                    'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
-                                                                                    .grey,
-                                                                                fontStyle:
+                                                                                    color: (snapshot.data[0][index][0] ==
+                                                                                        'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
+                                                                                        .grey,
+                                                                                    fontStyle:
                                                                                     FontStyle
                                                                                         .italic,
-                                                                                fontFamily:
+                                                                                    fontFamily:
                                                                                     'ABeeZee',
-                                                                              ),
-                                                                            ),
-                                                                            CircleAvatar(
-                                                                                maxRadius: constr
-                                                                                    ? sizeWidth /
+                                                                                  ),
+                                                                                ),
+                                                                                CircleAvatar(
+                                                                                    maxRadius: constr
+                                                                                        ? sizeWidth /
                                                                                         65
-                                                                                    : sizeWidth /
+                                                                                        : sizeWidth /
                                                                                         40,
-                                                                                backgroundColor:
+                                                                                    backgroundColor:
                                                                                     Colors
                                                                                         .transparent,
-                                                                                child:
+                                                                                    child:
                                                                                     Text(
-                                                                                  "",
-                                                                                  style: TextStyle(
-                                                                                      fontSize:
+                                                                                      "",
+                                                                                      style: TextStyle(
+                                                                                          fontSize:
                                                                                           sizeWidth / 50),
-                                                                                )),
-                                                                          ],
-                                                                        ),
+                                                                                    )),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
                                                                       ),
-                                                                    ],
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                          );
-                                                        }),
-                                                    SizedBox(
-                                                      height: sizeHeight * 0.03,
-                                                    ),
-                                                    historyscroll(
-                                                        sizeWidth,
-                                                        sizeHeight,
-                                                        constr,
-                                                        "History",
-                                                        snapshot.data[5],
-                                                        context,
-                                                        currentUserId),
-                                                    SizedBox(
-                                                      height: sizeHeight * 0.03,
-                                                    ),
-                                                    communityscroll(
-                                                        sizeWidth,
-                                                        sizeHeight,
-                                                        constr,
-                                                        "Community Discussions",
-                                                        snapshot.data[1],
-                                                        currentUserId,
-                                                        context),
-                                                    SizedBox(
-                                                      height: sizeHeight * 0.03,
-                                                    ),
-                                                    
+                                                              );
+                                                            }),
+                                                        SizedBox(
+                                                          height: sizeHeight * 0.03,
+                                                        ),
+                                                        historyscroll(
+                                                            sizeWidth,
+                                                            sizeHeight,
+                                                            constr,
+                                                            "History",
+                                                            snapshot.data[5],
+                                                            context,
+                                                            currentUserId),
+                                                        SizedBox(
+                                                          height: sizeHeight * 0.03,
+                                                        ),
+                                                        communityscroll(
+                                                            sizeWidth,
+                                                            sizeHeight,
+                                                            constr,
+                                                            "Community Discussions",
+                                                            snapshot.data[1],
+                                                            currentUserId,
+                                                            context),
+                                                        SizedBox(
+                                                          height: sizeHeight * 0.03,
+                                                        ),
+
                                                         ActivityMapsWidget(
-                                                                sizeWidth: sizeWidth,
-                                                                sizeHeight: sizeHeight,
-                                                                constr: constr,
-                                                               pos: [positionLong, positionLat],
-                                                           con:context,
+                                                          sizeWidth: sizeWidth,
+                                                          sizeHeight: sizeHeight,
+                                                          constr: constr,
+                                                          pos: [positionLong, positionLat],
+                                                          con:context,
                                                           activityString: "Stress Busting Activities",
                                                           currentUserId : currentUserId,
-                                                           arr: snapshot.data[2],
-                                                              ),
-                                                      callingscroll(
+                                                          arr: snapshot.data[2],
+                                                        ),
+                                                        callingscroll(
                                                             sizeWidth,
                                                             sizeHeight,
                                                             constr,
                                                             "Calls",
                                                             snapshot.data[4],
                                                             currentUserId),
-                                                    SizedBox(
-                                                      height: sizeHeight * 0.03,
+                                                        SizedBox(
+                                                          height: sizeHeight * 0.03,
+                                                        ),
+
+
+                                                      ],
                                                     ),
-                                                      
-                                                    
-                                                  ],
-                                                ),
-                                              );
+                                                  );
+                                                }
                                             }
-                                        }
-                                      }),
+                                          }),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ));
-                  },childCount: 1,
-                ),
-              )],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-              onTap: (int index) {
-                if(index == 1) {
- Navigator.pushNamed(context, '/video',
-  arguments: {'currentid': currentUserId, 'senderid' : "Joe"}
+                              ],
+                            ));
+                      },childCount: 1,
+                    ),
+                  )],
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                  onTap: (int index) {
+                    if(index == 1) {
+                      Navigator.pushNamed(context, '/video',
+                          arguments: {'currentid': currentUserId, 'senderid' : "Joe"}
                       );
-                } else
-                if (index == 2) {
-                  Navigator.pushNamed(context, '/settings',
-                      arguments: {'currentid': currentUserId});
-                }
-              },
-              unselectedItemColor: Color.fromRGBO(35, 154, 139, 75),
-              fixedColor: Color.fromRGBO(35, 154, 139, 75),
-              backgroundColor: Colors.white,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.message,
-                    color: Color.fromRGBO(35, 154, 139, 75),
-                  ),
-                  label: "Message",
-                ),
-                BottomNavigationBarItem(
-                  icon:
+                    } else
+                    if (index == 2) {
+                      Navigator.pushNamed(context, '/settings',
+                          arguments: {'currentid': currentUserId});
+                    }
+                  },
+                  unselectedItemColor: Color.fromRGBO(35, 154, 139, 75),
+                  fixedColor: Color.fromRGBO(35, 154, 139, 75),
+                  backgroundColor: Colors.white,
+
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.message,
+                        color: Color.fromRGBO(35, 154, 139, 75),
+                      ),
+                      label: "Message",
+                    ),
+                    BottomNavigationBarItem(
+                      icon:
                       Icon(Icons.call, color: Color.fromRGBO(35, 154, 139, 75)),
-                  label: "Calls",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.settings,
-                      color: Color.fromRGBO(35, 154, 139, 75)),
-                  label: "Settings",
-                ),
-              ]));
-    });
+                      label: "Calls",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.settings,
+                          color: Color.fromRGBO(35, 154, 139, 75)),
+                      label: "Settings",
+                    ),
+                  ]));
+        });
   }
 }
 
 getDataFuture(String currentUserId,place,pos) async {
   var data = getUsers(currentUserId);
   if(!place.getval()) {
-var response = await searchNearbyPlaces(place.getPlace(), pos);
+    var response = await searchNearbyPlaces(place.getPlace(), pos);
 
-                // print("take me to hell");
-                print(response);
-                place.setObject(response);
-                place.setval();
-                place.setremove(false);
-               
+    // print("take me to hell");
+    print(response);
+    place.setObject(response);
+    place.setval();
+    place.setremove(false);
+
   }
-              
-                return data;
+
+  return data;
 }
 
 Future<Position> _determinePosition() async {

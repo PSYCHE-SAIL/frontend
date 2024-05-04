@@ -62,7 +62,7 @@ class _onboardingState extends State<onboarding>  with SingleTickerProviderState
                     child: Container(
                      // alignment: Alignment.center,
                       child: Center(
-                        child: Text(constr ? 'Success Beyond Stress, Wellness Within':'Success Beyond Stress,\nWellness Within',
+                        child: Text(constr ? 'Sail Through Tough Times with PsycheSail':'Sail Through Tough Times \n with PsycheSail.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: constr ? sizeWidth/30: sizeHeight/17,

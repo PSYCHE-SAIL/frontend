@@ -126,9 +126,9 @@ Widget bookscroll(sizeWidth, sizeHeight, constr, title, arr,currentid,context) {
             style: TextStyle(
                 color: Colors.white,
                 fontSize: sizeWidth * sizeHeight * 0.000067,
-                fontWeight: FontWeight.bold),
+                fontWeight: FontWeight.bold,),
           ),
-          Text("See All", style: TextStyle(color: Colors.white)),
+          Text("See All", style: TextStyle(color: Colors.white,)),
         ],
       ),
       SizedBox(

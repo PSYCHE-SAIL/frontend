@@ -62,6 +62,9 @@ dependencies:
   flutter_local_notifications: ^17.1.1
   google_books_api: ^1.0.1
   youtube_data_api: ^1.0.4
+  rxdart: ^0.26.0
+  firebase_messaging: ^14.7.19
+  flutter_tts: ^4.0.2
   # js: ^0.7.0
 
 dev_dependencies:

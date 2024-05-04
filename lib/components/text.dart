@@ -127,7 +127,6 @@ InputDecoration logininput(txt, example) {
 Widget textbubble(
     message, timestamp, receiverid, currentid, bgcolor, condition, context) {
   bool constr = (receiverid == currentid);
-  final size = MediaQuery.of(context).size;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Row(
@@ -363,7 +362,7 @@ Widget bookContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring
   print(description.length);
   return Container(
                                               constraints: BoxConstraints(
-                                                maxWidth: sizeWidth *0.9
+                                                maxWidth: sizeWidth *0.95
                                               ),
                                               decoration: BoxDecoration(
                                                 border: Border.all(
@@ -401,7 +400,7 @@ Widget bookContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring
                                                                           Text(description,style: TextStyle(
                                                                                                                             color: Colors.white,
                                                                                                                             fontSize: sizeWidth * sizeHeight * 0.00005,
-                                                                                                                        
+
                                                                                                                           ),
                                                                                                                           textAlign: TextAlign.center,),
                                                                         ],
