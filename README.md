@@ -1,10 +1,10 @@
 # PsycheSail
 
-<div style="display: flex">
+<div style="display: flex; justify-content: center; align-items: center;">
  <img src="https://avatars.githubusercontent.com/u/156929781?s=400&u=e78410db0bb16fec2208ed7d1f1b3d944d76fc72&v=4" alt="psychesail-application" width="400" height="400">
 </div>
 
-PsycheSail is an app for students who need help with their feelings. It has a chatbot that talks to you and gives you ways to feel better. It also shows you fun things to do nearby on a map. You can join a group chat with other people who feel the same way as you. If things are really bad, you can talk to a counselor right away. It's all about helping you feel better and stay strong together. And the chatbot can even suggest music to help you relax.
+Introducing PsycheSail: a go-to app for emotional support and self-care for students. Chat with our helpful bot, track the progress of the user's mood, discover local activities using Google Maps, and join anonymous support/community chats with peers. Need immediate help? Connect with a counselor. Plus, access recommended books and motivational videos for extra support. Sail through tough times with PsycheSail.
 
 Watch the product demo on:
 
@@ -18,8 +18,8 @@ Watch the product demo on:
 
 <table style="width: 100%;">
   <tr>
-    <td>
-      <img src="https://i.imgur.com/iHjDNpt.png" alt="Image 1" style="width: 50%;"> 
+    <td style=>
+      <img src="https://i.imgur.com/iHjDNpt.png" alt="Image 1" style="width: 50%; "> 
       <p>😓 
 We discovered that many of our peers feel depressed and like their minds stop working when they're struggling. They're hesitant to talk about their feelings because they think they're the only ones going through tough times. This sense of loneliness and despair sometimes leads to students hurting themselves or even thinking about ending their lives.
  </p>
@@ -90,19 +90,27 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 
 ### ⭐🚀 Features
 
-- **AI Therapist Interaction:** Engage in conversational interactions with an AI therapist designed to provide emotional support and guidance.
+- **AI Therapist Interaction**: Experience empathetic conversations with our AI therapist, enhanced with prompt-engineered Gemini API. Each response is imbued with a human touch, integrating unique thought processes for a more genuine interaction, elevating the chatbot experience significantly.
 
 - **Cognitive Behavioral Therapy (CBT) Techniques:** Incorporate evidence-based cognitive behavioral therapy techniques to address negative thought patterns and promote positive behavior change.
 
-- **Notifications for Check-Ins**: Stay connected and supported with regular check-in notifications. Receive reminders to check in with your progress and well-being, ensuring you stay on track with your goals and providing an opportunity to reflect on your journey.
+- **Recreational Activity Suggestions**: Explore nearby recreational activities and venues using the Google Maps API. Receive personalized recommendations tailored to your location and preferences, helping you discover new experiences to enhance your well-being and enjoyment.
 
+- **Mood Tracking and Progress Visualization:** Mood analysis through NLP for personalized insights. Graphical representation of emotional progress over time.
+
+- **Community Recommendations:** Tailored suggestions for online support groups and forums. Communities matched based on user's chat history and preferences.
+
+- **Support Groups with Anonymous Communication:** 24-hour anonymous support groups for peer connection. Vertex vector search for compatible matches in safe space.
+- **Books Recommendation using Google Books API:** Personalized book suggestions based on user's needs. Google Books API utilized for tailored recommendations.
+
+- **Motivational Videos Recommendations via YouTube API:** Inspiring video suggestions reflecting user's interests and struggles. Customized recommendations from YouTube API for emotional upliftment.
+- **Integration of Text-to-Speech (TTS) and Speech-to-Text (STT) Technology:** Voice-based interaction for accessibility and convenience. TTS and STT integration enhances user experience and engagement.
+- **Notifications for Check-Ins**: Stay connected and supported with regular check-in notifications. Receive reminders to check in with your progress and well-being, ensuring you stay on track with your goals and providing an opportunity to reflect on your journey.
 - **Mindfulness Exercises:** Access guided mindfulness exercises and relaxation techniques to reduce stress and improve emotional well-being.
 
 - **Privacy and Security:** Ensure user privacy and data security with robust encryption and adherence to privacy regulations. user anonymously chat with others going through the same and hence
 
 - **Personalized Therapy Sessions:** Access personalized therapy sessions tailored to individual needs and preferences.
-
-- **Peer Support Group Chat**: Engage in supportive group conversations with peers who share similar experiences anonymously, providing a safe space for sharing insights, experiences, and words of encouragement.
 
 - **Customizable Settings:** Customize the app settings to suit individual preferences, notifications, and therapy approach.
 
@@ -117,13 +125,19 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 
 ### 👀 Upcoming Features
 
-- **Recreational Activity Suggestions**: Explore nearby recreational activities and venues using the Google Maps API. Receive personalized recommendations tailored to your location and preferences, helping you discover new experiences to enhance your well-being and enjoyment.
+- **Personalized Storytelling:** PsycheSail's Personalized Storytelling integrates challenges and victories from users' conversations with Serenity. It offers an interactive narrative journey guided by an empathetic companion, reflecting real-life experiences. Enhancements with additional graphics are planned for a more compelling user experience.
 
-- **Professional Support Integration:** Seamlessly integrate with professional mental health services for additional support and intervention when needed.
+- **Achievement Badges:** Users earn badges for completing tasks or reaching milestones. Examples include completing chat sessions or practicing self-care activities. This system encourages positive engagement, fostering a sense of accomplishment.
 
-- **Cross-Platform Accessibility:** Access PsycheSail across multiple platforms, including web, mobile devices, and desktop, for seamless user experience.
+- **Daily Challenges:** Users are offered daily challenges related to mental wellness. Challenges may include mindfulness practices or reaching out to friends for support. Completing challenges earns rewards, promoting regular engagement.
 
-- **Affiliate Marketing Partnership**: Discover curated recommendations and exclusive deals from affiliated businesses aimed at improving your well-being and boosting your confidence. Partnering with businesses aligned with your interests, we aim to enhance your overall experience and promote your happiness and fulfillment through recreational activities and more.
+- **Storytelling and Narrative:** The app features a narrative where users improve mental well-being. Progression occurs through completing tasks and making positive changes. This narrative provides motivation and guidance for users.
+
+- **Affiliate Marketing:** The app explores affiliate marketing to generate revenue. It partners with businesses for product promotions, earning commissions for referrals. This creates additional income streams.
+
+- **Collaboration with Licensed Therapists:** The plan is to collaborate with therapists for professional counseling services. This expands mental health support by providing access to qualified professionals.
+
+- **Marketing and Outreach:** The focus is on advertising and social media to raise awareness. Increasing visibility highlights PsycheSail's benefits, attracting more users.
 
 <hr>
 
@@ -164,6 +178,7 @@ Before you start, make sure you have installed the following on your system:
 - VS Code
 - Dart and Flutter extensions for VS Code
 - Android emulator or physical device
+- Python 3.10.x
 
 ### 🛠️ Installation
 
@@ -174,6 +189,8 @@ Before you start, make sure you have installed the following on your system:
 3. In VS Code, open the command palette (View > Command Palette) and type "Flutter: Run Flutter Doctor". This will check your system to make sure everything is set up correctly.
 
 4. In VS Code, open the main.dart file and click the "Run" button. This will launch the app in the emulator or on your physical device.
+
+5. Visit the PsycheSail backend repository from GitHub: https://github.com/PSYCHE-SAIL/backend and follow the steps there to setup the backend.
 
 <hr>
 
@@ -211,6 +228,30 @@ PsycheSail offers a feature where users can connect with others facing similar c
 
 PsycheSail incorporates a feature that suggests nearby recreational activities to users, encouraging them to step out of the house and engage in leisurely pursuits. Utilizing the Google Maps API, the app identifies various recreational options in the vicinity, such as parks, cafes, or cultural attractions, tailored to the user's location. By encouraging outdoor activities, PsycheSail aims to promote relaxation, physical activity, and a change of scenery, which can positively impact mental well-being and alleviate feelings of stress and isolation.
 
+### 📊 Mood Tracking and Progress Visualization
+
+Track your emotional journey with ease using Serenity's mood tracking feature. Through natural language processing (NLP), Serenity analyzes your conversations, helping you gain personalized insights into your emotional state. Visualize your progress over time with intuitive graphs, empowering you to understand your emotions better and take positive steps towards emotional well-being.
+
+### 🌐 Community Recommendations
+
+Discover tailored support communities and forums that resonate with your needs. Serenity leverages advanced algorithms to match you with online support groups based on your chat history and preferences. Forge meaningful connections with peers who share similar experiences, fostering a sense of belonging and understanding in a safe and supportive environment.
+
+### 💬 Support Groups with Anonymous Communication
+
+Connect with others anonymously in 24-hour support groups curated by Serenity. Using vertex vector search technology, Serenity ensures compatibility among group members, creating a safe space for open and judgment-free communication. Share your thoughts and feelings openly, knowing that you're surrounded by individuals who empathize with your struggles and are there to offer support.
+
+### 📚 Books Recommendation using Google Books API
+
+Explore a curated selection of books tailored to your emotional needs with Serenity's book recommendation feature. Powered by the Google Books API, Serenity suggests literature that aligns with your preferences and challenges. Whether you seek guidance, inspiration, or comfort, Serenity helps you discover relevant reading material to support your emotional journey.
+
+### 🎥 Motivational Videos Recommendations via YouTube API
+
+Find motivation and encouragement through personalized video recommendations on Serenity. Utilizing the YouTube API, Serenity suggests inspiring videos that reflect your interests and struggles. Watch content curated specifically for you, designed to uplift your spirits and provide a source of emotional support whenever you need it most.
+
+### 🔊 Integration of Text-to-Speech (TTS) and Speech-to-Text (STT) Technology
+
+Experience seamless interaction with Serenity through voice-based communication. With integrated Text-to-Speech (TTS) and Speech-to-Text (STT) technology, Serenity offers accessibility and convenience for users. Engage in conversations, receive guidance, and express yourself using your voice, enhancing your overall experience and engagement with the platform.
+
 ### 💫 Licensed Therapist Support
 
 PsycheSail offers seamless support by connecting users to licensed therapists if they don't feel better after a while. This feature ensures that users have access to professional help when needed, further enhancing the app's commitment to prioritizing mental well-being and providing comprehensive support for struggling students.
@@ -227,4 +268,4 @@ If you would like to contribute to PsycheSail, please fork the project on GitHub
 
 ## 🙏 Acknowledgments
 
-- All the juniors who helped us in our initial survey and those who gave us suggestions.
+We extend our heartfelt gratitude to all the juniors who generously contributed to our initial survey and provided valuable suggestions. Additionally, we express our sincere appreciation to our seniors and mentors whose unwavering support and guidance were instrumental at every stage of the development of this application.

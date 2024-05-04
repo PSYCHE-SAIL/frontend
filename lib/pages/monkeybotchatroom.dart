@@ -301,7 +301,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                 border: Border.all(color: Colors.black),
               ),
           child: Text(
-            "Looks like the best way for you to refresh yourself might be some outdoor activities. Here are some suggested activities near you - ",
+            "While we talk more, one of the way for you to refresh might be some outdoor activities. Here are some suggested activities near you - ",
             style: TextStyle(
               color: Colors.black,
               fontSize: 17,
