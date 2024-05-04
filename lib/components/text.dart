@@ -358,7 +358,7 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                               ),
   );
 }
-Widget bookContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,currentid,context) {
+Widget bookContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,previewstring) {
   print("inside container");
   print(description.length);
   return Container(
@@ -375,25 +375,48 @@ Widget bookContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring
                                                 padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
                                                 child: Center(
                                                   child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       
-                                                                Text(heading,textAlign:TextAlign.center,style: TextStyle(
-                                                                                                                      color: Colors.black,
-                                                                                                                      fontSize: sizeWidth * sizeHeight * 0.00008,
-                                                                                                                      fontWeight: FontWeight.bold
-                                                                                                                    ),),
-                                                    Text(description,style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: sizeWidth * sizeHeight * 0.00005,
-                                                  
-                                                    ),
-                                                    textAlign: TextAlign.center,),
+                                                                Row(
+                                                                  children: [
+                                                                    Container(
+                                                                                                                          height: sizeHeight * 0.3,
+                                                                                                                          child: Image.network(
+                                                                                                                                      imagestring.toString(),
+                                                                                                                                      fit: BoxFit.cover, // Adjust the fit as needed
+                                                                                                                                    ),
+                                                                                                                        ),
+                                                                                                                        SizedBox(width: min(12,sizeWidth*0.05),),
+                                                                    Expanded(
+                                                                      child: Column(
+                                                                        children: [
+                                                                          Text(heading,textAlign:TextAlign.center,style: TextStyle(
+                                                                                                                                color: Colors.white,
+                                                                                                                                fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                                                                                                fontWeight: FontWeight.bold
+                                                                                                                              ),
+                                                                                                                              softWrap: true),
+                                                                                                                              SizedBox(height: min(12,sizeHeight*0.05),),
+                                                                          Text(description,style: TextStyle(
+                                                                                                                            color: Colors.white,
+                                                                                                                            fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                                                                                        
+                                                                                                                          ),
+                                                                                                                          textAlign: TextAlign.center,),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                                                                        
+                                                                  ],
+                                                                ),
+                                                    SizedBox(height: min(12,sizeHeight*0.05),),
                                                     InkWell(
-          onTap:() => _launchUrl(imagestring),
+          onTap:() => _launchUrl(previewstring),
         child: Text(
           'Preview the recommended book',
           style: TextStyle(
-            color: Colors.red,
+            color: Colors.blue,
             decoration: TextDecoration.underline,
           ),
         )
@@ -738,3 +761,73 @@ Widget activitymaps(sizeWidth, sizeHeight, constr, places,imagestring,{ Color bo
       ],
     );
   }
+
+Widget youtubeContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,videoId) {
+  print("inside container");
+  print(description.length);
+  return Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: sizeWidth *0.9
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                                                                                          width: sizeWidth * 0.8,
+                                                                                                                          child: Image.network(
+                                                                                                                                      imagestring.toString(),
+                                                                                                                                      fit: BoxFit.cover, // Adjust the fit as needed
+                                                                                                                                    ),
+                                                                                                                        ),
+                                                                Row(
+                                                                  children: [
+                                                                    
+                                                                                                                        SizedBox(width: min(12,sizeWidth*0.05),),
+                                                                    Expanded(
+                                                                      child: Column(
+                                                                        children: [
+                                                                          Text(heading,textAlign:TextAlign.center,style: TextStyle(
+                                                                                                                                color: Colors.white,
+                                                                                                                                fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                                                                                                fontWeight: FontWeight.bold
+                                                                                                                              ),
+                                                                                                                              softWrap: true),
+                                                                                                                              SizedBox(height: min(12,sizeHeight*0.05),),
+                                                                          Text(description,style: TextStyle(
+                                                                                                                            color: Colors.white,
+                                                                                                                            fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                                                                                        
+                                                                                                                          ),
+                                                                                                                          textAlign: TextAlign.center,),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                                                                        
+                                                                  ],
+                                                                ),
+                                                    SizedBox(height: min(12,sizeHeight*0.05),),
+                                                   InkWell(
+          onTap:() => _launchUrl(Uri.parse('https://www.youtube.com/watch?v=$videoId')),
+        child: Text(
+          'Checkout the YouTube video here',
+          style: TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+        )
+        )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+}

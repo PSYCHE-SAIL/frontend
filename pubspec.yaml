@@ -61,6 +61,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   flutter_local_notifications: ^17.1.1
   google_books_api: ^1.0.1
+  youtube_data_api: ^1.0.4
   # js: ^0.7.0
 
 dev_dependencies:

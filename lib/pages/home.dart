@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_books_api/google_books_api.dart';
 import 'package:provider/provider.dart';
 import 'package:psychesail/components/activity_widget.dart';
+import 'package:psychesail/components/api.dart';
 import 'package:psychesail/components/crud.dart';
 import 'package:psychesail/components/text.dart';
 import 'package:psychesail/components/vertical_scroll.dart';
@@ -126,18 +127,12 @@ SliverToBoxAdapter(
               duration: Duration(milliseconds: 200),
               child: Container(
                 height: sizeHeight*0.7,
-                color: Colors.blue,
+                color: Colors.transparent,
                 child: Container(
                               height: sizeHeight * 0.73,
                               child: SingleChildScrollView(
                                 child: FutureBuilder<dynamic>(
-                                    future: GoogleBooksApi().searchBooks(
-    'book',
-    maxResults: 20,
-    printType: PrintType.books,
-    orderBy: OrderBy.relevance,
-    queryType: QueryType.subject,
-), // async work
+                                    future: buildAPI(), // async work
                                     builder: (BuildContext context,
                                         AsyncSnapshot<dynamic> snapshot) {
                                       switch (snapshot.connectionState) {
@@ -161,7 +156,18 @@ SliverToBoxAdapter(
                                                       sizeHeight,
                                                       constr,
                                                       "Books",
-                                                      snapshot.data,
+                                                      snapshot.data[0],
+                                                      currentUserId,
+                                                      context),
+                                                  SizedBox(
+                                                    height: sizeHeight * 0.03,
+                                                  ),
+                                                  youtubescroll(
+                                                      sizeWidth,
+                                                      sizeHeight,
+                                                      constr,
+                                                      "YouTube",
+                                                      snapshot.data[1],
                                                       currentUserId,
                                                       context),
                                                   SizedBox(
