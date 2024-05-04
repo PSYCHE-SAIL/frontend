@@ -79,45 +79,49 @@ class _ChatRoomState extends State<ChatRoom> {
                     color: Colors.white))
           ],
         ),
-        body: Column(children: [
-          Flexible(
-            fit: FlexFit.loose,
-            child: Container(
-              color: Colors.white,
-              child: _buildMessageList(receiverid, currentid,sizeWidth,sizeHeight),
+        body: Container(
+          decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/background_chatbot.png"),fit: BoxFit.cover)),
+          child: Column(children: [
+            Flexible(
+              fit: FlexFit.loose,
+              child: Container(
+                color: Colors.transparent,
+                child: _buildMessageList(receiverid, currentid,sizeWidth,sizeHeight),
+              ),
             ),
-          ),
-          Container(
-              padding: const EdgeInsets.symmetric(vertical : 12,
-                  horizontal: 9),
-              height: size.height / 8.6,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      _chatField(_messageController),
-                      SizedBox(
-                        width: 9,
-                      ),
-                      InkWell(onTap: () {
-                        _sendMessage();
-                      },
-                        child: const CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.black,
-                          child: Icon(
-                            Icons.send,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-          SizedBox(),
-        ]));
+            Container(
+                padding: const EdgeInsets.symmetric(vertical : 12,
+                    horizontal: 9),
+                height: 120,
+                color: Colors.transparent,
+                child: Column(
+                  children: [
+                    Row(
+                                      children: [
+                                        _chatField(_messageController),
+                                        const SizedBox(
+                                          width: 9,
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            _sendMessage();
+                                          },
+                                          child: CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundColor: Colors.black,
+                                                  child: Icon(
+                                                    Icons.send,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                        ),
+                                      ],
+                                    )
+                  ],
+                )),
+            SizedBox(),
+          ]),
+        ));
   }
 
 // build message list
@@ -134,18 +138,20 @@ class _ChatRoomState extends State<ChatRoom> {
           final documents = snapshot.data!.docs;
           Map<Timestamp,dynamic> arr = {};
           for (var docSnapshot in documents) {
-  Object docData = docSnapshot.data()?? {{'hey' : "no"}};
-  print(docData); 
-  print(docData.runtimeType);
+ var docDataRaw = docSnapshot.data();
+ print(docDataRaw);
+
+  
+  
   // Accessing a sub-co // Print the data of each document in the sub-collection
   
 }
-          return Placeholder(
-          // return ListView.builder(
-          //   itemCount: documents.length,
-          //   itemBuilder: (context, index){
-          //     return _buildMessageItem(documents[index], currentid,sizeWidth,sizeHeight);
-          //   },
+          // return Placeholder(
+          return ListView.builder(
+            itemCount: documents.length,
+            itemBuilder: (context, index){
+              return _buildMessageItem(documents[index], currentid,sizeWidth,sizeHeight);
+            },
           );
         });
   }
@@ -167,51 +173,72 @@ class _ChatRoomState extends State<ChatRoom> {
           if (constraints.maxWidth > 600) constr = true;
           return 
           Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: (data['senderid'] == currentid) ? CrossAxisAlignment.end :CrossAxisAlignment.start ,
             children: [
+              
               Row(
                 mainAxisAlignment: (data['senderid'] == currentid) ? MainAxisAlignment.end : MainAxisAlignment.start,
                 children: [
                   Flexible(
-                    child: Container(
-              margin: (data['senderid'] == currentid)
+                    child: Column(
+                      crossAxisAlignment: (data['senderid'] == currentid) ? CrossAxisAlignment.start :CrossAxisAlignment.end ,
+                      children: [
+                        Padding(
+                padding: (data['senderid'] == currentid)
               ? EdgeInsets.only(
-                  top: min(12, sizeWidth * 0.05),
-                  
+                 top: min(12, sizeWidth * 0.05),
                   right: min(sizeHeight * 0.05, 12),
                   left: sizeHeight * 0.05,
                 )
               : EdgeInsets.only(
-                  top: min(12, sizeWidth * 0.05),
-                  
+                top: min(12, sizeWidth * 0.05),
                   left: min(sizeHeight * 0.05, 12),
                   right: sizeHeight * 0.05,
                 ),
-                  padding: EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                    borderRadius: (data['senderid'] == currentid)
-                ? BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(20),
-                    bottomLeft: Radius.circular(12),
-                  )
-                : BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
+                child: Text(
+                    data['senderid'],
+                    style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
-                    color: (data['senderid'] == currentid)
-                ? Color.fromRGBO(32, 160, 144, 100)
-                : Colors.grey,
-                    border: Border.all(color: Colors.black),
-                  ),
-              child: Text(
-                data['message'],
-                style: TextStyle(
-                  color: (data['senderid'] == currentid) ? Colors.white : Colors.black,
-                  fontSize: 17,
-                ),
               ),
+                        Container(
+                                      margin: (data['senderid'] == currentid)
+                                      ? EdgeInsets.only(
+                                          right: min(sizeHeight * 0.05, 12),
+                                          left: sizeHeight * 0.05,
+                                        )
+                                      : EdgeInsets.only(
+                                          
+                                          
+                                          left: min(sizeHeight * 0.05, 12),
+                                          right: sizeHeight * 0.05,
+                                        ),
+                                          padding: EdgeInsets.all(12.0),
+                                      decoration: BoxDecoration(
+                        borderRadius: (data['senderid'] == currentid)
+                                        ? BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(12),
+                                          )
+                                        : BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                                          ),
+                        color: (data['senderid'] == currentid)
+                                        ? Color.fromRGBO(32, 160, 144, 100)
+                                        : Colors.grey,
+                        border: Border.all(color: Colors.black),
+                                          ),
+                                      child: Text(
+                                        data['message'],
+                                        style: TextStyle(
+                                          color: (data['senderid'] == currentid) ? Colors.white : Colors.black,
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -238,7 +265,7 @@ class _ChatRoomState extends State<ChatRoom> {
                               .minute
                               .toString()
                               .padLeft(2, '0')}',
-                    style: TextStyle(color: Colors.black45, fontSize: 12),
+                    style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
               ),
             ],
@@ -305,22 +332,35 @@ class _ChatRoomState extends State<ChatRoom> {
 // }
 
   Widget _chatField(_messageController) {
-    return Expanded(
+  return Expanded(
+    child: Theme(
+      data: ThemeData(
+    // Set the border color for TextField
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: Colors.black), // Set border color here
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: Colors.black), // Set focused border color here
+      ),
+    ),
+  ),
       child: TextField(
+        cursorColor: Colors.black,
         style: TextStyle(
           color: Colors.black,
         ),
         controller: _messageController,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-            ),
+            
             filled: true,
             fillColor: Colors.transparent,
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(100),
-                borderSide: BorderSide(color: Colors.black))),
+            ),
+            
       ),
-    );
-  }
+    ),
+  );
+}
 }

@@ -220,7 +220,7 @@ print(snap['email']);
 
       //add new message to database
       await _firestore.collection('community').doc(title)
-          .collection('users').doc(currentUserId).set({"$timestamp": newMessage.toMap()},SetOptions(merge: true));
+          .collection('users').add(newMessage.toMap());
 
   }
 
@@ -229,7 +229,7 @@ print(snap['email']);
   print("userID : "+userId);
   print("title :"+title);
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    return _firestore.collection('community').doc(title).collection('users').snapshots();
+    return _firestore.collection('community').doc(title).collection('users').orderBy('timestamp', descending: false).snapshots();
   }
 
   // GET COMMUNTIY TITLES 
