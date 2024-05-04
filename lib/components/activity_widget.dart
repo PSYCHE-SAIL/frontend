@@ -49,7 +49,7 @@ class _ActivityMapsWidgetState extends State<ActivityMapsWidget> {
                                                       widget.pos,
                                                       widget.currentUserId,
                                                       place),
-            if(place.getPlace()[0] != "hospital") activitymaps(widget.sizeWidth, widget.sizeHeight, widget.constr, place.getObject(),
+            if(place.getremove()) activitymaps(widget.sizeWidth, widget.sizeHeight, widget.constr, place.getObject(),
             place.getImagestring()),
           ],
         );

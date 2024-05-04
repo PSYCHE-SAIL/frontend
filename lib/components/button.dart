@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget circleButton(constr, greaterwidth, lesswidth, imagestring) {
+Widget circleButton(constr, greaterwidth, lesswidth, imagestring,{borderneed = true }) {
   return Container(
     child: Padding(
       padding: EdgeInsets.all(constr ? greaterwidth : lesswidth),
@@ -13,7 +13,7 @@ Widget circleButton(constr, greaterwidth, lesswidth, imagestring) {
       shape: BoxShape.circle,
       color: Colors.transparent,
       border: Border.all(
-        color: Colors.grey,
+        color: borderneed ? Colors.grey: Colors.transparent,
         width: 1.0,
       ),
     ),

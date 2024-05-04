@@ -95,8 +95,18 @@ _firestore.collection('chatAvailable').doc('$currentUser').set({
 
 dynamic getUsers(currentuser) async {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  dynamic user = await _firestore.collection('chatAvailable').doc('$currentuser').get();
-  print(user.data().values);
+  dynamic userentries = await _firestore.collection('chatAvailable').doc('$currentuser').get();
+  print("hello");
+  print(userentries.runtimeType);
+  dynamic user = userentries.data().entries.map((entry) => [entry.key, entry.value]).toList();
+   int serenityIndex = 0;
+   for(var it = 0; it < user.length; it++) {
+    if(user[it][0] == 'Serenity') serenityIndex = it;
+   }
+   var temp = user[0];
+   user[0] = user[serenityIndex];
+   user[serenityIndex] = temp;
+  print(user);
   dynamic community = await _firestore.collection('community').get();
   print(community.docs[1]['description']);
   dynamic activity = await _firestore.collection('activity').get();
@@ -142,7 +152,7 @@ dynamic getUsers(currentuser) async {
    }
    print(callerUsers);
    var stresshistory = await getStressHistory(currentuser);
-  return [user.data(),community.docs,activity.docs, pairList,callerUsers,stresshistory];
+  return [user,community.docs,activity.docs, pairList,callerUsers,stresshistory];
 }
 
 Future<void> sendmessage(String receiverId, String message, currentid) async{
@@ -187,7 +197,7 @@ print(snap['email']);
   }
 
   // COMMUNITY DESCRIPTION RETRIEVE DATA 
-  Future<void> sendcommunitymessage(String message, currentid, String title, String subtitle) async{
+  Future<void> sendcommunitymessage(String message, currentid, String title) async{
     // get user info
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
       var snap = await getData(currentid);
@@ -210,8 +220,7 @@ print(snap['email']);
 
       //add new message to database
       await _firestore.collection('community').doc(title)
-          .collection('users').doc(currentUserId).collection('messages')
-          .add(newMessage.toMap());
+          .collection('users').doc(currentUserId).set({"$timestamp": newMessage.toMap()},SetOptions(merge: true));
 
   }
 
@@ -220,7 +229,7 @@ print(snap['email']);
   print("userID : "+userId);
   print("title :"+title);
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    return _firestore.collection('community').doc(title).collection('users').doc(userId).collection('messages').snapshots();
+    return _firestore.collection('community').doc(title).collection('users').snapshots();
   }
 
   // GET COMMUNTIY TITLES 
@@ -265,7 +274,9 @@ Future<List<List<dynamic>>> getStressHistory(String userId ) async {
       print(convertedStressHistory);
       return convertedStressHistory;
     } else {
-      throw Exception('No stress history available.');
+      print('No stress history available.');
+      return [[]];
+
     }
   } else {
     throw Exception('No data available.');

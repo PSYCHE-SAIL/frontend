@@ -7,9 +7,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:psychesail/bloc/chat_bloc.dart';
 import 'package:psychesail/bloc/chat_state.dart';
 import 'package:psychesail/model/botchatmessagemodel.dart';
+import 'package:psychesail/model/places.dart';
 import 'package:psychesail/model/textField.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -47,6 +49,8 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
   var currentid;
   bool _isLoading = false;
   var stressScore = '0';
+  var obj ={};
+  var url = '';
 
   @override
   void initState() {
@@ -66,7 +70,8 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
     lastmessage = args?['lastmessage'] ?? '';
     receiverid = 'Serenity';
     currentid = args?['currentid'] ?? '';
-
+    obj = args?['obj'] ?? {};
+     url = args?['url'] ?? '';
     print(receiverid);
     print(lastmessage);
     print(currentid);
@@ -135,6 +140,8 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
       return;
     }
 
+      // print(hello)
+      
 
     return Scaffold(
         appBar: AppBar(
@@ -152,412 +159,499 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> {
                     color: Colors.white))
           ],
         ),
-        body: BlocConsumer<ChatBloc, ChatState>(
-            bloc: chatbloc,
-            listener: (context, state) {},
-            builder: (context, state) {
-              List<BotChatMessageModel> messages = chatbloc.messages;
-
-              switch (messages.isNotEmpty) {
-                case true:
-                  return Container(
-                    width: double.maxFinite,
-                    height: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                              itemCount: messages.length,
-                              itemBuilder: (context, index) {
-                                return !(index % 8 == 7)
-                                    ? Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 12, horizontal: 12),
-                                        padding: const EdgeInsets.all(12.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color:
-                                              (messages[index].role == "user")
-                                                  ? Color.fromRGBO(
-                                                      32, 160, 144, 100)
-                                                  : Colors.grey,
-                                        ),
-                                        child: Text(
-                                            style: TextStyle(
-                                                color: (messages[index].role ==
-                                                        "user")
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontSize: 17),
-                                            messages[index].parts.first.text),
-                                      )
-                                    : Column(
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 12, horizontal: 12),
-                                            padding: const EdgeInsets.all(12.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: (messages[index].role ==
-                                                      "user")
-                                                  ? Color.fromRGBO(
-                                                      32, 160, 144, 100)
-                                                  : Colors.grey,
-                                            ),
-                                            child: Text(
-                                                style: TextStyle(
-                                                    color:
-                                                        (messages[index].role ==
-                                                                "user")
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                    fontSize: 17),
-                                                messages[index]
-                                                    .parts
-                                                    .first
-                                                    .text),
-                                          ),
-                                          (!endchat || !suggestplaces)
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () async {
-                                                        print("hello");
-                                                        print(userinputs);
-                                                        setState(() {
-                                                          endchat = true;
-                                                        });
-                                                        print(jsonEncode({
-                                                          "inputs": userinputs
-                                                        }));
-                                                        await _fetchStressScore(
-                                                            userinputs);
-                                                        print(
-                                                            "after sending and fetching response");
-                                                      },
-                                                      child: (!endchat &&
-                                                              !suggestplaces)
-                                                          ? Container(
-                                                              width:
-                                                                  sizeWidth / 3,
-                                                              height:
-                                                                  sizeHeight /
-                                                                      25,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            12),
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                              child: Center(
-                                                                  child: Text(
-                                                                      "End chat")),
-                                                            )
-                                                          : (endchat)
-                                                              ? Container(
-                                                                  width:
-                                                                      sizeWidth,
-                                                                  height:
-                                                                      sizeHeight /
-                                                                          25,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Colors
-                                                                        .transparent,
-                                                                  ),
-                                                                  child: Center(
-                                                                      child: Text(
-                                                                          "CHAT ENDED",style: TextStyle( color: Colors.black))),
-                                                                )
-                                                              : SizedBox(),
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () => {
-                                                        setState(() {
-                                                          suggestplaces = true;
-                                                        }),
-                                                      },
-                                                      child:
-                                                          (!suggestplaces &&
-                                                                  !endchat)
-                                                              ? Container(
-                                                                  width:
-                                                                      sizeWidth /
-                                                                          3,
-                                                                  height:
-                                                                      sizeHeight /
-                                                                          25,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            12),
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                  child: Center(
-                                                                      child: Text(
-                                                                          "Suggest Places")),
-                                                                )
-                                                              : (suggestplaces)
-                                                                  ? Container(
-                                                                      width:
-                                                                          sizeWidth,
-                                                                      height:
-                                                                          sizeHeight /
-                                                                              25,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        border:
-                                                                            Border(
-                                                                          top:
-                                                                              BorderSide(
-                                                                            color:
-                                                                                Colors.black38, // Color of the top border
-                                                                            width:
-                                                                                1.5, // Width of the top border
+        body: Container(
+          decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/background_chatbot.png"),fit: BoxFit.cover)), 
+          child: BlocConsumer<ChatBloc, ChatState>(
+              bloc: chatbloc,
+              listener: (context, state) async {
+                
+                },
+              builder: (context, state) {
+                List<BotChatMessageModel> messages = chatbloc.messages;
+          
+                switch (messages.isNotEmpty) {
+                  case true:
+                    return Container(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: messages.length,
+                                itemBuilder: (context, index) {
+                                  return !(index % 8 == 7)
+                                      ? Row(
+            mainAxisAlignment: (messages[index].role == "user") ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Container(
+          margin: (messages[index].role == "user")
+          ? EdgeInsets.only(
+              top: min(12, sizeWidth * 0.05),
+              bottom: min(12, sizeWidth * 0.05),
+              right: min(sizeHeight * 0.05, 12),
+              left: sizeHeight * 0.05,
+            )
+          : EdgeInsets.only(
+              top: min(12, sizeWidth * 0.05),
+              bottom: min(12, sizeWidth * 0.05),
+              left: min(sizeHeight * 0.05, 12),
+              right: sizeHeight * 0.05,
+            ),
+              padding: EdgeInsets.all(12.0),
+          decoration: BoxDecoration(
+                borderRadius: (messages[index].role == "user")
+            ? BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(12),
+              )
+            : BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
+                color: (messages[index].role == "user")
+            ? Color.fromRGBO(32, 160, 144, 100)
+            : Colors.grey,
+                border: Border.all(color: Colors.black),
+              ),
+          child: Text(
+            messages[index].parts.first.text,
+            style: TextStyle(
+              color: (messages[index].role == "user") ? Colors.white : Colors.black,
+              fontSize: 17,
+            ),
+          ),
+                ),
+              ),
+            ],
+          )
+          
+                                      : Column(
+                                          children: [
+                                            Row(
+            mainAxisAlignment: (messages[index].role == "user") ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Container(
+          margin: (messages[index].role == "user")
+          ? EdgeInsets.only(
+              top: min(12, sizeWidth * 0.05),
+              bottom: min(12, sizeWidth * 0.05),
+              right: min(sizeHeight * 0.05, 12),
+              left: sizeHeight * 0.05,
+            )
+          : EdgeInsets.only(
+              top: min(12, sizeWidth * 0.05),
+              bottom: min(12, sizeWidth * 0.05),
+              left: min(sizeHeight * 0.05, 12),
+              right: sizeHeight * 0.05,
+            ),
+              padding: EdgeInsets.all(12.0),
+          decoration: BoxDecoration(
+                borderRadius: (messages[index].role == "user")
+            ? BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(12),
+              )
+            : BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
+                color: (messages[index].role == "user")
+            ? Color.fromRGBO(32, 160, 144, 100)
+            : Colors.grey,
+                border: Border.all(color: Colors.black),
+              ),
+          child: Text(
+            messages[index].parts.first.text,
+            style: TextStyle(
+              color: (messages[index].role == "user") ? Colors.white : Colors.black,
+              fontSize: 17,
+            ),
+          ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment:MainAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Container(
+          margin: EdgeInsets.only(
+              top: min(12, sizeWidth * 0.05),
+              bottom: min(12, sizeWidth * 0.05),
+              left: min(sizeHeight * 0.05, 12),
+              right: sizeHeight * 0.05,
+            ),
+              padding: EdgeInsets.all(12.0),
+          decoration: BoxDecoration(
+                borderRadius:  BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
+                color: Colors.grey,
+                border: Border.all(color: Colors.black),
+              ),
+          child: Text(
+            "Looks like the best way for you to refresh yourself might be some outdoor activities. Here are some suggested activities near you - ",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 17,
+            ),
+          ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: min(sizeHeight*0.05,12),vertical: min(sizeWidth * 0.05,12)),
+            child: activitymaps(sizeWidth, sizeHeight, true, obj,
+              url,bordercolor: Colors.black),
+          ),
+                                            (!endchat || !suggestplaces)
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          print("hello");
+                                                          print(userinputs);
+                                                          setState(() {
+                                                            endchat = true;
+                                                          });
+                                                          print(jsonEncode({
+                                                            "inputs": userinputs
+                                                          }));
+                                                          await _fetchStressScore(
+                                                              userinputs);
+                                                          print(
+                                                              "after sending and fetching response");
+                                                        },
+                                                        child: (!endchat &&
+                                                                !suggestplaces)
+                                                            ? Container(
+                                                                width:
+                                                                    sizeWidth / 3,
+                                                                height:
+                                                                    sizeHeight /
+                                                                        25,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              12),
+                                                                  color:
+                                                                      Colors.grey,
+                                                                ),
+                                                                child: Center(
+                                                                    child: Text(
+                                                                        "End chat")),
+                                                              )
+                                                            : (endchat)
+                                                                ? Container(
+                                                                    width:
+                                                                        sizeWidth,
+                                                                    height:
+                                                                        sizeHeight /
+                                                                            25,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                    ),
+                                                                    child: Center(
+                                                                        child: Text(
+                                                                            "CHAT ENDED",style: TextStyle( color: Colors.black))),
+                                                                  )
+                                                                : SizedBox(),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () => {
+                                                          setState(() {
+                                                            suggestplaces = true;
+                                                          }),
+                                                        },
+                                                        child:
+                                                            (!suggestplaces &&
+                                                                    !endchat)
+                                                                ? Container(
+                                                                    width:
+                                                                        sizeWidth /
+                                                                            3,
+                                                                    height:
+                                                                        sizeHeight /
+                                                                            25,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              12),
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                    child: Center(
+                                                                        child: Text(
+                                                                            "Suggest Places")),
+                                                                  )
+                                                                : (suggestplaces)
+                                                                    ? Container(
+                                                                        width:
+                                                                            sizeWidth,
+                                                                        height:
+                                                                            sizeHeight /
+                                                                                25,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          border:
+                                                                              Border(
+                                                                            top:
+                                                                                BorderSide(
+                                                                              color:
+                                                                                  Colors.black38, // Color of the top border
+                                                                              width:
+                                                                                  1.5, // Width of the top border
+                                                                            ),
                                                                           ),
+                                                                          color: Colors
+                                                                              .transparent,
                                                                         ),
-                                                                        color: Colors
-                                                                            .transparent,
-                                                                      ),
-                                                                      child: Center(
-                                                                          child: Text(
-                                                                        "CHAT ENDED ... SUGGESTING PLACES",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.black),
-                                                                      )),
-                                                                    )
-                                                                  : SizedBox(),
-                                                    ),
-                                                  ],
-                                                )
-                                              : SizedBox(),
-                                        ],
-                                      );
-                              }),
-                        ),
-                        if (suggestplaces)
-                          Row(
-                            children: [
-                              Wrap(
-                                spacing: 20,
-                                runSpacing: min(20, sizeWidth * 0.0006),
-                                children: [
-                                  SizedBox(
-                                    height: sizeHeight * 0.01,
-                                  ),
-                                  SizedBox(
-                                    height: sizeHeight * 0.15,
-                                    child: ListView.separated(
-                                      reverse: false,
-                                      scrollDirection: Axis.horizontal,
-                                      shrinkWrap: true,
-                                      itemCount: arr.length,
-                                      itemBuilder: (context, index) {
-                                        return _suggestplaces(
-                                            sizeHeight,
-                                            sizeWidth,
-                                            arr[arr.length - 1 - index][0],
-                                            arr[arr.length - 1 - index][1],
-                                            true);
-                                      },
-                                      separatorBuilder: ((context, index) =>
-                                          SizedBox(
-                                            width: min(sizeWidth * 0.05, 30),
-                                          )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
+                                                                        child: Center(
+                                                                            child: Text(
+                                                                          "CHAT ENDED ... SUGGESTING PLACES",
+                                                                          style: TextStyle(
+                                                                              color:
+                                                                                  Colors.black),
+                                                                        )),
+                                                                      )
+                                                                    : SizedBox(),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : SizedBox(),
+                                          ],
+                                        );
+                                }),
                           ),
-                        if (endchat)
-                          _endchat(stressScore, sizeWidth, sizeHeight,currentid,context),
-                        (!endchat && !suggestplaces)
-                            ? Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 10),
-                                height: 120,
-                                color: Colors.white,
-                                child: Row(
+                          if (suggestplaces)
+                            Row(
+                              children: [
+                                Wrap(
+                                  spacing: 20,
+                                  runSpacing: min(20, sizeWidth * 0.0006),
                                   children: [
-                                    _chatField(_messageController),
-                                    const SizedBox(
-                                      width: 12,
+                                    SizedBox(
+                                      height: sizeHeight * 0.01,
                                     ),
-                                    InkWell(
-                                      onTap: () async {
-                                        if (_messageController
-                                            .text.isNotEmpty) {
-                                          print(_messageController.text);
-                                          var userInput =
-                                              _messageController.text;
-                                          _messageController.clear();
-                                          setState(() {
-                                            _isLoading = true;
-                                          });
-                                          print(ChatGenerateNewTextMessageEvent(
-                                              inputMessage: userInput));
-                                          print(await chatbloc
-                                              .chatGenerateNewTextMessageEvent(
-                                                  ChatGenerateNewTextMessageEvent(
-                                                      inputMessage:
-                                                          userInput)));
-                                          setState(() {
-                                            _isLoading = false;
-                                            userinputs.add(userInput);
-                                          });
-
-                                          await sendMessage(messages);
-                                          print(userinputs);
-                                        }
-                                      },
-                                      child: ((!endchat))
-                                          ? (_isLoading)
-                                              ? Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                          color: Colors.black),
-                                                )
-                                              : CircleAvatar(
-                                                  radius: 30,
-                                                  backgroundColor: Colors.black,
-                                                  child: Icon(
-                                                    Icons.send,
-                                                    color: Colors.white,
-                                                  ),
-                                                )
-                                          : _endchat(stressScore, sizeWidth,
-                                              sizeHeight,currentid,context),
-                                    ),
+                                    SizedBox(
+                                      height: sizeHeight * 0.15,
+                                      child: ListView.separated(
+                                        reverse: false,
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        itemCount: arr.length,
+                                        itemBuilder: (context, index) {
+                                          return _suggestplaces(
+                                              sizeHeight,
+                                              sizeWidth,
+                                              arr[arr.length - 1 - index][0],
+                                              arr[arr.length - 1 - index][1],
+                                              true);
+                                        },
+                                        separatorBuilder: ((context, index) =>
+                                            SizedBox(
+                                              width: min(sizeWidth * 0.05, 30),
+                                            )),
+                                      ),
+                                    )
                                   ],
                                 ),
-                              )
-                            : SizedBox()
-                      ],
-                    ),
-                  );
-                default:
-                  return Column(children: [
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Container(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 9),
-                      height: sizeHeight / 4,
-                      color: Colors.white,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              InkWell(
-                                onTap: () => {
-                                  _messageController.text = "I don't feel well"
-                                },
-                                child: Container(
-                                  width: sizeWidth / 3,
-                                  height: sizeHeight / 25,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.grey,
+                              ],
+                            ),
+                          if (endchat)
+                            _endchat(stressScore, sizeWidth, sizeHeight,currentid,context),
+                          (!endchat && !suggestplaces)
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 10),
+                                  height: 120,
+                                  color: Colors.transparent,
+                                  child: Row(
+                                    children: [
+                                      _chatField(_messageController),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                          if (_messageController
+                                              .text.isNotEmpty) {
+                                            print(_messageController.text);
+                                            var userInput =
+                                                _messageController.text;
+                                            _messageController.clear();
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            print(ChatGenerateNewTextMessageEvent(
+                                                inputMessage: userInput));
+                                            print(await chatbloc
+                                                .chatGenerateNewTextMessageEvent(
+                                                    ChatGenerateNewTextMessageEvent(
+                                                        inputMessage:
+                                                            userInput)));
+                                            setState(() {
+                                              _isLoading = false;
+                                              userinputs.add(userInput);
+                                            });
+          
+                                            await sendMessage(messages);
+                                            print(userinputs);
+                                          }
+                                        },
+                                        child: ((!endchat))
+                                            ? (_isLoading)
+                                                ? Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                            color: Colors.black),
+                                                  )
+                                                : CircleAvatar(
+                                                    radius: 30,
+                                                    backgroundColor: Colors.black,
+                                                    child: Icon(
+                                                      Icons.send,
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                            : _endchat(stressScore, sizeWidth,
+                                                sizeHeight,currentid,context),
+                                      ),
+                                    ],
                                   ),
-                                  child:
-                                      Center(child: Text("I don't feel well")),
-                                ),
-                              ),
-                              InkWell(
+                                )
+                              : SizedBox()
+                        ],
+                      ),
+                    );
+                  default:
+                    return Column(children: [
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Container(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 9),
+                        height: sizeHeight / 4,
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                InkWell(
                                   onTap: () => {
-                                        _messageController.text =
-                                            "Help me! I am stressed!"
-                                      },
+                                    _messageController.text = "I don't feel well"
+                                  },
                                   child: Container(
-                                    width: sizeWidth / 2,
+                                    width: sizeWidth / 3,
                                     height: sizeHeight / 25,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       color: Colors.grey,
                                     ),
-                                    child: Center(
-                                        child: Text("Help me! I am stressed!")),
-                                  ))
-                            ],
-                          ),
-                          ((!endchat && !suggestplaces))
-                              ? Row(
-                                  children: [
-                                    _chatField(_messageController),
-                                    const SizedBox(
-                                      width: 9,
-                                    ),
-                                    InkWell(
-                                      onTap: () async {
-                                        if (_messageController
-                                            .text.isNotEmpty) {
-                                          print(_messageController.text);
-                                          var userInput =
-                                              _messageController.text;
-                                          _messageController.clear();
-                                          setState(() {
-                                            _isLoading = true;
-                                          });
-                                          print(ChatGenerateNewTextMessageEvent(
-                                              inputMessage: userInput));
-                                          print(await chatbloc
-                                              .chatGenerateNewTextMessageEvent(
-                                                  ChatGenerateNewTextMessageEvent(
-                                                      inputMessage:
-                                                          userInput)));
-                                          // print(chatbloc.messages.length);
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                          await sendMessage(messages);
-                                          // _messageController.clear();
-                                        }
-                                      },
-                                      child: (_isLoading)
-                                          ? Center(
-                                              child: CircularProgressIndicator(
-                                                  color: Colors.black),
-                                            )
-                                          : CircleAvatar(
-                                              radius: 30,
-                                              backgroundColor: Colors.black,
-                                              child: Icon(
-                                                Icons.send,
-                                                color: Colors.white,
+                                    child:
+                                        Center(child: Text("I don't feel well")),
+                                  ),
+                                ),
+                                InkWell(
+                                    onTap: () => {
+                                          _messageController.text =
+                                              "Help me! I am stressed!"
+                                        },
+                                    child: Container(
+                                      width: sizeWidth / 2,
+                                      height: sizeHeight / 25,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey,
+                                      ),
+                                      child: Center(
+                                          child: Text("Help me! I am stressed!")),
+                                    ))
+                              ],
+                            ),
+                            (!endchat && !suggestplaces)
+                                ? Row(
+                                    children: [
+                                      _chatField(_messageController),
+                                      const SizedBox(
+                                        width: 9,
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                          if (_messageController
+                                              .text.isNotEmpty) {
+                                            print(_messageController.text);
+                                            var userInput =
+                                                _messageController.text;
+                                            _messageController.clear();
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            print(ChatGenerateNewTextMessageEvent(
+                                                inputMessage: userInput));
+                                            print(await chatbloc
+                                                .chatGenerateNewTextMessageEvent(
+                                                    ChatGenerateNewTextMessageEvent(
+                                                        inputMessage:
+                                                            userInput)));
+                                            // print(chatbloc.messages.length);
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
+                                            await sendMessage(messages);
+                                            // _messageController.clear();
+                                          }
+                                        },
+                                        child: (_isLoading)
+                                            ? Center(
+                                                child: CircularProgressIndicator(
+                                                    color: Colors.black),
+                                              )
+                                            : CircleAvatar(
+                                                radius: 30,
+                                                backgroundColor: Colors.black,
+                                                child: Icon(
+                                                  Icons.send,
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                            ),
-                                    ),
-                                  ],
-                                )
-                              : _endchat(stressScore, sizeWidth, sizeHeight,currentid,context),
-                        ],
-                      ),
-                    )
-                  ]);
-              }
-            }));
+                                      ),
+                                    ],
+                                  )
+                                : _endchat(stressScore, sizeWidth, sizeHeight,currentid,context),
+                          ],
+                        ),
+                      )
+                    ]);
+                }
+              }),
+        ));
   }
 
 
@@ -760,20 +854,33 @@ Widget _endchat(stressScore, sizeWidth, sizeHeight,currentid, context) {
 
 Widget _chatField(_messageController) {
   return Expanded(
-    child: TextField(
-      style: TextStyle(
-        color: Colors.black,
+    child: Theme(
+      data: ThemeData(
+    // Set the border color for TextField
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: Colors.black), // Set border color here
       ),
-      controller: _messageController,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
-          ),
-          filled: true,
-          fillColor: Colors.transparent,
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: BorderSide(color: Colors.black))),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: Colors.black), // Set focused border color here
+      ),
+    ),
+  ),
+      child: TextField(
+        cursorColor: Colors.black,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+        controller: _messageController,
+        decoration: InputDecoration(
+            
+            filled: true,
+            fillColor: Colors.transparent,
+            ),
+            
+      ),
     ),
   );
 }

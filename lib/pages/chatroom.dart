@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -30,7 +32,7 @@ class _ChatRoomState extends State<ChatRoom> {
   dynamic _sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await sendcommunitymessage(
-          _messageController.text, currentid, communityname, 'users');
+          _messageController.text, currentid, communityname);
       _messageController.clear();
       return true;
     }
@@ -39,6 +41,8 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   Widget build(BuildContext context) {
+    double sizeHeight = MediaQuery.of(context).size.height;
+    double sizeWidth = MediaQuery.of(context).size.width;
     final Map<String, dynamic>? args =
     ModalRoute
         .of(context)!
@@ -80,7 +84,7 @@ class _ChatRoomState extends State<ChatRoom> {
             fit: FlexFit.loose,
             child: Container(
               color: Colors.white,
-              child: _buildMessageList(receiverid, currentid),
+              child: _buildMessageList(receiverid, currentid,sizeWidth,sizeHeight),
             ),
           ),
           Container(
@@ -117,7 +121,7 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
 // build message list
-  Widget _buildMessageList(receiverid, currentid) {
+  Widget _buildMessageList(receiverid, currentid,sizeWidth,sizeHeight) {
     return StreamBuilder(
         stream: getcommunitymessages(currentid,communityname),
         builder: (context, snapshot) {
@@ -128,17 +132,26 @@ class _ChatRoomState extends State<ChatRoom> {
             return const Text('Loading...');
           }
           final documents = snapshot.data!.docs;
-          return ListView.builder(
-            itemCount: documents.length,
-            itemBuilder: (context, index){
-              return _buildMessageItem(documents[index], currentid);
-            },
+          Map<Timestamp,dynamic> arr = {};
+          for (var docSnapshot in documents) {
+  Object docData = docSnapshot.data()?? {{'hey' : "no"}};
+  print(docData); 
+  print(docData.runtimeType);
+  // Accessing a sub-co // Print the data of each document in the sub-collection
+  
+}
+          return Placeholder(
+          // return ListView.builder(
+          //   itemCount: documents.length,
+          //   itemBuilder: (context, index){
+          //     return _buildMessageItem(documents[index], currentid,sizeWidth,sizeHeight);
+          //   },
           );
         });
   }
 
   // build message item
-  Widget _buildMessageItem(DocumentSnapshot document, currentid) {
+  Widget _buildMessageItem(DocumentSnapshot document, currentid,sizeWidth,sizeHeight) {
     print("POPOPOPOO");
     print(document.data());
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
@@ -152,37 +165,116 @@ class _ChatRoomState extends State<ChatRoom> {
         builder: (BuildContext context, BoxConstraints constraints) {
           bool constr = false;
           if (constraints.maxWidth > 600) constr = true;
-          return Container(
-            alignment: alignment,
-            child: Column(
-              crossAxisAlignment: (data['senderid'] == currentid)
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-              mainAxisAlignment: (data['senderid'] == currentid)
-                  ? MainAxisAlignment.end
-                  : MainAxisAlignment.start,
-              children: [
-                // Text(data['senderid'],style: const TextStyle(backgroundColor: Colors.transparent,color: Colors.black,fontSize: 15,),),
-                textbubble(
-                    data['message'],
+          return 
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisAlignment: (data['senderid'] == currentid) ? MainAxisAlignment.end : MainAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Container(
+              margin: (data['senderid'] == currentid)
+              ? EdgeInsets.only(
+                  top: min(12, sizeWidth * 0.05),
+                  
+                  right: min(sizeHeight * 0.05, 12),
+                  left: sizeHeight * 0.05,
+                )
+              : EdgeInsets.only(
+                  top: min(12, sizeWidth * 0.05),
+                  
+                  left: min(sizeHeight * 0.05, 12),
+                  right: sizeHeight * 0.05,
+                ),
+                  padding: EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                    borderRadius: (data['senderid'] == currentid)
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(12),
+                  )
+                : BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                    color: (data['senderid'] == currentid)
+                ? Color.fromRGBO(32, 160, 144, 100)
+                : Colors.grey,
+                    border: Border.all(color: Colors.black),
+                  ),
+              child: Text(
+                data['message'],
+                style: TextStyle(
+                  color: (data['senderid'] == currentid) ? Colors.white : Colors.black,
+                  fontSize: 17,
+                ),
+              ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: (data['senderid'] == currentid)
+              ? EdgeInsets.only(
+                 
+                  right: min(sizeHeight * 0.05, 12),
+                  left: sizeHeight * 0.05,
+                )
+              : EdgeInsets.only(
+                  left: min(sizeHeight * 0.05, 12),
+                  right: sizeHeight * 0.05,
+                ),
+                child: Text(
                     '${data['timestamp']
-                        .toDate()
-                        .toLocal()
-                        .hour}:' +
-                        '${data['timestamp']
-                            .toDate()
-                            .toLocal()
-                            .minute
-                            .toString()
-                            .padLeft(2, '0')}',
-                    data['senderid'],
-                    currentid,
-                    bgcolor,
-                    constr,
-                    context),
-              ],
-            ),
+                          .toDate()
+                          .toLocal()
+                          .hour}:' +
+                          '${data['timestamp']
+                              .toDate()
+                              .toLocal()
+                              .minute
+                              .toString()
+                              .padLeft(2, '0')}',
+                    style: TextStyle(color: Colors.black45, fontSize: 12),
+                  ),
+              ),
+            ],
           );
+          
+          // Container(
+          //   alignment: alignment,
+          //   child: Column(
+          //     crossAxisAlignment: (data['senderid'] == currentid)
+          //         ? CrossAxisAlignment.end
+          //         : CrossAxisAlignment.start,
+          //     mainAxisAlignment: (data['senderid'] == currentid)
+          //         ? MainAxisAlignment.end
+          //         : MainAxisAlignment.start,
+          //     children: [
+          //       // Text(data['senderid'],style: const TextStyle(backgroundColor: Colors.transparent,color: Colors.black,fontSize: 15,),),
+          //       textbubble(
+          //           data['message'],
+          //           '${data['timestamp']
+          //               .toDate()
+          //               .toLocal()
+          //               .hour}:' +
+          //               '${data['timestamp']
+          //                   .toDate()
+          //                   .toLocal()
+          //                   .minute
+          //                   .toString()
+          //                   .padLeft(2, '0')}',
+          //           data['senderid'],
+          //           currentid,
+          //           bgcolor,
+          //           constr,
+          //           context),
+          //     ],
+          //   ),
+          // );
         });
   }
 

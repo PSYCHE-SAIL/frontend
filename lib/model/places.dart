@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class Places extends ChangeNotifier{
   List<String> place = ["hospital"];
+  bool val = false;
+  bool remove = true;
   Map<dynamic,dynamic> object = {
     "places" : [{
       "googleMapsUri" : "Disha",
@@ -25,6 +27,22 @@ class Places extends ChangeNotifier{
 
   List<String> getPlace() {
     return place;
+  }
+
+  void setval() {
+    val = true;
+  }
+
+  bool getval() {
+    return val;
+  }
+
+  void setremove(val) {
+    remove = val;
+  }
+
+  bool getremove() {
+    return remove;
   }
 
   void setImagestring(String url) {

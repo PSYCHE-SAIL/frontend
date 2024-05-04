@@ -59,6 +59,10 @@ class _homeState extends State<home> {
     print(positionLong);
     print("position Latitude: ");
     print(positionLat);
+    Places place = Provider.of<Places>(context);
+     print(place.getPlace());
+place.setPlace('Games');
+                    place.setImagestring('assets/games.png');
 
     // List<List<dynamic>> stressHistory = getStressHistory();
     // var stressHistory = (getStressHistory(currentUserId)==[])? getStressHistory(currentUserId):[['yyyy-mm-dd','hh:mm:ss','5']];
@@ -108,7 +112,7 @@ class _homeState extends State<home> {
                       height: sizeHeight * 0.73,
                       child: SingleChildScrollView(
                         child: FutureBuilder<dynamic>(
-                            future: getUsers(currentUserId),  // async work
+                            future: getDataFuture(currentUserId,place,[positionLong, positionLat]),  // async work
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> snapshot) {
                               switch (snapshot.connectionState) {
@@ -149,18 +153,14 @@ class _homeState extends State<home> {
                                                     .difference(DateFormat(
                                                             "hh:mm:ss")
                                                         .parse(snapshot
-                                                                .data[0].values
-                                                                .elementAt(
-                                                                    index)[
+                                                                .data[0][index][1][
                                                             'time']));
                                                 return Padding(
                                                   padding: const EdgeInsets
                                                       .symmetric(vertical: 8.0),
                                                   child: InkWell(
                                                     onTap: () => {
-                                                      if (snapshot.data[0].keys
-                                                              .elementAt(
-                                                                  index) ==
+                                                      if (snapshot.data[0][index][0] ==
                                                           'Serenity')
                                                         {
                                                           Navigator.pushNamed(
@@ -169,17 +169,16 @@ class _homeState extends State<home> {
                                                               arguments: {
                                                                 'receiverid': snapshot
                                                                     .data[0]
-                                                                    .keys
-                                                                    .elementAt(
-                                                                        index),
+                                                                    [index][0],
                                                                 'currentid':
                                                                     currentUserId,
                                                                 'lastmessage': snapshot
                                                                         .data[0]
-                                                                        .values
-                                                                        .elementAt(
-                                                                            index)[
-                                                                    'message']
+                                                                        [index][1][
+                                                                    'message'],
+                                                                    'obj': place.getObject(),
+                                                                    'url' : place.getImagestring()
+                                                                    
                                                               })
                                                         }
                                                       else
@@ -190,9 +189,7 @@ class _homeState extends State<home> {
                                                               arguments: {
                                                                 'receiverid': snapshot
                                                                     .data[0]
-                                                                    .keys
-                                                                    .elementAt(
-                                                                        index),
+                                                                    [index][0],
                                                                 'currentid':
                                                                     currentUserId,
                                                                 'receiveremail':
@@ -201,12 +198,27 @@ class _homeState extends State<home> {
                                                         }
                                                     },
                                                     child: Container(
+                                                      decoration: BoxDecoration(
+                                                        
+                                                        
+                                                         boxShadow: [
+      BoxShadow(
+        color: (snapshot.data[0][index][0] ==
+                                                          'Serenity') ? Colors.grey.withOpacity(0.5) : Colors.transparent, // Greyish color with opacity
+        spreadRadius: 2, // Controls how far the shadow spreads
+        blurRadius: 5, // Controls the blurriness of the shadow
+        offset: Offset(0, 2), // Controls the position of the shadow
+      ),
+    ],
+  ),
+                                                      
                                                       child: Padding(
                                                         padding:
-                                                            const EdgeInsets
+                                                            EdgeInsets
                                                                 .symmetric(
                                                                 horizontal:
-                                                                    8.0),
+                                                                    8.0, vertical: (snapshot.data[0][index][0] ==
+                                                          'Serenity') ? 8.0 : 0.0),
                                                         child: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -223,17 +235,13 @@ class _homeState extends State<home> {
                                                               child: !(snapshot
                                                                           .data[
                                                                               0]
-                                                                          .keys
-                                                                          .elementAt(
-                                                                              index) ==
-                                                                      "Groupchat")
+                                                                          [index][0] ==
+                                                                      "Serenity")
                                                                   ? RandomAvatar(
                                                                       snapshot
                                                                           .data[
                                                                               0]
-                                                                          .keys
-                                                                          .elementAt(
-                                                                              index),
+                                                                          [index][0],
                                                                       trBackground:
                                                                           false,
                                                                       height:
@@ -242,10 +250,10 @@ class _homeState extends State<home> {
                                                                   : circleButton(
                                                                       constr,
                                                                       sizeWidth /
-                                                                          100,
+                                                                          150,
                                                                       sizeWidth /
-                                                                          50,
-                                                                      "assets/group_dp.png"),
+                                                                          45,
+                                                                      "assets/serenity.png",borderneed : false),
                                                             ),
                                                             Container(
                                                               width: sizeWidth /
@@ -258,9 +266,7 @@ class _homeState extends State<home> {
                                                                   Text(
                                                                     snapshot
                                                                         .data[0]
-                                                                        .keys
-                                                                        .elementAt(
-                                                                            index),
+                                                                        [index][0],
                                                                     style:
                                                                         TextStyle(
                                                                       color: Colors
@@ -278,21 +284,22 @@ class _homeState extends State<home> {
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    snapshot.data[0].values.elementAt(index)['message'].length <
+                                                                    (snapshot.data[0][index][0] ==
+                                                          'Serenity') ?"Always there for u 😇" : snapshot.data[0][index][1]['message'].length <
                                                                             20
-                                                                        ? snapshot.data[0].values.elementAt(index)[
+                                                                        ? snapshot.data[0][index][1][
                                                                             'message']
                                                                         : snapshot
                                                                             .data[
                                                                                 0]
-                                                                            .values
-                                                                            .elementAt(index)[
+                                                                            [index][1][
                                                                                 'message']
                                                                             .substring(0,
-                                                                                20),
+                                                                                20) ,
                                                                     style:
                                                                         TextStyle(
-                                                                      color: Colors
+                                                                      color:  (snapshot.data[0][index][0] ==
+                                                          'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
                                                                           .grey,
                                                                     ),
                                                                   ),
@@ -312,7 +319,7 @@ class _homeState extends State<home> {
                                                                 children: [
                                                                   Text(
                                                                     formattedDate ==
-                                                                            snapshot.data[0].values.elementAt(index)[
+                                                                            snapshot.data[0][index][1][
                                                                                 'date']
                                                                         ? diffTime.inHours ==
                                                                                 00
@@ -323,11 +330,11 @@ class _homeState extends State<home> {
                                                                             : "${diffTime.inHours.toString()} hours"
                                                                         : snapshot
                                                                             .data[0]
-                                                                            .values
-                                                                            .elementAt(index)['date'],
+                                                                            [index][1]['date'],
                                                                     style:
                                                                         TextStyle(
-                                                                      color: Colors
+                                                                      color: (snapshot.data[0][index][0] ==
+                                                          'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
                                                                           .grey,
                                                                       fontStyle:
                                                                           FontStyle
@@ -408,9 +415,6 @@ class _homeState extends State<home> {
                                           SizedBox(
                                             height: sizeHeight * 0.03,
                                           ),
-                                          InkWell(
-                                            onTap: () => createChatrooms(currentUserId, "Disha", "Hi"),
-                                            child: Text("video"))
                                             
                                           
                                         ],
@@ -460,6 +464,22 @@ class _homeState extends State<home> {
               ]));
     });
   }
+}
+
+getDataFuture(String currentUserId,place,pos) async {
+  var data = getUsers(currentUserId);
+  if(!place.getval()) {
+var response = await searchNearbyPlaces(place.getPlace(), pos);
+
+                // print("take me to hell");
+                print(response);
+                place.setObject(response);
+                place.setval();
+                place.setremove(false);
+               
+  }
+              
+                return data;
 }
 
 Future<Position> _determinePosition() async {

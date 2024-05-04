@@ -432,6 +432,7 @@ Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagest
       // print("take me to hell");
       print(response);
       place.setObject(response);
+      place.setremove(true);
       print(place.getObject());
 
     },
@@ -461,10 +462,11 @@ Widget activityContainer(context,sizeWidth, sizeHeight, constr, heading, imagest
 Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji,seeall) {
   return Container(
                                               constraints: BoxConstraints(
-                                                minWidth: sizeWidth * 0.7
+                                                minWidth: sizeWidth * 0.7,
+                                                maxWidth: sizeWidth
                                               ),
                                               decoration: BoxDecoration(
-                                                color: (seeall)?Colors.black87: Colors.white,
+                                                color:  Colors.white,
                                                 border: Border.all(
                                                   color: Colors.grey.shade300,
                                                 ),
@@ -476,43 +478,48 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji,seeall
                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                   crossAxisAlignment: CrossAxisAlignment.start, 
                                                   children: [
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        Column(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start, 
+                                                    
+                                                     SizedBox.fromSize(
+                                                      size: Size.fromHeight(sizeHeight * 0.08),
+                                                       child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,children: [ 
-                                                              Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
-                                                               SizedBox(width: sizeWidth * 0.02),
-                                                              Text(date,style: TextStyle(
-                                                            color: (seeall)?Colors.white:Colors.black,
+                                                            Column(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                                                          crossAxisAlignment: CrossAxisAlignment.start, 
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.start,children: [ 
+                                                                  Icon(Icons.calendar_month_rounded,color: Color.fromRGBO(35, 154, 139, 75)),
+                                                                   SizedBox(width: sizeWidth * 0.02),
+                                                                  Text(date,style: TextStyle(
+                                                                color: Colors.black,
+                                                                fontSize: sizeWidth * sizeHeight * 0.000055,
+                                                                fontWeight: FontWeight.bold
+                                                                                                                  ),)
+                                                                ],),
+                                                                SizedBox(height: sizeHeight * 0.01),
+                                                             Row(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [ 
+                                                              Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
+                                                              SizedBox(width: sizeWidth * 0.02),
+                                                              Text(time,style: TextStyle(
+                                                            color:Colors.black,
                                                             fontSize: sizeWidth * sizeHeight * 0.000055,
-                                                            fontWeight: FontWeight.bold
+                                                            
                                                                                                               ),)
                                                             ],),
-                                                            SizedBox(height: sizeHeight * 0.01),
-                                                         Row(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [ 
-                                                          Icon(Icons.schedule,color: Color.fromRGBO(35, 154, 139, 75)),
-                                                          SizedBox(width: sizeWidth * 0.02),
-                                                          Text(time,style: TextStyle(
-                                                        color:(seeall)? Colors.white:Colors.black,
-                                                        fontSize: sizeWidth * sizeHeight * 0.000055,
-                                                        
-                                                                                                          ),)
-                                                        ],),
-                                                        
+                                                            
+                                                              ],
+                                                            ),
+                                                       
+                                                            circleButton(
+                                                                  constr, sizeWidth / 100, sizeWidth / 50, stressEmoji[0]),
                                                           ],
                                                         ),
-                                                        if(constr) SizedBox(width : sizeWidth * 0.05),
-                                                        circleButton(
-                                                              constr, sizeWidth / 100, sizeWidth / 50, stressEmoji[0]),
-                                                      ],
-                                                    ),
+                                                     ),
+                                                    
                                                     
                                                     SizedBox(height: sizeHeight * 0.01),
                                                               Row(
@@ -611,12 +618,12 @@ dynamic searchNearbyPlaces(List<String> places_type, pos) async {
   return responseData;
 }
 Widget communitycontainer(
-    sizeWidth, sizeHeight, constr, heading, googlemapsuri, imagestring) {
+    sizeWidth, sizeHeight, constr, heading, googlemapsuri, imagestring, bordercolor) {
   return Container(
     constraints: BoxConstraints(maxWidth: sizeWidth *0.8),
     decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.grey.shade300,
+          color: bordercolor,
         ),
         borderRadius: BorderRadius.all(Radius.circular(8.0))),
     child: Padding(
@@ -652,7 +659,7 @@ Future<void> _launchUrl(Uri _url) async {
   }
 }
 format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-Widget activitymaps(sizeWidth, sizeHeight, constr, places,imagestring) {
+Widget activitymaps(sizeWidth, sizeHeight, constr, places,imagestring,{ Color bordercolor = Colors.grey}) {
     print(places['places']);
     return Wrap(
       spacing: 20,
@@ -675,7 +682,7 @@ Widget activitymaps(sizeWidth, sizeHeight, constr, places,imagestring) {
                   constr,
                   places['places'][index]['displayName']['text'].length > 20 ?  places['places'][index]['displayName']['text'].substring(0,20) :  places['places'][index]['displayName']['text'],
                   places['places'][index]['googleMapsUri'],
-                  imagestring);
+                  imagestring,bordercolor == Colors.grey ? Colors.grey.shade300 : bordercolor);
             },
             separatorBuilder: ((context, index) => SizedBox(
               width: min(sizeWidth * 0.05, 30),

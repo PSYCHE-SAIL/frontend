@@ -205,7 +205,7 @@ Widget historyscroll(
           shrinkWrap: true,
           itemCount: arr.length,
           itemBuilder: (context, index) {
-            return historyContainer(sizeWidth, sizeHeight, true, arr[index][0],
+            return (arr[index].length == 0) ? Container(width: sizeWidth ,child: Center(child: Text("Start Journey with Serenity....",style: TextStyle(color: Colors.black),))): historyContainer(sizeWidth, sizeHeight, true, arr[index][0],
                 arr[index][1], stressEmoji.stressEmoji((index + 1).toString()),false);
           },
           separatorBuilder: ((context, index) => SizedBox(
