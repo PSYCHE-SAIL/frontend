@@ -120,6 +120,7 @@ place.setPlace('Games');
             ],
           ),
           body: CustomScrollView(
+            controller: _scrollController,
             slivers: [
 SliverToBoxAdapter(
             child: AnimatedOpacity(
@@ -137,9 +138,11 @@ SliverToBoxAdapter(
                                         AsyncSnapshot<dynamic> snapshot) {
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.waiting:
-                                          return Text(
-                                            'Loading....',
-                                            style: TextStyle(color: Colors.black),
+                                          return Center(
+                                            child: Text(
+                                              'Loading....',
+                                              style: TextStyle(color: Colors.white),
+                                            ),
                                           );
                                         default:
                                           if (snapshot.hasError) {
@@ -194,7 +197,7 @@ SliverToBoxAdapter(
                 delegate: SliverChildBuilderDelegate(
                 (context, index) {
                     return Container(
-                        height: sizeHeight*0.8,
+                        height: sizeHeight*0.73,
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
@@ -211,321 +214,325 @@ SliverToBoxAdapter(
                                 thickness: 3,
                               ),
                             ),
-                            Container(
-                              height: sizeHeight * 0.73,
-                              child: SingleChildScrollView(
-                                child: FutureBuilder<dynamic>(
-                                    future: getDataFuture(currentUserId,place,[positionLong, positionLat]),  // async work
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<dynamic> snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.waiting:
-                                          return Text(
-                                            'Loading....',
-                                            style: TextStyle(color: Colors.black),
-                                          );
-                                        default:
-                                          if (snapshot.hasError) {
-                                            return Text('Error: ${snapshot.error}');
-                                          } else {
-                                            return Padding(
-                                              padding: const EdgeInsets.all(16.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
-                                                children: [
-                                                  ListView.builder(
-                                                      scrollDirection: Axis.vertical,
-                                                      shrinkWrap: true,
-                                                      itemCount:
-                                                          snapshot.data[0].length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        final DateTime now =
-                                                            DateTime.now();
-                                                        final formattedDate =
-                                                            dateFormatter.format(now);
-                                                        final formattedTime =
-                                                            timeFormatter.format(now);
-                                
-                                                        DateTime checkTime =
-                                                            DateFormat("hh:mm:ss")
-                                                                .parse(formattedTime);
-                                                        final diffTime = checkTime
-                                                            .difference(DateFormat(
-                                                                    "hh:mm:ss")
-                                                                .parse(snapshot
-                                                                        .data[0][index][1][
-                                                                    'time']));
-                                                        return Padding(
-                                                          padding: const EdgeInsets
-                                                              .symmetric(vertical: 8.0),
-                                                          child: InkWell(
-                                                            onTap: () => {
-                                                              if (snapshot.data[0][index][0] ==
-                                                                  'Serenity')
-                                                                {
-                                                                  Navigator.pushNamed(
-                                                                      context,
-                                                                      '/monkeybot',
-                                                                      arguments: {
-                                                                        'receiverid': snapshot
-                                                                            .data[0]
-                                                                            [index][0],
-                                                                        'currentid':
-                                                                            currentUserId,
-                                                                        'lastmessage': snapshot
-                                                                                .data[0]
-                                                                                [index][1][
-                                                                            'message'],
-                                                                            'obj': place.getObject(),
-                                                                            'url' : place.getImagestring()
-                                                                            
-                                                                      })
-                                                                }
-                                                              else
-                                                                {
-                                                                  Navigator.pushNamed(
-                                                                      context,
-                                                                      '/chatroom',
-                                                                      arguments: {
-                                                                        'receiverid': snapshot
-                                                                            .data[0]
-                                                                            [index][0],
-                                                                        'currentid':
-                                                                            currentUserId,
-                                                                        'receiveremail':
-                                                                            'gaand_maarao'
-                                                                      })
-                                                                }
-                                                            },
-                                                            child: Container(
-                                                              decoration: BoxDecoration(
+                            AnimatedOpacity(
+                              opacity: _showTopContainer ? 0.0 : 1.0,
+              duration: Duration(milliseconds: 200),
+                              child: Container(
+                                height: sizeHeight * 0.68,
+                                child: SingleChildScrollView(
+                                  child: FutureBuilder<dynamic>(
+                                      future: getDataFuture(currentUserId,place,[positionLong, positionLat]),  // async work
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<dynamic> snapshot) {
+                                        switch (snapshot.connectionState) {
+                                          case ConnectionState.waiting:
+                                            return Text(
+                                              'Loading....',
+                                              style: TextStyle(color: Colors.black),
+                                            );
+                                          default:
+                                            if (snapshot.hasError) {
+                                              return Text('Error: ${snapshot.error}');
+                                            } else {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.spaceAround,
+                                                  children: [
+                                                    ListView.builder(
+                                                        scrollDirection: Axis.vertical,
+                                                        shrinkWrap: true,
+                                                        itemCount:
+                                                            snapshot.data[0].length,
+                                                        itemBuilder:
+                                                            (BuildContext context,
+                                                                int index) {
+                                                          final DateTime now =
+                                                              DateTime.now();
+                                                          final formattedDate =
+                                                              dateFormatter.format(now);
+                                                          final formattedTime =
+                                                              timeFormatter.format(now);
+                                  
+                                                          DateTime checkTime =
+                                                              DateFormat("hh:mm:ss")
+                                                                  .parse(formattedTime);
+                                                          final diffTime = checkTime
+                                                              .difference(DateFormat(
+                                                                      "hh:mm:ss")
+                                                                  .parse(snapshot
+                                                                          .data[0][index][1][
+                                                                      'time']));
+                                                          return Padding(
+                                                            padding: const EdgeInsets
+                                                                .symmetric(vertical: 8.0),
+                                                            child: InkWell(
+                                                              onTap: () => {
+                                                                if (snapshot.data[0][index][0] ==
+                                                                    'Serenity')
+                                                                  {
+                                                                    Navigator.pushNamed(
+                                                                        context,
+                                                                        '/monkeybot',
+                                                                        arguments: {
+                                                                          'receiverid': snapshot
+                                                                              .data[0]
+                                                                              [index][0],
+                                                                          'currentid':
+                                                                              currentUserId,
+                                                                          'lastmessage': snapshot
+                                                                                  .data[0]
+                                                                                  [index][1][
+                                                                              'message'],
+                                                                              'obj': place.getObject(),
+                                                                              'url' : place.getImagestring()
+                                                                              
+                                                                        })
+                                                                  }
+                                                                else
+                                                                  {
+                                                                    Navigator.pushNamed(
+                                                                        context,
+                                                                        '/chatroom',
+                                                                        arguments: {
+                                                                          'receiverid': snapshot
+                                                                              .data[0]
+                                                                              [index][0],
+                                                                          'currentid':
+                                                                              currentUserId,
+                                                                          'receiveremail':
+                                                                              'gaand_maarao'
+                                                                        })
+                                                                  }
+                                                              },
+                                                              child: Container(
+                                                                decoration: BoxDecoration(
+                                                                  
+                                                                  
+                                                                   boxShadow: [
+                                                      BoxShadow(
+                                                        color: (snapshot.data[0][index][0] ==
+                                                                    'Serenity') ? Colors.grey.withOpacity(0.5) : Colors.transparent, // Greyish color with opacity
+                                                        spreadRadius: 2, // Controls how far the shadow spreads
+                                                        blurRadius: 5, // Controls the blurriness of the shadow
+                                                        offset: Offset(0, 2), // Controls the position of the shadow
+                                                      ),
+                                                    ],
+                                                  ),
                                                                 
-                                                                
-                                                                 boxShadow: [
-                        BoxShadow(
-                          color: (snapshot.data[0][index][0] ==
-                                                                  'Serenity') ? Colors.grey.withOpacity(0.5) : Colors.transparent, // Greyish color with opacity
-                          spreadRadius: 2, // Controls how far the shadow spreads
-                          blurRadius: 5, // Controls the blurriness of the shadow
-                          offset: Offset(0, 2), // Controls the position of the shadow
-                        ),
-                      ],
-                    ),
-                                                              
-                                                              child: Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .symmetric(
-                                                                        horizontal:
-                                                                            8.0, vertical: (snapshot.data[0][index][0] ==
-                                                                  'Serenity') ? 8.0 : 0.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceEvenly,
-                                                                  children: [
-                                                                    Container(
-                                                                      width:
-                                                                          sizeWidth / 5,
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius
-                                                                                  .circular(
-                                                                                      5)),
-                                                                      child: !(snapshot
-                                                                                  .data[
-                                                                                      0]
-                                                                                  [index][0] ==
-                                                                              "Serenity")
-                                                                          ? RandomAvatar(
-                                                                              snapshot
-                                                                                  .data[
-                                                                                      0]
-                                                                                  [index][0],
-                                                                              trBackground:
-                                                                                  false,
-                                                                              height:
-                                                                                  50,
-                                                                              width: 50)
-                                                                          : circleButton(
-                                                                              constr,
-                                                                              sizeWidth /
-                                                                                  150,
-                                                                              sizeWidth /
-                                                                                  45,
-                                                                              "assets/serenity.png",borderneed : false),
-                                                                    ),
-                                                                    Container(
-                                                                      width: sizeWidth /
-                                                                          2.5,
-                                                                      child: Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .center,
-                                                                        children: [
-                                                                          Text(
-                                                                            snapshot
-                                                                                .data[0]
-                                                                                [index][0],
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: Colors
-                                                                                  .black,
-                                                                              fontSize: constr
-                                                                                  ? sizeWidth /
-                                                                                      40
-                                                                                  : sizeWidth /
-                                                                                      20,
-                                                                              fontStyle:
-                                                                                  FontStyle
-                                                                                      .italic,
-                                                                              fontFamily:
-                                                                                  'ABeeZee',
-                                                                            ),
-                                                                          ),
-                                                                          Text(
-                                                                            (snapshot.data[0][index][0] ==
-                                                                  'Serenity') ?"Always there for u 😇" : snapshot.data[0][index][1]['message'].length <
-                                                                                    20
-                                                                                ? snapshot.data[0][index][1][
-                                                                                    'message']
-                                                                                : snapshot
+                                                                child: Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .symmetric(
+                                                                          horizontal:
+                                                                              8.0, vertical: (snapshot.data[0][index][0] ==
+                                                                    'Serenity') ? 8.0 : 0.0),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceEvenly,
+                                                                    children: [
+                                                                      Container(
+                                                                        width:
+                                                                            sizeWidth / 5,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius
+                                                                                    .circular(
+                                                                                        5)),
+                                                                        child: !(snapshot
                                                                                     .data[
                                                                                         0]
-                                                                                    [index][1][
-                                                                                        'message']
-                                                                                    .substring(0,
-                                                                                        20) ,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color:  (snapshot.data[0][index][0] ==
-                                                                  'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
-                                                                                  .grey,
-                                                                            ),
-                                                                          ),
-                                                                        ],
+                                                                                    [index][0] ==
+                                                                                "Serenity")
+                                                                            ? RandomAvatar(
+                                                                                snapshot
+                                                                                    .data[
+                                                                                        0]
+                                                                                    [index][0],
+                                                                                trBackground:
+                                                                                    false,
+                                                                                height:
+                                                                                    50,
+                                                                                width: 50)
+                                                                            : circleButton(
+                                                                                constr,
+                                                                                sizeWidth /
+                                                                                    150,
+                                                                                sizeWidth /
+                                                                                    45,
+                                                                                "assets/serenity.png",borderneed : false),
                                                                       ),
-                                                                    ),
-                                                                    Container(
-                                                                      width:
-                                                                          sizeWidth / 4,
-                                                                      child: Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .center,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .spaceAround,
-                                                                        children: [
-                                                                          Text(
-                                                                            formattedDate ==
-                                                                                    snapshot.data[0][index][1][
-                                                                                        'date']
-                                                                                ? diffTime.inHours ==
-                                                                                        00
-                                                                                    ? diffTime.inMinutes ==
-                                                                                            00
-                                                                                        ? "${diffTime.inSeconds.toString()} sec"
-                                                                                        : "${diffTime.inMinutes.toString()} mins"
-                                                                                    : "${diffTime.inHours.toString()} hours"
-                                                                                : snapshot
-                                                                                    .data[0]
-                                                                                    [index][1]['date'],
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: (snapshot.data[0][index][0] ==
-                                                                  'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
-                                                                                  .grey,
-                                                                              fontStyle:
-                                                                                  FontStyle
-                                                                                      .italic,
-                                                                              fontFamily:
-                                                                                  'ABeeZee',
+                                                                      Container(
+                                                                        width: sizeWidth /
+                                                                            2.5,
+                                                                        child: Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment
+                                                                                  .center,
+                                                                          children: [
+                                                                            Text(
+                                                                              snapshot
+                                                                                  .data[0]
+                                                                                  [index][0],
+                                                                              style:
+                                                                                  TextStyle(
+                                                                                color: Colors
+                                                                                    .black,
+                                                                                fontSize: constr
+                                                                                    ? sizeWidth /
+                                                                                        40
+                                                                                    : sizeWidth /
+                                                                                        20,
+                                                                                fontStyle:
+                                                                                    FontStyle
+                                                                                        .italic,
+                                                                                fontFamily:
+                                                                                    'ABeeZee',
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                          CircleAvatar(
-                                                                              maxRadius: constr
-                                                                                  ? sizeWidth /
-                                                                                      65
-                                                                                  : sizeWidth /
-                                                                                      40,
-                                                                              backgroundColor:
-                                                                                  Colors
-                                                                                      .transparent,
-                                                                              child:
-                                                                                  Text(
-                                                                                "",
-                                                                                style: TextStyle(
-                                                                                    fontSize:
-                                                                                        sizeWidth / 50),
-                                                                              )),
-                                                                        ],
+                                                                            Text(
+                                                                              (snapshot.data[0][index][0] ==
+                                                                    'Serenity') ?"Always there for u 😇" : snapshot.data[0][index][1]['message'].length <
+                                                                                      20
+                                                                                  ? snapshot.data[0][index][1][
+                                                                                      'message']
+                                                                                  : snapshot
+                                                                                      .data[
+                                                                                          0]
+                                                                                      [index][1][
+                                                                                          'message']
+                                                                                      .substring(0,
+                                                                                          20) ,
+                                                                              style:
+                                                                                  TextStyle(
+                                                                                color:  (snapshot.data[0][index][0] ==
+                                                                    'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
+                                                                                    .grey,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  ],
+                                                                      Container(
+                                                                        width:
+                                                                            sizeWidth / 4,
+                                                                        child: Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment
+                                                                                  .center,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment
+                                                                                  .spaceAround,
+                                                                          children: [
+                                                                            Text(
+                                                                              formattedDate ==
+                                                                                      snapshot.data[0][index][1][
+                                                                                          'date']
+                                                                                  ? diffTime.inHours ==
+                                                                                          00
+                                                                                      ? diffTime.inMinutes ==
+                                                                                              00
+                                                                                          ? "${diffTime.inSeconds.toString()} sec"
+                                                                                          : "${diffTime.inMinutes.toString()} mins"
+                                                                                      : "${diffTime.inHours.toString()} hours"
+                                                                                  : snapshot
+                                                                                      .data[0]
+                                                                                      [index][1]['date'],
+                                                                              style:
+                                                                                  TextStyle(
+                                                                                color: (snapshot.data[0][index][0] ==
+                                                                    'Serenity') ?Color.fromRGBO(35, 154, 139, 75) :Colors
+                                                                                    .grey,
+                                                                                fontStyle:
+                                                                                    FontStyle
+                                                                                        .italic,
+                                                                                fontFamily:
+                                                                                    'ABeeZee',
+                                                                              ),
+                                                                            ),
+                                                                            CircleAvatar(
+                                                                                maxRadius: constr
+                                                                                    ? sizeWidth /
+                                                                                        65
+                                                                                    : sizeWidth /
+                                                                                        40,
+                                                                                backgroundColor:
+                                                                                    Colors
+                                                                                        .transparent,
+                                                                                child:
+                                                                                    Text(
+                                                                                  "",
+                                                                                  style: TextStyle(
+                                                                                      fontSize:
+                                                                                          sizeWidth / 50),
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        );
-                                                      }),
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.03,
-                                                  ),
-                                                  historyscroll(
-                                                      sizeWidth,
-                                                      sizeHeight,
-                                                      constr,
-                                                      "History",
-                                                      snapshot.data[5],
-                                                      context,
-                                                      currentUserId),
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.03,
-                                                  ),
-                                                  communityscroll(
-                                                      sizeWidth,
-                                                      sizeHeight,
-                                                      constr,
-                                                      "Community Discussions",
-                                                      snapshot.data[1],
-                                                      currentUserId,
-                                                      context),
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.03,
-                                                  ),
-                                                  
-                                                      ActivityMapsWidget(
-                                                              sizeWidth: sizeWidth,
-                                                              sizeHeight: sizeHeight,
-                                                              constr: constr,
-                                                             pos: [positionLong, positionLat],
-                                                         con:context,
-                                                        activityString: "Stress Busting Activities",
-                                                        currentUserId : currentUserId,
-                                                         arr: snapshot.data[2],
-                                                            ),
-                                                    callingscroll(
-                                                          sizeWidth,
-                                                          sizeHeight,
-                                                          constr,
-                                                          "Calls",
-                                                          snapshot.data[4],
-                                                          currentUserId),
-                                                  SizedBox(
-                                                    height: sizeHeight * 0.03,
-                                                  ),
+                                                          );
+                                                        }),
+                                                    SizedBox(
+                                                      height: sizeHeight * 0.03,
+                                                    ),
+                                                    historyscroll(
+                                                        sizeWidth,
+                                                        sizeHeight,
+                                                        constr,
+                                                        "History",
+                                                        snapshot.data[5],
+                                                        context,
+                                                        currentUserId),
+                                                    SizedBox(
+                                                      height: sizeHeight * 0.03,
+                                                    ),
+                                                    communityscroll(
+                                                        sizeWidth,
+                                                        sizeHeight,
+                                                        constr,
+                                                        "Community Discussions",
+                                                        snapshot.data[1],
+                                                        currentUserId,
+                                                        context),
+                                                    SizedBox(
+                                                      height: sizeHeight * 0.03,
+                                                    ),
                                                     
-                                                  
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                      }
-                                    }),
+                                                        ActivityMapsWidget(
+                                                                sizeWidth: sizeWidth,
+                                                                sizeHeight: sizeHeight,
+                                                                constr: constr,
+                                                               pos: [positionLong, positionLat],
+                                                           con:context,
+                                                          activityString: "Stress Busting Activities",
+                                                          currentUserId : currentUserId,
+                                                           arr: snapshot.data[2],
+                                                              ),
+                                                      callingscroll(
+                                                            sizeWidth,
+                                                            sizeHeight,
+                                                            constr,
+                                                            "Calls",
+                                                            snapshot.data[4],
+                                                            currentUserId),
+                                                    SizedBox(
+                                                      height: sizeHeight * 0.03,
+                                                    ),
+                                                      
+                                                    
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                        }
+                                      }),
+                                ),
                               ),
                             ),
                           ],
