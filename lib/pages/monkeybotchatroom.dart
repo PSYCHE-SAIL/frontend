@@ -49,8 +49,6 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> with RouteAware {
   bool suggestplaces = false;
   var currentid;
   bool _isLoading = false;
-  bool _isPaused = false;
-  int pauseIndex = 0;
   String? lastTextSpoken;
   var stressScore = '0';
   var obj = {};
@@ -84,34 +82,23 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> with RouteAware {
   void initializeTts() {
     flutterTts.setStartHandler(() {
       print("TTS playback started");
-      _isPaused =false;
     });
     flutterTts.setCompletionHandler(() {
       print("TTS playback finished");
-      _isPaused =false;
     });
     flutterTts.setErrorHandler((msg) {
       print("TTS playback error: $msg");
-      _isPaused =false;
-    });
-    flutterTts.setProgressHandler((text, start, end, word) {
-pauseIndex = start;
     });
   }
 
-  Future<void> textToSpeech(String text) async {
+  Future<void> textToSpeech(String text, String lastMessage) async {
     print("SPEAKING");
     var lang = await flutterTts.getVoices;
     print(lang);
-    if (!_isPaused) {
       lastTextSpoken = text;
       await flutterTts.setVoice({"name": "en-AU-language", "locale": "en-AU"});
+      await flutterTts.setPitch(0.8);
       await flutterTts.speak(text);
-    } else {
-      String textToSpeak = lastTextSpoken!.substring(pauseIndex);
-      await flutterTts.speak(textToSpeak);
-      _isPaused = false;
-    }
   }
 
   @override
@@ -207,7 +194,7 @@ pauseIndex = start;
                 padding: EdgeInsets.only(right: size.width / 50),
                 child: IconButton(
                     onPressed: () async {
-                      await textToSpeech("CALLING SERENITY");
+                      await textToSpeech("CALLING SERENITY", "CALLING SERENITY");
                     },
                     icon: Icon(Icons.call),
                     color: Colors.white))
@@ -236,7 +223,7 @@ pauseIndex = start;
                           Container(color: Colors.grey.shade400,
                               height: sizeHeight / 20,
                               child: Center(child: Text(
-                                "Single tap response : Pause, Double Tap response : Play",
+                                "Single tap response : Pause",
                                 style: TextStyle(color: Colors.black,
                                     fontFamily: 'AbeeZee',
                                     fontSize: 12,
@@ -258,23 +245,7 @@ pauseIndex = start;
                                                 onTap: () async {
                                                   print(
                                                       "Pressed Pause- Single");
-                                                  if (messages[index].role !=
-                                                      'user' && !_isPaused) {
-                                                    await flutterTts.stop();
-                                                    _isPaused = true;
-                                                  }
-                                                },
-                                                onDoubleTap: () async{
-                                                  print(
-                                                      "Pressed STOP! - Double");
-                                                  if (_isPaused && lastTextSpoken != null && messages[index].role !=
-                                                      'user') {
-                                                    print(
-                                                        "Pressed STOP! - Double");
-                                                    String textToSpeak = lastTextSpoken!.substring(pauseIndex);
-                                                    await flutterTts.speak(textToSpeak);
-                                                    _isPaused = false;
-                                                  }
+                                                      await flutterTts.stop();
                                                 },
                                                 child: Container(
                                                   margin: (messages[index]
@@ -456,24 +427,9 @@ pauseIndex = start;
                                                     onTap: () async {
                                                       print(
                                                           "Pressed Pause- Single");
-                                                      if (messages[index].role !=
-                                                          'user' && !_isPaused) {
                                                         await flutterTts.stop();
-                                                        _isPaused = true;
-                                                      }
                                                     },
-                                                    onDoubleTap: () async{
-                                                      print(
-                                                          "Pressed STOP! - Double");
-                                                      if (_isPaused && lastTextSpoken != null && messages[index].role !=
-                                                          'user') {
-                                                        print(
-                                                            "Pressed STOP! - Double");
-                                                        String textToSpeak = lastTextSpoken!.substring(pauseIndex);
-                                                        await flutterTts.speak(textToSpeak);
-                                                        _isPaused = false;
-                                                      }
-                                                    },
+
                                                     child: Container(
                                                       margin: (messages[index]
                                                                   .role ==
@@ -834,7 +790,10 @@ pauseIndex = start;
                                                 messages[messages.length - 1]
                                                     .parts
                                                     .first
-                                                    .text);
+                                                    .text, messages[messages.length - 1]
+                                                .parts
+                                                .first
+                                                .text);
                                             print(userinputs);
                                           }
                                         },
@@ -962,7 +921,10 @@ pauseIndex = start;
                                                 messages[messages.length - 1]
                                                     .parts
                                                     .first
-                                                    .text);
+                                                    .text, messages[messages.length - 1]
+                                                .parts
+                                                .first
+                                                .text);
                                             // _messageController.clear();
                                           }
                                         },
@@ -1175,7 +1137,7 @@ Widget _endchat(stressScore, sizeWidth, sizeHeight, currentid, context) {
               Navigator.pushNamed(context, '/chatroom', arguments: {
                 'currentuser': currentid,
                 'receiverid': 'Disha',
-                'communityname': 'Exams',
+                'communityname': 'community',
               });
             },
             child: Center(

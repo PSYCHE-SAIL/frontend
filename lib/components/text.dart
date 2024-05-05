@@ -318,6 +318,19 @@ Widget _maptextbubble(size) {
 Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,currentid,context) {
   print("inside container");
   print(currentid);
+  // decoration: BoxDecoration(
+  //   color: Colors.white.withOpacity(0.9) ,
+  //   borderRadius: BorderRadius.all(Radius.circular(20.0),),
+  //   boxShadow: [
+  //     BoxShadow(
+  //       color: (snapshot.data[0][index][0] ==
+  //           'Serenity') ? Colors.grey.withOpacity(0.5) :Colors.black26 , // Greyish color with opacity
+  //       spreadRadius: 2, // Controls how far the shadow spreads
+  //       blurRadius: 3, // Controls the blurriness of the shadow
+  //       offset: Offset(0, 1), // Controls the position of the shadow
+  //     ),
+  //   ],
+  // ),
   return InkWell(
     onTap: () {
       Navigator.pushNamed(context, '/chatroom', arguments:{'currentid': currentid,
@@ -329,9 +342,18 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                                   maxWidth: sizeWidth * 0.5
                                                 ),
                                                 decoration: BoxDecoration(
+                                                    color: Colors.white.withOpacity(0.9) ,
                                                   border: Border.all(
                                                     color: Colors.grey.shade300,
                                                   ),
+                                                    boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.5)  , // Greyish color with opacity
+                                                      spreadRadius: 3, // Controls how far the shadow spreads
+                                                      blurRadius: 3, // Controls the blurriness of the shadow
+                                                      offset: Offset(0, 0), // Controls the position of the shadow
+                                                    ),
+                                                  ],
                                                   borderRadius: BorderRadius.all(Radius.circular(8.0))
                                                 ),
                                                 child: Padding(
@@ -538,8 +560,9 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji,seeall
                                                 border: Border.all(
                                                   color: Colors.grey.shade300,
                                                 ),
-                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
                                               ),
+
                                               child: Padding(
                                                 padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
                                                 child: Column(

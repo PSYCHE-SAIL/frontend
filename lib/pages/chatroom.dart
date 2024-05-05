@@ -72,7 +72,7 @@ class _ChatRoomState extends State<ChatRoom> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-          title: Center(child: Text(communityname)),
+          title: Center(child: Text("STRESS 3")),
           actions: [
             Padding(
                 padding: EdgeInsets.only(right: size.width / 50),

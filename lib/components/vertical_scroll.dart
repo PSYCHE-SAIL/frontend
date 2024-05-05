@@ -225,7 +225,7 @@ Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr,user) {
   );
 }
 
-Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,currentUserId,place) {
+Widget  activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,currentUserId,place) {
   print(pos);
 
   return Wrap(
