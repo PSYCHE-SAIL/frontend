@@ -100,10 +100,10 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 
 - **Community Recommendations:** Tailored suggestions for online support groups and forums. Communities matched based on user's chat history and preferences.
 
-- **Support Groups with Anonymous Communication:** 24-hour anonymous support groups for peer connection. Vertex vector search for compatible matches in safe space.
 - **Books Recommendation using Google Books API:** Personalized book suggestions based on user's needs. Google Books API utilized for tailored recommendations.
 
 - **Motivational Videos Recommendations via YouTube API:** Inspiring video suggestions reflecting user's interests and struggles. Customized recommendations from YouTube API for emotional upliftment.
+- **Support Groups with Anonymous Communication:** 24-hour anonymous support groups for peer connection. Vertex vector search for compatible matches in safe space.
 - **Integration of Text-to-Speech (TTS) and Speech-to-Text (STT) Technology:** Voice-based interaction for accessibility and convenience. TTS and STT integration enhances user experience and engagement.
 - **Notifications for Check-Ins**: Stay connected and supported with regular check-in notifications. Receive reminders to check in with your progress and well-being, ensuring you stay on track with your goals and providing an opportunity to reflect on your journey.
 - **Mindfulness Exercises:** Access guided mindfulness exercises and relaxation techniques to reduce stress and improve emotional well-being.
