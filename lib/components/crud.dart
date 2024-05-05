@@ -238,6 +238,30 @@ print(snap['email']);
     return _firestore.collection('community').get();
   }
 
+  dynamic getcommunityconstmessages(String userId, String title) async {
+  print("userID : "+userId);
+  print("title :"+title);
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+Set<String> listOfPeople = {};
+    QuerySnapshot querySnapshot = await _firestore.collection('community').doc(title).collection('users').orderBy('timestamp', descending: false).get();
+   if (querySnapshot.docs.isNotEmpty) {
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      // Extract the timestamp field from each document and convert it to DateTime
+       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      // Check if the 'timestamp' field exists in the data map
+      if (data.containsKey('senderid')) {
+         listOfPeople.add(data['senderid']);
+      }
+    
+    }
+    // Now, distinctTimestamps set contains all the distinct timestamps from Firestore
+    print('Distinct Senderid: $listOfPeople');
+  } else {
+    print('No documents found in Firestore');
+  }
+  return listOfPeople;
+  }
+
   // ADD FINAL STRESS VALUE
 void addStressValue(String userId, String stressValue ) async {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;

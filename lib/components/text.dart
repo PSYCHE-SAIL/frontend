@@ -127,7 +127,6 @@ InputDecoration logininput(txt, example) {
 Widget textbubble(
     message, timestamp, receiverid, currentid, bgcolor, condition, context) {
   bool constr = (receiverid == currentid);
-  final size = MediaQuery.of(context).size;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Row(
@@ -319,6 +318,19 @@ Widget _maptextbubble(size) {
 Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,currentid,context) {
   print("inside container");
   print(currentid);
+  // decoration: BoxDecoration(
+  //   color: Colors.white.withOpacity(0.9) ,
+  //   borderRadius: BorderRadius.all(Radius.circular(20.0),),
+  //   boxShadow: [
+  //     BoxShadow(
+  //       color: (snapshot.data[0][index][0] ==
+  //           'Serenity') ? Colors.grey.withOpacity(0.5) :Colors.black26 , // Greyish color with opacity
+  //       spreadRadius: 2, // Controls how far the shadow spreads
+  //       blurRadius: 3, // Controls the blurriness of the shadow
+  //       offset: Offset(0, 1), // Controls the position of the shadow
+  //     ),
+  //   ],
+  // ),
   return InkWell(
     onTap: () {
       Navigator.pushNamed(context, '/chatroom', arguments:{'currentid': currentid,
@@ -330,9 +342,18 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                                   maxWidth: sizeWidth * 0.5
                                                 ),
                                                 decoration: BoxDecoration(
+                                                    color: Colors.white.withOpacity(0.9) ,
                                                   border: Border.all(
                                                     color: Colors.grey.shade300,
                                                   ),
+                                                    boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.5)  , // Greyish color with opacity
+                                                      spreadRadius: 3, // Controls how far the shadow spreads
+                                                      blurRadius: 3, // Controls the blurriness of the shadow
+                                                      offset: Offset(0, 0), // Controls the position of the shadow
+                                                    ),
+                                                  ],
                                                   borderRadius: BorderRadius.all(Radius.circular(8.0))
                                                 ),
                                                 child: Padding(
@@ -357,6 +378,75 @@ Widget communityContainer(sizeWidth,sizeHeight,constr,heading,description,images
                                                 ),
                                               ),
   );
+}
+Widget bookContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,previewstring) {
+  print("inside container");
+  print(description.length);
+  return Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: sizeWidth *0.95
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      
+                                                                Row(
+                                                                  children: [
+                                                                    Container(
+                                                                                                                          height: sizeHeight * 0.3,
+                                                                                                                          child: Image.network(
+                                                                                                                                      imagestring.toString(),
+                                                                                                                                      fit: BoxFit.cover, // Adjust the fit as needed
+                                                                                                                                    ),
+                                                                                                                        ),
+                                                                                                                        SizedBox(width: min(12,sizeWidth*0.05),),
+                                                                    Expanded(
+                                                                      child: Column(
+                                                                        children: [
+                                                                          Text(heading,textAlign:TextAlign.center,style: TextStyle(
+                                                                                                                                color: Colors.white,
+                                                                                                                                fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                                                                                                fontWeight: FontWeight.bold
+                                                                                                                              ),
+                                                                                                                              softWrap: true),
+                                                                                                                              SizedBox(height: min(12,sizeHeight*0.05),),
+                                                                          Text(description,style: TextStyle(
+                                                                                                                            color: Colors.white,
+                                                                                                                            fontSize: sizeWidth * sizeHeight * 0.00005,
+
+                                                                                                                          ),
+                                                                                                                          textAlign: TextAlign.center,),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                                                                        
+                                                                  ],
+                                                                ),
+                                                    SizedBox(height: min(12,sizeHeight*0.05),),
+                                                    InkWell(
+          onTap:() => _launchUrl(previewstring),
+        child: Text(
+          'Preview the recommended book',
+          style: TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+        )
+        )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
 }
 
 Widget callingContainer(sizeWidth,sizeHeight,constr,user) {
@@ -470,8 +560,9 @@ Widget historyContainer(sizeWidth,sizeHeight,constr,date,time,stressEmoji,seeall
                                                 border: Border.all(
                                                   color: Colors.grey.shade300,
                                                 ),
-                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
                                               ),
+
                                               child: Padding(
                                                 padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
                                                 child: Column(
@@ -692,3 +783,73 @@ Widget activitymaps(sizeWidth, sizeHeight, constr, places,imagestring,{ Color bo
       ],
     );
   }
+
+Widget youtubeContainer(sizeWidth,sizeHeight,constr,heading,description,imagestring,videoId) {
+  print("inside container");
+  print(description.length);
+  return Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: sizeWidth *0.9
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                                borderRadius: BorderRadius.all(Radius.circular(8.0))
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(sizeHeight * sizeWidth * 0.00005),
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                                                                                          width: sizeWidth * 0.8,
+                                                                                                                          child: Image.network(
+                                                                                                                                      imagestring.toString(),
+                                                                                                                                      fit: BoxFit.cover, // Adjust the fit as needed
+                                                                                                                                    ),
+                                                                                                                        ),
+                                                                Row(
+                                                                  children: [
+                                                                    
+                                                                                                                        SizedBox(width: min(12,sizeWidth*0.05),),
+                                                                    Expanded(
+                                                                      child: Column(
+                                                                        children: [
+                                                                          Text(heading,textAlign:TextAlign.center,style: TextStyle(
+                                                                                                                                color: Colors.white,
+                                                                                                                                fontSize: sizeWidth * sizeHeight * 0.00008,
+                                                                                                                                fontWeight: FontWeight.bold
+                                                                                                                              ),
+                                                                                                                              softWrap: true),
+                                                                                                                              SizedBox(height: min(12,sizeHeight*0.05),),
+                                                                          Text(description,style: TextStyle(
+                                                                                                                            color: Colors.white,
+                                                                                                                            fontSize: sizeWidth * sizeHeight * 0.00005,
+                                                                                                                        
+                                                                                                                          ),
+                                                                                                                          textAlign: TextAlign.center,),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                                                                        
+                                                                  ],
+                                                                ),
+                                                    SizedBox(height: min(12,sizeHeight*0.05),),
+                                                   InkWell(
+          onTap:() => _launchUrl(Uri.parse('https://www.youtube.com/watch?v=$videoId')),
+        child: Text(
+          'Checkout the YouTube video here',
+          style: TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+        )
+        )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+}

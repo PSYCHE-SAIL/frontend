@@ -58,6 +58,114 @@ Widget communityscroll(sizeWidth, sizeHeight, constr, title, arr,currentid,conte
   );
 }
 
+Widget youtubescroll(sizeWidth, sizeHeight, constr, title, arr,currentid,context) {
+  print(arr);
+  print(currentid);
+  return Wrap(
+    spacing: 20,
+    runSpacing: min(20, sizeWidth * 0.0006),
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: sizeWidth * sizeHeight * 0.000067,
+                fontWeight: FontWeight.bold),
+          ),
+          Text("See All", style: TextStyle(color: Colors.white)),
+        ],
+      ),
+      SizedBox(
+        height: sizeHeight * 0.01,
+      ),
+      Container(
+        constraints: BoxConstraints(
+                                                        maxHeight: sizeHeight * 0.5,
+
+                                              ),
+        child: ListView.separated(
+          reverse: false,
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: arr.length,
+          itemBuilder: (context, index) {
+      return youtubeContainer(
+        sizeWidth,
+        sizeHeight,
+        constr,
+        arr[arr.length - 1 - index].title,
+        arr[arr.length - 1 - index].views,
+        arr[arr.length - 1 - index].thumbnails.first.url,
+        arr[arr.length - 1 - index].videoId,
+      );
+    
+          },
+          separatorBuilder: ((context, index) => SizedBox(
+                width: min(sizeWidth * 0.05, 30),
+              )),
+        ),
+      )
+    ],
+  );
+}
+Widget bookscroll(sizeWidth, sizeHeight, constr, title, arr,currentid,context) {
+  print(arr);
+  print(currentid);
+  return Wrap(
+    spacing: 20,
+    runSpacing: min(20, sizeWidth * 0.0006),
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: sizeWidth * sizeHeight * 0.000067,
+                fontWeight: FontWeight.bold,),
+          ),
+          Text("See All", style: TextStyle(color: Colors.white,)),
+        ],
+      ),
+      SizedBox(
+        height: sizeHeight * 0.01,
+      ),
+      Container(
+        constraints: BoxConstraints(
+                                                        maxHeight: sizeHeight * 0.5,
+
+                                              ),
+        child: ListView.separated(
+          reverse: false,
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: arr.length,
+          itemBuilder: (context, index) {
+            
+      return bookContainer(
+        sizeWidth,
+        sizeHeight,
+        constr,
+        arr[arr.length - 1 - index].volumeInfo.title,
+        arr[arr.length - 1 - index].volumeInfo.description,
+        arr[arr.length - 1 - index].volumeInfo.imageLinks.entries.first.value,
+        arr[arr.length - 1 - index].volumeInfo.previewLink
+      );
+    
+          },
+          separatorBuilder: ((context, index) => SizedBox(
+                width: min(sizeWidth * 0.05, 30),
+              )),
+        ),
+      )
+    ],
+  );
+}
+
 Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr,user) {
   return Wrap(
     spacing: 20,
@@ -117,7 +225,7 @@ Widget callingscroll(sizeWidth, sizeHeight, constr, title, arr,user) {
   );
 }
 
-Widget activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,currentUserId,place) {
+Widget  activityscroll(context,sizeWidth, sizeHeight, constr, title, arr, pos,currentUserId,place) {
   print(pos);
 
   return Wrap(

@@ -64,6 +64,8 @@ class _RoomScreenState extends State<RoomScreen> {
     });
     _room.on(Events.roomLeft, () {
       participantVideoStreams.clear();
+      if(widget.userId == 'community') deleteCall('Exams', widget.currentId);
+      else 
       deleteCall(widget.userId, widget.currentId);
     });
   }
