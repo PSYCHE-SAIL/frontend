@@ -8,7 +8,7 @@ Introducing PsycheSail: a go-to app for emotional support and self-care for stud
 
 Watch the product demo on:
 
-<a href="https://youtu.be/C7G-DoE2umk">
+<a href="https://youtu.be/8ZnkQj82gmM">
     <img src="https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white" alt="LinkedIn Badge"/>
   </a> 	
   
@@ -144,7 +144,7 @@ We discovered that many of our peers feel depressed and like their minds stop wo
 <table style="width: 100%;">
   <tr>
     <td style="text-align: center;">
-      <img src="./assets/ps1gif1.gif" style="width: 100%;"">
+      <img src="./assets/psychesail_start.gif" style="width: 100%;"">
       <p>Login Screen</p>
     </td>
     <td style="text-align: center;">
@@ -152,25 +152,16 @@ We discovered that many of our peers feel depressed and like their minds stop wo
       <p>Home Screen</p>
     </td>
     <td style="text-align: center;">
-      <img src="./assets/ps4gif4.gif" style="width: 100%;"">
-      <p>Group Chat</p>
-    </td>
-  </tr>
-</table>
-
-<table style="width: 100%;">
-  <tr>
-    <td style="text-align: center;">
-      <img src="./assets/psychesail_books_videos.gif" style="width: 100%;"">
-      <p>Motivational videos and books Screen</p>
+      <img src="./assets/psychesail_serenity.gif" style="width: 100%;"">
+      <p>Serenity Bot</p>
     </td>
     <td style="text-align: center;">
       <img src="./assets/psychesail_stress_calc.gif" style="width: 100%;"">
       <p>Stress Progress Screen</p>
     </td>
     <td style="text-align: center;">
-      <img src="./assets/psychesail_serenity.gif" style="width: 100%;"">
-      <p>Serenity Bot</p>
+      <img src="./assets/psychesail_books_videos.gif" style="width: 100%;"">
+      <p>Motivational videos and books Screen</p>
     </td>
   </tr>
 </table>
@@ -213,6 +204,14 @@ Before you start, make sure you have installed the following on your system:
      <td style="text-align: center;">
       <img src="./assets/ps3ss.jpg" alt="Image 4" height="50%" width="50%" >
       <p>Start Screen</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="./assets/ps4gif4.gif" style="width: 85%;"">
+      <p>Group Chat</p>
+    </td>
+    <td style="text-align: center;" >
+      <img src="./assets/psychesail_videocall.jpg" alt="Image 5" style="width: 75%;"">
+      <p>Video Call Screen</p>
     </td>
     <td style="text-align: center;" >
       <img src="./assets/ps1ss.jpg" alt="Image 6" height="50%" width="50%">
