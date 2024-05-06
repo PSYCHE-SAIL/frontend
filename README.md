@@ -148,7 +148,7 @@ We discovered that many of our peers feel depressed and like their minds stop wo
       <p>Login Screen</p>
     </td>
     <td style="text-align: center;">
-      <img src="./assets/ps2gif2.gif" style="width: 100%;"">
+      <img src="./assets/psychesail_home.gif" style="width: 100%;"">
       <p>Home Screen</p>
     </td>
     <td style="text-align: center;">
