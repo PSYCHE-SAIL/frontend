@@ -192,7 +192,7 @@ class _ProgressState extends State<Progress> {
 
   List<FlSpot> weeklySpots(List<List<dynamic>> stressHistory) {
     var daysOfWeek = {"Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6, "Sunday": 7};
-    DateTime now = DateTime.parse('2024-05-05');
+    DateTime now = DateTime.now();
     int currentWeekOfYear = weekOfYear(now);
     int currentYear = now.year;
 
