@@ -152,12 +152,25 @@ We discovered that many of our peers feel depressed and like their minds stop wo
       <p>Home Screen</p>
     </td>
     <td style="text-align: center;">
-      <img src="./assets/ps3gif3.gif" style="width: 100%;"">
-      <p>Serenity Bot</p>
-    </td>
-    <td style="text-align: center;">
       <img src="./assets/ps4gif4.gif" style="width: 100%;"">
       <p>Group Chat</p>
+    </td>
+  </tr>
+</table>
+
+<table style="width: 100%;">
+  <tr>
+    <td style="text-align: center;">
+      <img src="./assets/psychesail_books_videos.gif" style="width: 100%;"">
+      <p>Motivational videos and books Screen</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="./assets/psychesail_stress_calc.gif" style="width: 100%;"">
+      <p>Stress Progress Screen</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="./assets/psychesail_serenity.gif" style="width: 100%;"">
+      <p>Serenity Bot</p>
     </td>
   </tr>
 </table>
