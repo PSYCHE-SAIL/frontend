@@ -317,9 +317,14 @@ Future<List<List<dynamic>>> getStressHistory(String userId ) async {
 
 void deleteCall(String userId, String currentUserId) {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  if(userId == 'Exams') {
+    FirebaseFirestore.instance.collection('calling').get().then((querySnapshot) => querySnapshot.docs.forEach((doc) => FirebaseFirestore.instance.collection('calling').doc(doc.id).update({'Exams': FieldValue.delete()}))).then((_) => print('Field deleted from all documents successfully.')).catchError((error) => print('Error deleting field from documents: $error'));
+
+  } else {
   _firestore.collection('calling').doc(userId).update({
     currentUserId: FieldValue.delete(),
   }).then((res) => print("deleted")).catchError((error) => print("Error deleting call: $error"));
+  }
 }
 
 

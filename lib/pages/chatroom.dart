@@ -64,7 +64,8 @@ class _ChatRoomState extends State<ChatRoom> {
     currentid = args?['currentid'] ?? '';
     receiverid =
         args?['receiverid'] ?? ((currentid == 'Joe') ? 'Disha' : 'Joe');
-
+    var name = args?['name'] ?? "Exams";
+    var chatid = args?['chatid'] ?? "-1";
     print(receiverid);
     print(communityname);
     print(currentid);
@@ -72,7 +73,7 @@ class _ChatRoomState extends State<ChatRoom> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-          title: Center(child: Text("STRESS 3")),
+          title: Center(child: Text(name)),
           actions: [
             Padding(
                 padding: EdgeInsets.only(right: size.width / 50),
@@ -88,7 +89,7 @@ class _ChatRoomState extends State<ChatRoom> {
           ],
         ),
         body: Column(children: [
-          Container(color: Colors.grey,
+         if(name != 'Exams') Container(color: Colors.grey,
               height: sizeHeight / 22,
               child: Center(child: Text(
                 "This community will disappear after 24 hours",
@@ -152,7 +153,11 @@ class _ChatRoomState extends State<ChatRoom> {
           if (snapshot.hasError) {
             return Text('Error${snapshot.error}');
           }
-          final documents = snapshot.data!.docs;
+          var documents;
+          if(snapshot.data == null)  {
+documents = [];
+          } else {
+           documents = snapshot.data!.docs;
           Map<Timestamp,dynamic> arr = {};
           for (var docSnapshot in documents) {
  var docDataRaw = docSnapshot.data();
@@ -161,6 +166,7 @@ class _ChatRoomState extends State<ChatRoom> {
   // Accessing a sub-co // Print the data of each document in the sub-collection
   
 }
+          }
           // return Placeholder(
           return ListView.builder(
             itemCount: documents.length,

@@ -46,6 +46,7 @@ class _homeState extends State<home> {
   ScrollController _scrollController = ScrollController();
   bool _showTopContainer = true;
   bool _showBottomContainer = false;
+  bool flag = true;
 
   @override
   void initState() {
@@ -63,6 +64,7 @@ class _homeState extends State<home> {
     if (_scrollController.position.userScrollDirection == ScrollDirection.forward) {
       setState(() {
         _showTopContainer = true;
+        flag = false;
         _showBottomContainer = false;
       });
     } else if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
@@ -127,10 +129,10 @@ class _homeState extends State<home> {
                       opacity: _showTopContainer ? 1.0 : 0.0,
                       duration: Duration(milliseconds: 200),
                       child: Container(
-                        height: sizeHeight*0.7,
+                        height: sizeHeight * 0.7,
                         color: Colors.transparent,
                         child: Container(
-                          height: sizeHeight * 0.73,
+                          height: sizeHeight * 0.7,
                           child: SingleChildScrollView(
                             child: FutureBuilder<dynamic>(
                                 future: buildAPI(), // async work
@@ -196,7 +198,7 @@ class _homeState extends State<home> {
                     delegate: SliverChildBuilderDelegate(
                           (context, index) {
                         return Container(
-                            height: sizeHeight*0.73,
+                            height: sizeHeight * 0.73,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
@@ -214,7 +216,7 @@ class _homeState extends State<home> {
                                   ),
                                 ),
                                 AnimatedOpacity(
-                                  opacity: _showTopContainer ? 0.0 : 1.0,
+                                  opacity: _showBottomContainer ? 1.0 : 0.0,
                                   duration: Duration(milliseconds: 200),
                                   child: Container(
                                     height: sizeHeight * 0.68,
@@ -393,7 +395,7 @@ class _homeState extends State<home> {
                                                                                 ),
                                                                                 Text(
                                                                                   (snapshot.data[0][index][0] ==
-                                                                                      'Serenity') ?"Always there for u 😇" : snapshot.data[0][index][1]['message'].length <
+                                                                                      'Serenity') ?"There for u 😇" : snapshot.data[0][index][1]['message'].length <
                                                                                       20
                                                                                       ? snapshot.data[0][index][1][
                                                                                   'message']

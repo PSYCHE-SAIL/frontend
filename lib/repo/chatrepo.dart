@@ -15,7 +15,7 @@ class ChatRepo {
         ChatPartModel(
             text:
           // "Hey how are you")
-          "My name is Samarth. And ask some questions in the start before suggesting something. Give responses within 50 words and never exceed the limit. Strictly adhere with the limit and always put emojis wherever required to make the conversation more better.")
+          "My name is Joe. And ask some questions in the start before suggesting something. Give responses within 50 words and never exceed the limit. Strictly adhere with the limit and always put emojis wherever required to make the conversation more better.")
       ]));
       tempdata.add(BotChatMessageModel(role: "model", parts: [
         ChatPartModel(

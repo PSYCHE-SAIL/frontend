@@ -11,6 +11,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
 import 'package:psychesail/bloc/chat_bloc.dart';
 import 'package:psychesail/bloc/chat_state.dart';
+import 'package:psychesail/components/api.dart';
 import 'package:psychesail/model/botchatmessagemodel.dart';
 import 'package:psychesail/model/places.dart';
 import 'package:psychesail/model/textField.dart';
@@ -119,7 +120,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> with RouteAware {
     print(currentid);
 
     Future<void> _fetchStressScore(userinputs) async {
-      var url = Uri.parse('http://172.70.101.9:8000/process_data');
+      var url = Uri.parse('http://192.168.197.137:8000/process_data');
       try {
         print("Sending request...");
         print(jsonEncode({"inputs": userinputs}));
@@ -378,155 +379,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> with RouteAware {
               ),
             ],
           ),
-          Row(
-//             mainAxisAlignment:MainAxisAlignment.start,
-//             children: [
-//               Flexible(
-//                 child: Container(
-//           margin: EdgeInsets.only(
-//               top: min(12, sizeWidth * 0.05),
-//               bottom: min(12, sizeWidth * 0.05),
-//               left: min(sizeHeight * 0.05, 12),
-//               right: sizeHeight * 0.05,
-//             ),
-//               padding: EdgeInsets.all(12.0),
-//           decoration: BoxDecoration(
-//                 borderRadius:  BorderRadius.only(
-//                 topLeft: Radius.circular(20),
-//                 topRight: Radius.circular(12),
-//                 bottomRight: Radius.circular(12),
-//               ),
-//                 color: Colors.grey,
-//                 border: Border.all(color: Colors.black),
-//               ),
-//           child: Text(
-//             "While we talk more, one of the way for you to refresh might be some outdoor activities. Here are some suggested activities near you - ",
-//             style: TextStyle(
-//               color: Colors.black,
-//               fontSize: 17,
-//             ),
-//           ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//           Padding(
-//             padding: EdgeInsets.symmetric(horizontal: min(sizeHeight*0.05,12),vertical: min(sizeWidth * 0.05,12)),
-//             child: activitymaps(sizeWidth, sizeHeight, true, obj,
-//               url,bordercolor: Colors.black),
-//           ),
-// =======
-                                              mainAxisAlignment:
-                                                  (messages[index].role ==
-                                                          "user")
-                                                      ? MainAxisAlignment.end
-                                                      : MainAxisAlignment.start,
-                                              children: [
-                                                Flexible(
-                                                  child: InkWell(
-                                                    onTap: () async {
-                                                      print(
-                                                          "Pressed Pause- Single");
-                                                        await flutterTts.stop();
-                                                    },
-
-                                                    child: Container(
-                                                      margin: (messages[index]
-                                                                  .role ==
-                                                              "user")
-                                                          ? EdgeInsets.only(
-                                                              top: min(
-                                                                  12,
-                                                                  sizeWidth *
-                                                                      0.05),
-                                                              bottom: min(
-                                                                  12,
-                                                                  sizeWidth *
-                                                                      0.05),
-                                                              right: min(
-                                                                  sizeHeight *
-                                                                      0.05,
-                                                                  12),
-                                                              left: sizeHeight *
-                                                                  0.05,
-                                                            )
-                                                          : EdgeInsets.only(
-                                                              top: min(
-                                                                  12,
-                                                                  sizeWidth *
-                                                                      0.05),
-                                                              bottom: min(
-                                                                  12,
-                                                                  sizeWidth *
-                                                                      0.05),
-                                                              left: min(
-                                                                  sizeHeight *
-                                                                      0.05,
-                                                                  12),
-                                                              right:
-                                                                  sizeHeight *
-                                                                      0.05,
-                                                            ),
-                                                      padding:
-                                                          EdgeInsets.all(12.0),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: (messages[
-                                                                        index]
-                                                                    .role ==
-                                                                "user")
-                                                            ? BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        12),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        20),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        12),
-                                                              )
-                                                            : BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        20),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        12),
-                                                                bottomRight:
-                                                                    Radius
-                                                                        .circular(
-                                                                            12),
-                                                              ),
-                                                        color: (messages[index]
-                                                                    .role ==
-                                                                "user")
-                                                            ? Color.fromRGBO(32,
-                                                                160, 144, 100)
-                                                            : Colors.grey,
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                      child: Text(
-                                                        messages[index]
-                                                            .parts
-                                                            .first
-                                                            .text,
-                                                        style: TextStyle(
-                                                          color: (messages[
-                                                                          index]
-                                                                      .role ==
-                                                                  "user")
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          fontSize: 17,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+          
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
@@ -748,7 +601,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> with RouteAware {
                             ),
                           if (endchat)
                             _endchat(stressScore, sizeWidth, sizeHeight,
-                                currentid, context),
+                                currentid, context,messages),
                           (!endchat && !suggestplaces)
                               ? Container(
                                   padding: const EdgeInsets.symmetric(
@@ -816,7 +669,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> with RouteAware {
                                                     ),
                                                   )
                                             : _endchat(stressScore, sizeWidth,
-                                                sizeHeight, currentid, context),
+                                                sizeHeight, currentid, context,messages),
                                       ),
                                     ],
                                   ),
@@ -947,7 +800,7 @@ class _MonkeyBotChatRoomState extends State<MonkeyBotChatRoom> with RouteAware {
                                     ],
                                   )
                                 : _endchat(stressScore, sizeWidth, sizeHeight,
-                                    currentid, context),
+                                    currentid, context,messages),
                           ],
                         ),
                       )
@@ -1057,7 +910,7 @@ Widget _buildMessageItem(DocumentSnapshot document, currentid) {
   });
 }
 
-Widget _endchat(stressScore, sizeWidth, sizeHeight, currentid, context) {
+Widget _endchat(stressScore, sizeWidth, sizeHeight, currentid, context,messages) {
   Emoji stressEmoji = Emoji();
   var displayMood = (stressScore == '0')
       ? ['assets/stress_5.png', 'Therapist needed', Colors.red]
@@ -1066,7 +919,21 @@ Widget _endchat(stressScore, sizeWidth, sizeHeight, currentid, context) {
   //   "stressScore": stressScore, // Assuming stressScore is a variable holding the score
   //   "timestamp": FieldValue.serverTimestamp() // This will get the current timestamp from the server
   // });
-  return Column(
+  return (stressScore == '0') ? Container(
+    height : sizeHeight * 0.15,
+    child: Center(
+      child: Text(
+        "Calculating stress ....", 
+        style: TextStyle(
+                        color: Colors.black,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        fontFamily: 'AbeeZee'),
+                  
+      ),
+    )
+  ): Column(
     children: [
       Container(
         margin: EdgeInsets.only(
@@ -1133,16 +1000,19 @@ Widget _endchat(stressScore, sizeWidth, sizeHeight, currentid, context) {
         child: Container(
           color: Colors.black,
           child: InkWell(
-            onTap: () {
+            onTap: () async {
+              var chatid = await fetchChatId(messages);
               Navigator.pushNamed(context, '/chatroom', arguments: {
                 'currentuser': currentid,
                 'receiverid': 'Disha',
                 'communityname': 'community',
+                'name': 'Stress $stressScore',
+                'chatId': chatid
               });
             },
             child: Center(
               child: Text(
-                "Connect & Heal: Join Our Circle of Support",
+                "Connect & Heal: Join Tailored Stress-Matched Circle",
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'AbeeZee',
